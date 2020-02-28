@@ -10,7 +10,7 @@ def logout(token):
     }
 
 def register(email, password, name_first, name_last):
-    return {
+    return {    
         'u_id': 1,
         'token': '12345',
     }
