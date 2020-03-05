@@ -3,11 +3,23 @@ import pytest
 from error import InputError
 
 def test_auth_login():
+	result = auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')
+	result1 = auth.auth_login('yunrui.zhang@studnet.unsw.edu.au','123456')
 	# Function auth_login(email,password)
 	# Returns {u_id, token}
 	# Given a registered users' email and password and generates a valid token for the user to remain authenticated
 
 def test_auth_login_except():
+	#test for invalid email
+	with pytest.raises(InputError) as e:
+		auth.auth_login('1122','123456')
+	#incorrect password
+	auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')
+	with pytest.raises(InputError) as e:
+		auth.auth_login('yunrui.zhang@student.unsw.edu.au','123456789')
+	#not registered email
+	with pytest.raises(InputError) as e:
+		auth.auth_login('yunrui.zhang123@student.unsw.edu.au','123456')
 	# InputError:
 	#	Email entered is not a valid email 
 	#	Email entered does not belong to a user
