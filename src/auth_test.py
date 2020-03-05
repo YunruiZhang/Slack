@@ -14,7 +14,7 @@ def test_auth_login_except():
 	with pytest.raises(InputError) as e:
 		auth.auth_login('1122','123456')
 	#incorrect password
-	auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')
+	result = auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')
 	with pytest.raises(InputError) as e:
 		auth.auth_login('yunrui.zhang@student.unsw.edu.au','123456789')
 	#not registered email
@@ -54,19 +54,19 @@ def test_auth_refister_except():
 	#double register
 	result = auth.auth_register('yunrui.zhang1@studnet.unsw.edu.au','123456','Yunrui','Zhang')
 	with pytest.raises(InputError) as e:
-		result1 = auth.auth_register('yunrui.zhang1@studnet.unsw.edu.au','123456','Yunrui','Zhang')
+		auth.auth_register('yunrui.zhang1@studnet.unsw.edu.au','123456','Yunrui','Zhang')
 	#short first name
 	with pytest.raises(InputError) as e:
-		result2 = auth.auth_register('yunrui.zhang2@studnet.unsw.edu.au','123456','','Zhang')
+		auth.auth_register('yunrui.zhang2@studnet.unsw.edu.au','123456','','Zhang')
 	#long first name
 	with pytest.raises(InputError) as e:
-		result2 = auth.auth_register('yunrui.zhang3@studnet.unsw.edu.au','123456','y*50','Zhang')
+		auth.auth_register('yunrui.zhang3@studnet.unsw.edu.au','123456','y'*50,'Zhang')
 	#short last name
 	with pytest.raises(InputError) as e:
-		result2 = auth.auth_register('yunrui.zhang4@studnet.unsw.edu.au','123456','Yunrui','')
+		auth.auth_register('yunrui.zhang4@studnet.unsw.edu.au','123456','Yunrui','')
 	#long last name
 	with pytest.raises(InputError) as e:
-		result2 = auth.auth_register('yunrui.zhang5@studnet.unsw.edu.au','123456','Yunrui','Z*50')
+		auth.auth_register('yunrui.zhang5@studnet.unsw.edu.au','123456','Yunrui','z'*50)
 	#	Email entered is not a valid email 
 	#	Email address is already being used by another user
 	#	Password entered is less than 6 characters long
