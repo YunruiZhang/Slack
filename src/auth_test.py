@@ -26,6 +26,12 @@ def test_auth_login_except():
 	#	Password is incorrect
 
 def test_auth_logout():
+	#Try normal logout 
+	result = auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')
+	assert auth.auth_logout(result) == True
+	#Try to pass a invalid token
+	assert auth.auth_logout(123) == False
+
 	# Function auth_logout(token)
 	# Returns {is_success}
 	# Given an active token, invalidates the taken to log the user out. If a valid token is given, and the user is successfully logged out, it returns true, otherwise false.
