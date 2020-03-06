@@ -3,7 +3,8 @@
 <h2> Channel Test Assumptions </h2>
 <h4> test_channel_invite </h4>
 * All functions called in tests are assumed to be working
-* User with details "example@email.com" and password "password" is a valid user
+* Assumes that registering a user does not log them in 
 * All variables with "_id" suffix: 0 is an invalid id
-* There is at least one channel that a user is not a member of
-* Users are all at least members of one channel
+* List "messages" from channel_messages contains all the messages in the channel
+* Channels can have a name ""
+* Assumes that if you're not a member of a channel, you're not an admin
