@@ -56,6 +56,12 @@ def test_message_remove_except():
 	#try to remove it again
 	with pytest.raises(InputError) as e:
 		message.message_remove(token, msgid)
+	#create the same message again
+	msgid2 = message.message_send(token, channel_id1, "hello")
+	#create a new user and use the new token to remove the message
+	u_id2, token2 = get_user("user2")
+	with pytest.raises(AccessError) as e:
+		message.message_remove(token2, msgid2)
 	# InputError:
 	#	Message (based on ID) no longer exists
 	# AccessError (When none of the following are true):
@@ -63,11 +69,36 @@ def test_message_remove_except():
 	#	The authorised user is an admin or owner of this channel or the slackr
 
 def test_message_edit():
+	#send a message
+	u_id, token = get_user("user1")
+	channel_id1 = channels.channels_create(token, "channel1", True)
+	channel.channel_join(token, channel_id1)
+	msgid = message.message_send(token, channel_id1, "hello")
+	#edit the message
+	message.message_edit(token, msgid, "hi")
+	#edit the message to an empty string so the message is deleted
+	message.message_edit(token, msgid, "")
+	#try to delete the message which is deleted
+	with pytest.raises(InputError) as e:
+		message.message_remove(token, msgid)
 	# Function message_remove(token, message_id, message)
 	# Returns {}
 	# Given a message, update it's text with new text. If the new message is an empty string, the message is deleted.
 
 def test_message_edit_except():
+	#send a message
+	u_id, token = get_user("user1")
+	channel_id1 = channels.channels_create(token, "channel1", True)
+	channel.channel_join(token, channel_id1)
+	msgid = message.message_send(token, channel_id1, "hello")
+	#create a new user
+	u_id2, token2 = get_user("user2")
+	# try to use new user's token to delete the message
+	with pytest.raises(InputError) as e:
+		message.message_edit(token2, msgid, "hi")
+	# try to edit the message to more than 1000 characters
+	with pytest.raises(InputError) as e:
+		message.message_edit(token2, msgid, 'h'*1001)
 	# AccessError (When none of the following are true):
 	#	Message with message_id was sent by the authorised user making this request	
 	#	The authorised user is an admin or owner of this channel or the slackr
