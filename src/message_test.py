@@ -24,7 +24,7 @@ def test_message_send_except():
 	channel.channel_join(token, channel_id1)
 	with pytest.raises(InputError) as e:
 		message.message_send(token, channel_id1, 'a'*1001)
-	#not joined the channel
+	#try to send a message with a user not in the channel
 	u_id2, token2 = get_user("user2")
 	with pytest.raises(AccessError) as e:
 		message.message_send(token2, channel_id1, "hello")
