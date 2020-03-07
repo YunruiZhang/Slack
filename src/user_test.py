@@ -1,3 +1,5 @@
+import user
+import other
 from user import *
 from other import * 
 from auth import * 
@@ -106,6 +108,7 @@ def test_users_all():
 def search():
 	# Function search(token, query_str)
 	# Returns {messages}
+	# Given a query string, return a collection of messages in all of the channels that the user has joined that match the query
 	# Given a query string, return a collection of messages in all of the channels that the user has joined that match the query
 	c_id1 = channels_create(owner_token, 'channel_1', True)['channel_id']
 	c_id2 = channels_create(owner_token, 'channel_2', True)['channel_id']
