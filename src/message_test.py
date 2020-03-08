@@ -9,8 +9,6 @@ def test_message_send():
 	u_id, token = get_user("user1")
 	#get a channel
 	channel_id1 = channels.channels_create(token, "channel1", True)
-	#join the channel
-	channel.channel_join(token, channel_id1)
 	#send the message
 	msgid = message.message_send(token, channel_id1, "hello")
 	# Function message_send(token, channel_id, message)
@@ -21,7 +19,6 @@ def test_message_send_except():
 	#long message
 	u_id, token = get_user("user1")
 	channel_id1 = channels.channels_create(token, "channel1", True)
-	channel.channel_join(token, channel_id1)
 	with pytest.raises(InputError) as e:
 		message.message_send(token, channel_id1, 'a'*1001)
 	#try to send a message with a user not in the channel
@@ -38,10 +35,20 @@ def test_message_remove():
 	#create a message
 	u_id, token = get_user("user1")
 	channel_id1 = channels.channels_create(token, "channel1", True)
-	channel.channel_join(token, channel_id1)
 	msgid = message.message_send(token, channel_id1, "hello")
 	#remove the message
 	message.message_remove(token, msgid)
+	#have a new user and join the channel
+	u_id2, token2 = get_user("user2")
+	channel.channel_join(token2, channel_id1)
+	#new user send a message
+	msgid2 = message.message_send(token2, channel_id1, "hello")
+	#admin remove the new message
+	message.message_remove(token, msgid2)
+	#new user send another message
+	msgid3 = message.message_send(token2, channel_id1, "wow")
+	#new user remove the message
+	message.message_remove(token2, msgid3)
 	# Function message_remove(token, message_id)
 	# Returns {}
 	# Given a message_id for a message, this message is removed from the channel
@@ -50,7 +57,6 @@ def test_message_remove_except():
 	#create a message and remove it
 	u_id, token = get_user("user1")
 	channel_id1 = channels.channels_create(token, "channel1", True)
-	channel.channel_join(token, channel_id1)
 	msgid = message.message_send(token, channel_id1, "hello")
 	message.message_remove(token, msgid)
 	#try to remove it again
@@ -58,8 +64,9 @@ def test_message_remove_except():
 		message.message_remove(token, msgid)
 	#create the same message again
 	msgid2 = message.message_send(token, channel_id1, "hello")
-	#create a new user and use the new token to remove the message
+	#create a new user and join the channel and use the new user's token to remove the message
 	u_id2, token2 = get_user("user2")
+	channel.channel_join(token2, channel_id1)
 	with pytest.raises(AccessError) as e:
 		message.message_remove(token2, msgid2)
 	# InputError:
@@ -72,7 +79,6 @@ def test_message_edit():
 	#send a message
 	u_id, token = get_user("user1")
 	channel_id1 = channels.channels_create(token, "channel1", True)
-	channel.channel_join(token, channel_id1)
 	msgid = message.message_send(token, channel_id1, "hello")
 	#edit the message
 	message.message_edit(token, msgid, "hi")
@@ -81,6 +87,14 @@ def test_message_edit():
 	#try to delete the message which is deleted
 	with pytest.raises(InputError) as e:
 		message.message_remove(token, msgid)
+	#have a new user join the channel and send a message
+	u_id2, token2 = get_user("user2")
+	channel.channel_join(token2, channel_id1)
+	msgid2 = message.message_send(token2, channel_id1, "hello")
+	#admin edit the new message
+	message.message_edit(token, msgid2, "hi")
+	#new user edit him message
+	message.message_edit(token2, msgid2, "hillo")
 	# Function message_remove(token, message_id, message)
 	# Returns {}
 	# Given a message, update it's text with new text. If the new message is an empty string, the message is deleted.
@@ -89,11 +103,11 @@ def test_message_edit_except():
 	#send a message
 	u_id, token = get_user("user1")
 	channel_id1 = channels.channels_create(token, "channel1", True)
-	channel.channel_join(token, channel_id1)
 	msgid = message.message_send(token, channel_id1, "hello")
-	#create a new user
+	#create a new user and join the channel
 	u_id2, token2 = get_user("user2")
-	# try to use new user's token to delete the message
+	channel.channel_join(token2, channel_id1)
+	# try to use new user's token to edit the message
 	with pytest.raises(InputError) as e:
 		message.message_edit(token2, msgid, "hi")
 	# try to edit the message to more than 1000 characters
