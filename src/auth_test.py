@@ -29,6 +29,8 @@ def test_auth_logout():
 	#Try normal logout 
 	result = auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')
 	assert auth.auth_logout(result) == True
+	# Try double logout
+	assert auth.auth_logout(result) == False
 	#Try to pass a invalid token
 	assert auth.auth_logout(123) == False
 
