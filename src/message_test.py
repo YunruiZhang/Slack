@@ -1,7 +1,7 @@
 from message import*
 from auth import * 
 from channels import *
-from channel import channel_invite
+from channel import channel_invite, channel_messages
 import pytest
 from error import InputError, AccessError
 
