@@ -24,3 +24,7 @@
 * User who create the channel automatically join the channel.
 * Assume that after remove a message, the old message id become invalid.
 * Assume that the message_edit function simply replace the old message with the new message.
+
+<h4>  Assumptions for user tests </h4>
+* assume valid users are the ones having an existing user_id
+* 
