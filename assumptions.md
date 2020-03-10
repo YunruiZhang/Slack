@@ -26,5 +26,8 @@
 * Assume that the message_edit function simply replace the old message with the new message.
 
 <h4>  Assumptions for user tests </h4>
-* assume valid users are the ones having an existing user_id
-* 
+* Assume valid users are the ones having an existing user_id.
+* All functions called in tests are assumed to be working.
+* Assume after register, the user is automatically logged in. 
+* The user have authority to edit own profile.
+* The owner of a channel has authority to change member's profile. 
