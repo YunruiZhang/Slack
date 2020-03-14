@@ -1,6 +1,6 @@
 import auth
 import pytest
-from error import InputError
+from error import InputError, AccessError
 
 def test_auth_login():
 	result = auth.auth_register('yunrui.zhang@studnet.unsw.edu.au','123456','Yunrui','Zhang')

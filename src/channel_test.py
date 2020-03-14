@@ -2,7 +2,7 @@ import channel
 import channels
 import auth
 import pytest
-from error import InputError
+from error import InputError, AccessError
 
 def test_channel_invite():
     # Function channel_invite(token, channel_id, u_id)

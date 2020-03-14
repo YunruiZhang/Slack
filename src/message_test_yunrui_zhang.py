@@ -3,7 +3,7 @@ import pytest
 import channel
 import channels
 import auth
-from error import InputError
+from error import InputError, AccessError
 
 def test_message_send():
 	#get a user
