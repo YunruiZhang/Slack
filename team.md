@@ -6,7 +6,7 @@ We have split iteration 2 into three main parts. The first part is completing fu
 - message_http_tests.py - Yunrui
 - channels_http_tests.py - Chris
 - other_http_tests.py - Daniel (This includes user tests)
-- http_tests.py - Lina (Not sure what to call this one)
+- new_function_tests.py - Lina 
 
 The second part follows in a similiar matter, where each member will complete their respective functions. The function breakdown in our team is as follows:
 
@@ -23,4 +23,4 @@ Finally we will use peer reviewing by looking over one other member's code to en
 - message.py - Paul
 - channels.py and channel.py - Yunrui
 - other.py and user.py - Chris
-- server.py - Daniel
+- new functions - Daniel
