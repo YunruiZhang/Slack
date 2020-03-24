@@ -11,6 +11,8 @@ DATABASE = {
     msgs = []
 }
 
+SECRET = 'thesecret'
+
 def getData():
     global DATABASE
     return DATABASE
