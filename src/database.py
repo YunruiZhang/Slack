@@ -18,7 +18,7 @@ def getData():
     return DATABASE
 
 
-
-
+def token_generate():
+    pass
 
 
