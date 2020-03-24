@@ -5,10 +5,10 @@
 # and the sender of it , the time it sent and the msg itself.
 
 DATABASE = {
-    user = []
-    tokens = []
-    channels = []
-    msgs = []
+    'users' : [],
+    'tokens' : [],#make this a feature of users maybe ?
+    'channels' : [],
+    'messages' : [],
 }
 
 SECRET = 'thesecret'
