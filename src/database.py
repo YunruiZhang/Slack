@@ -21,8 +21,20 @@ def getData():
 def token_generate():
     pass
 
-def create_user():
-    pass
+def create_user(email, password, name_first, name_last):
+    DATA = getData
+    
+    new_user = {
+        'name_first': name_first, 
+        'name_last': name_last, 
+        'password': password, 
+        'email': email,
+        # ect.
+    }
+    
+    DATA['users'].append(new_user)
+    return {}
+    
 
 def create_channel():
     pass
