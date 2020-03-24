@@ -18,7 +18,14 @@ def getData():
     return DATABASE
 
 
+def token_generate():
+    pass
 
+def create_user():
+    pass
 
+def create_channel():
+    pass
 
-
+def create_message():
+    pass
