@@ -3,6 +3,7 @@
 # channels is a list of dicts contain existing channels info.
 # msgs is a list of dicts contain msg infos including the channel id which the msg in 
 # and the sender of it , the time it sent and the msg itself.
+import jwt
 
 DATABASE = {
     'users' : [],
@@ -18,13 +19,38 @@ def getData():
     return DATABASE
 
 
-def token_generate():
-    pass
+def token_generate(u_id):
+    '''
+
+    {
+        "alg": "HS256",
+        "typ": "JWT"
+    }
+    {
+        "u_id": "u_id"
+    }
+    {
+        SECRET
+    }
+    '''
+    encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
+    return encoded_jwt
+
+def verify_token(token):
+    # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
+    try:
+        decoded_jwt = jwt.decode(token, SECRET, algorithms=['HS256'])
+    except:
+        return False
+
+    return decoded_jwt['u_id']
+
 
 def create_user(email, password, name_first, name_last):
     DATA = getData
     
     new_user = {
+        'u_id' : len(getData)+1,
         'name_first': name_first, 
         'name_last': name_last, 
         'password': password, 
