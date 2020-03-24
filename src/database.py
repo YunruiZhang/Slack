@@ -11,3 +11,4 @@ DATABASE = {
     channels = []
     msgs = []
 }
+
