@@ -3,41 +3,55 @@
 # channels is a list of dicts contain existing channels info.
 # msgs is a list of dicts contain msg infos including the channel id which the msg in 
 # and the sender of it , the time it sent and the msg itself.
+import jwt
+
 
 DATABASE = {
-    'users' : [],
-    'tokens' : [],#make this a feature of users maybe ?
+    'users' : [], 
     'channels' : [],
     'messages' : [],
 }
 
 SECRET = 'thesecret'
+"""user = {
+    'name_first': name_first, 
+    'name_last': name_last, 
+    'password': password, 
+    'email': email,
+    'token': token,
+    # ect.
+    }
+message = {
+    'message_id': message_id,
+    'channel_id': channel_id,
+    'sender_id': user_id
+    'data': data
+}
+channel = {
+    'channel_id': channel_id,
+    'creater': user_id,
+    'member': []
+    'messages':[]
 
+}"""
 def getData():
     global DATABASE
     return DATABASE
 
 
-def token_generate():
+def token_verify(token):
+    pass
+
+def check_email(email):
     pass
 
 def create_user(email, password, name_first, name_last):
     DATA = getData
-    
-    new_user = {
-        'name_first': name_first, 
-        'name_last': name_last, 
-        'password': password, 
-        'email': email,
-        # ect.
-    }
-    
-    DATA['users'].append(new_user)
-    return {}
-    
 
-def create_channel():
+def verify_channel(channel_id):
     pass
 
-def create_message():
-    pass
+def verify_message(message_id):
+    pass  
+    
+
