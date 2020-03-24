@@ -4,10 +4,19 @@
 # msgs is a list of dicts contain msg infos including the channel id which the msg in 
 # and the sender of it , the time it sent and the msg itself.
 
-
 DATABASE = {
     user = []
     tokens = []
     channels = []
     msgs = []
 }
+
+def getData():
+    global DATABASE
+    return DATABASE
+
+
+
+
+
+
