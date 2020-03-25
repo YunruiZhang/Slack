@@ -48,8 +48,8 @@ def auth_login(email, password):
     '''
     index = 0
     while len(store['users']) is not index:         
-        if store['users'][index]['email'] is email:
-            if (store['users'][index]['password'] is hash(password)):
+        if store['users'][index]['email'] == email:
+            if (store['users'][index]['password'] == hash(password)):
                 return {
                     'u_id': store['users'][index]['u_id'],
                     'token': database.token_generate('u_id'),
