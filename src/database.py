@@ -4,7 +4,7 @@
 # msgs is a list of dicts contain msg infos including the channel id which the msg in 
 # and the sender of it , the time it sent and the msg itself.
 import jwt
-
+from datetime import datetime
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 
@@ -90,6 +90,25 @@ def create_user(email, password, name_first, name_last):
     DATA['users'].append(new_user)
     return {}
     
+def new_message(message_id, channel_id, user_id, message ):
+    DATABASE = getData()
+    time = datetime.now()
+    new_message = {
+        'message_id': message_id,
+        'u_id': user_id,
+        'message': message
+        'time': time
+    }
+    for i in DATABASE['channels']
+        if i['channel_id'] == channel_id
+            i[messages].append(new_message)
+    short_msg = {
+        'message_id': message_id,
+        'channel_id': channel_id,
+    }
+    DATABASE['messages'].append(short_msg)
+
+    return {}
 
 def create_channel():
     pass

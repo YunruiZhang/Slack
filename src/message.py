@@ -1,4 +1,5 @@
-import database.py
+import database
+import uuid
 from error import AccessError, InputError
 
 
@@ -17,11 +18,10 @@ def message_send(token, channel_id, message):
         raise InputError("channel doesn't exist")
     if flag == 1:
         raise AccessError("user is not in the channel")
-    #get the database
-    data = database.getData()
-
+    message_id = get_msg_id()
+    database.new_message(message_id, channel_id, var, message)
     return {
-        'message_id': 1,
+        'message_id': message_id,
     }
 
 def message_remove(token, message_id):
@@ -57,3 +57,10 @@ def check_in_channel(user_id, channel_id):
         return 1
     else:
         return 2
+
+def get_msg_id()
+    data = database.getData()
+    if len(database['messages']) == 0
+        return 0
+    else 
+        return data['messages'][-1]['message_id'] + 1
