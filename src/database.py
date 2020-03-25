@@ -38,7 +38,15 @@ def getData():
     global DATABASE
     return DATABASE
 
-
+def getNewUser():
+    user = {
+    'name_first': name_first, 
+    'name_last': name_last, 
+    'password': password, 
+    'email': email,
+    'token': token,
+    }
+    return user
 def token_verify(token):
     pass
 
@@ -55,3 +63,13 @@ def verify_message(message_id):
     pass  
     
 
+def new_message(message_id, channel_id, user_id, message ):
+    global DATABASE
+    new_message = {
+        'message_id': message_id,
+        'channel_id': channel_id,
+        'sender_id': user_id
+        'data': message
+    }
+    DATABASE['messages'].append(new_message)
+    return True
