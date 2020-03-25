@@ -105,7 +105,6 @@ def return_channel_invite():
     token = payload['token']
     channel_id = payload['channel_id']
     u_id = payload['u_id']
-
     return channel_invite(token,channel_id,u_id)
 
 @APP.route("/channel/details", methods=['GET'])

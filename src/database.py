@@ -38,6 +38,12 @@ DATABASE = {
     'users' : [],
     'channels' : [],
     'messages' : [],
+'''
+
+DATABASE = {
+    'users' : [],
+    'channels' : [],
+    'messages' : []
 }
 
 SECRET = 'thesecret'

@@ -59,8 +59,6 @@ def channels_create(token, name, is_public):
 
     u_id_details = user_profile(token,curr_u_id)['user']
 
-    print(u_id_details)
-
     channel_id = len(DATA['channels'])+1
 
     new_channel = {
