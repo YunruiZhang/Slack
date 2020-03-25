@@ -283,4 +283,14 @@ def get_user(username):
     #return auth.auth_login("example@email.com","password")
 
     # Use this if auth functions aren't implemented
+    DATA = getData()
+
+    DATA['users'].append( {'u_id' : int(username[-1]),
+            'name_first': "example first", 
+            'name_last': "example last", 
+            'password': "badpassword", 
+            'handle_str': 'hayden',
+            'email': "email@example.com"
+            })
+
     return(int(username[-1]), token_generate(int(username[-1])))

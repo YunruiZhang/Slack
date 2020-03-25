@@ -258,3 +258,9 @@ def user_owner_check(channel, u_id):
             return True
             break        
     return False
+
+def decode_variables(*arg):
+    return_list = []
+    for variable in arg:
+        return_list.append(variable.decode('utf-8'))
+    return return_list

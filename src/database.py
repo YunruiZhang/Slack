@@ -8,34 +8,7 @@ import jwt
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 
-"channels" : [
-        {
-            "channel_id":1,
-            "public":1,
-            "details" : {
-            "name": "example name",
-            "owner_members": [
-                {
-                    "u_id": 1,
-                    "name_first": "example first",
-                    "name_last": "example last",
-                }
-            ],
-            "all_members": [
-                {
-                    "u_id": 1,
-                    "name_first": "example first",
-                    "name_last": "example last",
-                }
-            ],
-            },
-            "messages":[{"ADD THE MESSAGE DICTIONARY TO THIS LIST PLEASE"}]
-        }
-    ]
-'''
-
-DATABASE = {
-    'users' : [ {'u_id' : 1,
+'users' : [ {'u_id' : 1,
             'name_first': "example first", 
             'name_last': "example last", 
             'password': "badpassword", 
@@ -123,6 +96,12 @@ DATABASE = {
         }
     ],
     'messages' : [],
+'''
+
+DATABASE = {
+    'users' : [],
+    'channels' : [],
+    'messages' : []
 }
 
 SECRET = 'thesecret'
