@@ -62,10 +62,11 @@ def token_generate(u_id):
     }
     '''
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
-    return encoded_jwt
+    return encoded_jwt.decode("utf-8") 
 
 def verify_token(token):
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
+    token.encode('utf-8')
     try:
         decoded_jwt = jwt.decode(token, SECRET, algorithms=['HS256'])
     except:

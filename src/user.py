@@ -6,7 +6,7 @@ def user_profile(token, u_id):
         	'name_first': 'Hayden',
         	'name_last': 'Jacobs',
         	'handle_str': 'hjacobs',
-        },
+        }
     }
 
 def user_profile_setname(token, name_first, name_last):
