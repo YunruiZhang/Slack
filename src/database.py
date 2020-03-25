@@ -36,7 +36,6 @@ EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 
 DATABASE = {
     'users' : [],
-    'tokens' : [],#make this a feature of users maybe ?
     'channels' : [],
     'messages' : [],
 }
@@ -75,16 +74,16 @@ def verify_token(token):
     return decoded_jwt['u_id']
 
 
-def create_user(email, password, name_first, name_last):
+def create_user(u_id, token, email, password, name_first, name_last):
     DATA = getData
     
     new_user = {
-        'u_id' : len(getData)+1,
+        'u_id': u_id,
+        'token': token,
         'name_first': name_first, 
         'name_last': name_last, 
         'password': password, 
         'email': email,
-        # ect.
     }
     
     DATA['users'].append(new_user)
