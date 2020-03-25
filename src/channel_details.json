@@ -2,28 +2,37 @@
 	"channels" : [
         {
     		"channel_id":1,
+            "public":1,
     		"details" : {
-            "name": "Hayden",
+            "name": "example name",
             "owner_members": [
                 {
                     "u_id": 1,
-                    "name_first": "Hayden",
-                    "name_last": "Jacobs",
+                    "name_first": "example first",
+                    "name_last": "example last",
                 }
             ],
             "all_members": [
                 {
                     "u_id": 1,
-                    "name_first": "Hayden",
-                    "name_last": "Jacobs",
+                    "name_first": "example first",
+                    "name_last": "example last",
                 }
             ],
     	    },
             "messages":[{
-
-            }
-            ]
+                "message_id": 1,
+                "u_id": 1,
+                "message": "Hello world",
+                "time_created": 1582426789,
+            },{
+                "message_id": 2,
+                "u_id": 1,
+                "message": "Hello there",
+                "time_created": 1582426790,
+            }]
 	    }
-    ],
+    ]
 	
 }	
+
