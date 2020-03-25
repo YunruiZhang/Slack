@@ -35,9 +35,38 @@ EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 '''
 
 DATABASE = {
-    'users' : [],
+    'users' : [ {'u_id' : 1,
+            'name_first': "example first", 
+            'name_last': "example last", 
+            'password': "badpassword", 
+            'email': "email@example.com"
+            }
+        ],
     'tokens' : [],#make this a feature of users maybe ?
-    'channels' : [],
+    'channels' : [
+         {
+            "channel_id":1,
+            "public":1,
+            "details" : {
+            "name": "example name",
+            "owner_members": [
+                {
+                    "u_id": 1,
+                    "name_first": "example first",
+                    "name_last": "example last",
+                }
+            ],
+            "all_members": [
+                {
+                    "u_id": 1,
+                    "name_first": "example first",
+                    "name_last": "example last",
+                }
+            ],
+            },
+            "messages":[{"ADD THE MESSAGE DICTIONARY TO THIS LIST PLEASE"}]
+        }
+    ],
     'messages' : [],
 }
 
@@ -63,10 +92,11 @@ def token_generate(u_id):
     }
     '''
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
-    return encoded_jwt
+    return encoded_jwt.decode("utf-8") 
 
 def verify_token(token):
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
+    token.encode('utf-8')
     try:
         decoded_jwt = jwt.decode(token, SECRET, algorithms=['HS256'])
     except:
