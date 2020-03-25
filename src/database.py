@@ -76,7 +76,7 @@ def verify_token(token):
 
 
 def create_user(email, password, name_first, name_last):
-    DATA = getData
+    DATA = getData()
     
     new_user = {
         'u_id' : len(getData)+1,

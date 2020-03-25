@@ -3,6 +3,8 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
+import message
+import database
 
 def defaultHandler(err):
     response = err.get_response()
@@ -21,6 +23,26 @@ CORS(APP)
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
+
+@APP.route("/message/send", methods = ['POST'])
+def message_send():
+    jason = request.get_json()
+    msg_id = message.message_send(jason['token'], jason['channel_id'], jason['message'])
+    return dumps(msgid)
+
+@APP.route("/message/remove", methods = ['DELETE'])
+    jason = request.get_json()
+    message.message_remove(jason['token'], jason['message_id'])
+    return dumps()
+
+@APP.route("message/edit", methods = ['PUT'])
+    jason = request.get_json()
+    message.message_edit(jason[token], jason['message_id'], jason['message'])
+    return dumps()
+
+@APP.route("message/sendlater", methods = ['POST'])
+    jason= request.get_json()
+    message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
 # Example
 @APP.route("/echo", methods=['GET'])
 def echo():
