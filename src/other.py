@@ -1,5 +1,10 @@
 def users_all(token):
-    return {
+    all_user = []
+    Data = getdata()
+    
+   return(all_user)
+   
+''' return {
         'users': [
             {
                 'u_id': 1,
@@ -9,10 +14,12 @@ def users_all(token):
                 'handle_str': 'hjacobs',
             },
         ],
-    }
+    }'''
 
 def search(token, query_str):
-    return {
+    
+    
+    '''return {
         'messages': [
             {
                 'message_id': 1,
@@ -21,4 +28,4 @@ def search(token, query_str):
                 'time_created': 1582426789,
             }
         ],
-    }
+    }'''
