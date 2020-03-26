@@ -24,7 +24,7 @@ CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
-
+#------------------- msgserver-----------------------------------------------------------#
 @APP.route("/message/send", methods = ['POST'])
 def message_send():
     jason = request.get_json()
@@ -52,6 +52,7 @@ def message_sendlater():
     return dumps({
         'message_id': id
     })
+#----------------------------------------------------------------------------------------------------------------------#
 # Example
 @APP.route("/echo", methods=['GET'])
 def echo():
