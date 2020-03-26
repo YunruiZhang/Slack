@@ -36,9 +36,8 @@ EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 
 DATABASE = {
     'users' : [],
-    'tokens' : [],#make this a feature of users maybe ?
     'channels' : [],
-    'messages' : [],
+    'messages' : []
 }
 
 SECRET = 'thesecret'
@@ -63,7 +62,7 @@ def token_generate(u_id):
     }
     '''
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
-    return encoded_jwt
+    return encoded_jwt.decode("utf-8") 
 
 
 
@@ -73,6 +72,7 @@ def token_generate(u_id):
 
 def verify_token(token):
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
+    token.encode('utf-8')
     try:
         decoded_jwt = jwt.decode(token, SECRET, algorithms=['HS256'])
     except:
@@ -81,6 +81,7 @@ def verify_token(token):
     return decoded_jwt['u_id']
 
 
+<<<<<<< src/database.py
 
 
 
@@ -102,7 +103,6 @@ def new_message(message_id, channel_id, user_id, message ):
         'time': time,
         'react': [],
         'is_pinned': False,
-    }
     for i in DATABASE['channels']:
         if i['channel_id'] == channel_id:
             i['messages'].append(new_message)
@@ -115,6 +115,17 @@ def new_message(message_id, channel_id, user_id, message ):
 
     return {}
 ##########################################################
+def create_user(u_id, token, email, password, name_first, name_last):
+    DATA = getData()
+    
+    new_user = {
+        'u_id': u_id,
+        'token': token,
+        'name_first': name_first, 
+        'name_last': name_last, 
+        'password': password, 
+        'email': email,
+    }
 def create_channel():
     pass
 
