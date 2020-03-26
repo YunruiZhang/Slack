@@ -83,7 +83,7 @@ def new_message(message_id, channel_id, user_id, message ):
         'u_id': user_id,
         'message': message,
         'time': time,
-        'react': [],
+        'reacts': [],
         'is_pinned': False,
     for i in DATABASE['channels']:
         if i['channel_id'] == channel_id:
