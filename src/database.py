@@ -37,12 +37,6 @@ EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 DATABASE = {
     'users' : [],
     'channels' : [],
-    'messages' : [],
-'''
-
-DATABASE = {
-    'users' : [],
-    'channels' : [],
     'messages' : []
 }
 
