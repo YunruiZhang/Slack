@@ -90,6 +90,7 @@ def new_message(message_id, channel_id, user_id, message ):
         'time': time,
         'react': [],
         'is_pinned': False,
+    }
     for i in DATABASE['channels']:
         if i['channel_id'] == channel_id:
             i['messages'].append(new_message)
