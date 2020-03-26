@@ -98,10 +98,13 @@ def new_message(message_id, channel_id, user_id, message ):
         'u_id': user_id,
         'message': message,
         'time': time,
+        'react': [],
+        'is_pinned': False,
     }
     for i in DATABASE['channels']:
         if i['channel_id'] == channel_id:
-            i[messages].append(new_message)
+            i['messages'].append(new_message)
+            break
     short_msg = {
         'message_id': message_id,
         'channel_id': channel_id,

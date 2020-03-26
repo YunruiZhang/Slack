@@ -36,13 +36,13 @@ def message_remove():
     message.message_remove(jason['token'], jason['message_id'])
     return dumps()
 
-@APP.route("message/edit", methods = ['PUT'])
+@APP.route("/message/edit", methods = ['PUT'])
 def message_edit():
     jason = request.get_json()
     message.message_edit(jason[token], jason['message_id'], jason['message'])
     return dumps()
 
-@APP.route("message/sendlater", methods = ['POST'])
+@APP.route("/message/sendlater", methods = ['POST'])
 def message_sendlater():
     jason= request.get_json()
     message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
