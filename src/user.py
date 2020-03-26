@@ -7,25 +7,29 @@ import re
 
 
 def user_profile(token, u_id):
+    
     DATA = getData()
     
-    if not u_id_check(u_id, token):
+    foundFlag = 0
+    for users in DATA['users']:
+        if users['u_id'] == u_id:
+            foundFlag = 1
+            break
+
+    if not foundFlag:
         raise InputError('Invalid User ID')
     
-    user = None
-    for user in Data['users']:
-        if int(user['u_id']) == u_id:
-            break
-    
-    return user
-'''        'user': {
+    return {'user':users}
+    '''
+    return {'user': {
         	'u_id': 1,
         	'email': 'cs1531@cse.unsw.edu.au',
         	'name_first': 'Hayden',
         	'name_last': 'Jacobs',
         	'handle_str': 'hjacobs',
         }
-    }'''
+    }
+    '''
 
 def user_profile_setname(token, name_first, name_last):
     DATA = getData()
