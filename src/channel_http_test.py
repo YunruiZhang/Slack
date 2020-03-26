@@ -22,8 +22,12 @@ def test_http_channel_invite():
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
   
+    print(channels.channels_listall(token))
+
     channel_id_to_invite = create_channel(owner_token,"Example Channel",1,1)
 
+    print(channel_id_to_invite)
+    print(channels.channels_listall(token))
     data = json.dumps({
         "token" : owner_token,
         "channel_id" : channel_id_to_invite,
@@ -63,6 +67,8 @@ def test_channel_invite_except():
         'channel_id': channel_id_to_invite,
         'u_id' : 0 
     }).encode('utf-8')
+
+    print(getData()['users'])
 
     with pytest.raises(HTTPError) as e:
         req = urllib.request.Request(f"{BASE_URL}/channel/invite", data=data, headers={'Content-Type': 'application/json'})
@@ -422,7 +428,7 @@ def test_channels_create_except():
         channel_id =  create_channel(token,"Example Channel with a ridiculiously long name",0,1)
 
 def get_user(username):
-    auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
+    #auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
     
     # Can use this otherwise
     #return auth.auth_login("example@email.com","password")

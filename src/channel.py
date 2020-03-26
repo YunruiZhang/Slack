@@ -11,6 +11,7 @@ def channel_invite(token, channel_id, u_id):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
+
     if not channel_id_check(channel_id, token) or not u_id_check(u_id, token):
         raise InputError('Invalid User or Channel ID')
 
@@ -33,8 +34,7 @@ def channel_invite(token, channel_id, u_id):
 
     curr_channel['details']['all_members'].append(user_to_add)
 
-    return {
-    }
+    return {}
 
 def channel_details(token, channel_id):
     DATA = getData()
