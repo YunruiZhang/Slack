@@ -92,9 +92,13 @@ def auth_register(email, password, name_first, name_last):
 
     #Gets the first and last name to make a u_id but if it is longer than
     #20 characters the u_id will cutoff at the 20 chars count
-    login = name_first + name_last
-    u_id = (login[:20]) if len(login) > 20 else login
+    #login = name_first + name_last
+    #u_id = (login[:20]) if len(login) > 20 else login
 
+    if len(store['users']) > 1:
+        u_id = store['users'][-1]['u_id'] + 1
+    else:
+        u_id = 1
 
     #Checks if the email entered is valid
     if not valid_email(email):
@@ -107,13 +111,9 @@ def auth_register(email, password, name_first, name_last):
     used by a user in the database
     '''
     index = 0
-    while len(store['users']) is not index:
-        if store['users'][index]['u_id'] is u_id:
-            u_id += "1"
-            break
-        if store['users'][index]['email'] is email:
+    for users in store['users']:
+        if users['email'] == email:
             raise InputError(f"Error, email: {email} is already in use")
-        index += 1
 
 
     #Checks if password is Valid

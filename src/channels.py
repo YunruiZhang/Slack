@@ -48,7 +48,7 @@ def channels_listall(token):
 
 def channels_create(token, name, is_public):
 
-    DATA = getData()
+    global DATABASE
 
     if len(name) > 20:
         raise InputError("Name too long")
@@ -59,7 +59,10 @@ def channels_create(token, name, is_public):
 
     u_id_details = user_profile(token,curr_u_id)['user']
 
-    channel_id = len(DATA['channels'])+1
+    if len(DATABASE['channels']) > 1:
+        channel_id = DATABASE['channels'][-1]['channel_id']+1
+    else:
+        channel_id = 1
 
     new_channel = {
             "channel_id":channel_id,
@@ -84,8 +87,8 @@ def channels_create(token, name, is_public):
             "messages":[]
         }
 
-    DATA['channels'].append(new_channel)
-
+    DATABASE['channels'].append(new_channel)
+  
     return {
         'channel_id': channel_id
     }
