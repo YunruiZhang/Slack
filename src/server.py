@@ -115,8 +115,8 @@ def register():
     token = auth_data['token']
 
     return dumps({
-        'u_id': ,
-        'token': ,
+        'u_id': u_id,
+        'token': token,
         })
 #-----------------------------------------------------------------------------#
 

@@ -64,12 +64,6 @@ def token_generate(u_id):
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
     return encoded_jwt.decode("utf-8") 
 
-
-
-
-
-    
-
 def verify_token(token):
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
     token.encode('utf-8')
@@ -79,18 +73,6 @@ def verify_token(token):
         return False
 
     return decoded_jwt['u_id']
-
-
-<<<<<<< src/database.py
-
-
-
-
-
-
-
-
-
 
 ######################message code############################## 
 def new_message(message_id, channel_id, user_id, message ):
@@ -126,6 +108,9 @@ def create_user(u_id, token, email, password, name_first, name_last):
         'password': password, 
         'email': email,
     }
+    DATA['users'].append(new_user)
+    return {}
+    
 def create_channel():
     pass
 
