@@ -12,25 +12,19 @@ import sys
 
 BASE_URL = 'http://127.0.0.1:8080'
 
-def test_http_channel_invite():
-    # HTTP Route channel/invite, takes: (token, channel_id, u_id)
-    # Returns {}
-    # Invites a user (with user id u_id) to join a channel with ID channel_id. Once invited the user is added to the channel immediately
-
-    #Basic test with valid token, channel_id and u_id
-  
+def test_channel_invite():
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
-  
-    channel_id_to_invite = create_channel(owner_token,"Example Channel",1,1)
-
+    channel_id = create_channel(token,"Example Channel",1,1)
+    # Function channel_join(token, channel_id)
+    # Returns {}
+    # Given a channel_id of a channel that the authorised user can join, adds them to that channel
     data = json.dumps({
         "token" : owner_token,
-        "channel_id" : channel_id_to_invite,
-        "u_id" : u_id
+        "channel_id" : channel_id
     }).encode('utf-8')
 
-    req = urllib.request.Request(f"{BASE_URL}/channel/invite", data=data,headers={'Content-Type': 'application/json'})
+    req = urllib.request.Request(f"{BASE_URL}/channel/join", data=data,headers={'Content-Type': 'application/json'})
     payload = json.load(urllib.request.urlopen(req))
     
     assert payload == {}
@@ -63,6 +57,8 @@ def test_channel_invite_except():
         'channel_id': channel_id_to_invite,
         'u_id' : 0 
     }).encode('utf-8')
+
+    print(getData()['users'])
 
     with pytest.raises(HTTPError) as e:
         req = urllib.request.Request(f"{BASE_URL}/channel/invite", data=data, headers={'Content-Type': 'application/json'})
@@ -422,7 +418,7 @@ def test_channels_create_except():
         channel_id =  create_channel(token,"Example Channel with a ridiculiously long name",0,1)
 
 def get_user(username):
-    auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
+    #auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
     
     # Can use this otherwise
     #return auth.auth_login("example@email.com","password")
@@ -441,6 +437,7 @@ def get_user(username):
     return(int(username[-1]), token_generate(int(username[-1])))
 
 def create_channel(token,name,public,return_id):
+
     create_data = json.dumps({
         "token" : token,
         "name" : name,
@@ -449,6 +446,7 @@ def create_channel(token,name,public,return_id):
 
     req = urllib.request.Request(f"{BASE_URL}/channels/create", data=create_data,headers={'Content-Type': 'application/json'})
     channel_id_to_invite = json.load(urllib.request.urlopen(req))
+
     if return_id:
         return channel_id_to_invite['channel_id']
     else:

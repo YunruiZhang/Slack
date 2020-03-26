@@ -4,6 +4,10 @@
 # msgs is a list of dicts contain msg infos including the channel id which the msg in 
 # and the sender of it , the time it sent and the msg itself.
 import jwt
+import json
+import urllib
+
+BASE_URL = 'http://127.0.0.1:8080'
 
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
@@ -89,10 +93,11 @@ def create_user(u_id, token, email, password, name_first, name_last):
     
     DATA['users'].append(new_user)
     return {}
-    
 
-def create_channel():
-    pass
+def append_channel(new_channel):
+    DATA = getData()
+    DATA['channels'].append(new_channel)
+    return 
 
 def create_message():
     pass
