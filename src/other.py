@@ -29,7 +29,7 @@ def search(token, query_str):
     for single_message in Data['messages']:
         if query_str in single_message['message']:
             i = 0
-            if search_message = []:
+            if search_message == []:
                 search_message[0] = single_message
             else:
                 while(i < len(single_message)):
