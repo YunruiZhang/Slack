@@ -23,12 +23,13 @@ CORS(APP)
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
-
 @APP.route("/message/send", methods = ['POST'])
 def message_send():
     jason = request.get_json()
     msg_id = message.message_send(jason['token'], jason['channel_id'], jason['message'])
-    return dumps(msgid)
+    return dumps({
+        'message_id': msg_id
+    })
 
 @APP.route("/message/remove", methods = ['DELETE'])
 def message_remove():
@@ -39,13 +40,16 @@ def message_remove():
 @APP.route("/message/edit", methods = ['PUT'])
 def message_edit():
     jason = request.get_json()
-    message.message_edit(jason[token], jason['message_id'], jason['message'])
+    message.message_edit(jason['token'], jason['message_id'], jason['message'])
     return dumps()
 
 @APP.route("/message/sendlater", methods = ['POST'])
 def message_sendlater():
     jason= request.get_json()
-    message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
+    id = message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
+    return dumps({
+        'message_id': id
+    })
 # Example
 @APP.route("/echo", methods=['GET'])
 def echo():

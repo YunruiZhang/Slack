@@ -1,5 +1,6 @@
 import database
 from error import AccessError, InputError
+from datetime import datetime
 
 
 
@@ -9,8 +10,8 @@ def message_send(token, channel_id, message):
         raise InputError("Message is longer than 1000 characters")
     #verify the token
     var = database.verify_token(token)
-    if var == False:
-        raise AccessError("The token does not exist")
+    """if var == False:
+        raise AccessError("The token does not exist")"""
     # check if the channel exist and whether the user is in it
     flag = check_in_channel(var, channel_id)
     if flag == 2:
@@ -63,7 +64,7 @@ def message_edit(token, message_id, message):
 
 def message_sendlater(token, channel_id, message, time_sent):
     #if time_sent is in the past raise error
-    if time_sent < datetime.now():
+    if datetime(int(time_sent)) < datetime.now():
         raise InputError("Cannot send a message in the past")
     #check whether the length of msg is smaller than 1000
     if len(message) > 1000:
@@ -90,7 +91,7 @@ def check_in_channel(user_id, channel_id):
     data = database.getData()
     found_channel = 0
     found_user = 0
-    for i in database['channels']:
+    for i in data['channels']:
         if i['channel_id'] == channel_id:
             found_channel = 1
             for x in i['all_members']:
@@ -108,7 +109,7 @@ def check_in_channel(user_id, channel_id):
 
 def get_msg_id():
     data = database.getData()
-    if len(database['messages']) == 0:
+    if len(data['messages']) == 0:
         return 0
     else: 
         return data['messages'][-1]['message_id'] + 1
@@ -165,6 +166,7 @@ def remove(message_id, channel_id):
 
 def edit(message_id, channel_id, message):
     #edit message it in channel
+    data = database.getData()
     for j in data['channels']:
         if j['channel_id'] == channel_id:
             for x in j['messages']:
@@ -174,6 +176,7 @@ def edit(message_id, channel_id, message):
     return{
     }
 def later_send(message_id, channel_id, user_id, message, time_sent):
+    #wait until time_sent
     while datetime.now() < time_sent:
         sleep(0.1)
     database.new_message(message_id, channel_id, user_id, message)
