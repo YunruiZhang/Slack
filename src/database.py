@@ -4,7 +4,7 @@
 # msgs is a list of dicts contain msg infos including the channel id which the msg in 
 # and the sender of it , the time it sent and the msg itself.
 import jwt
-
+from datetime import datetime
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 
@@ -64,6 +64,12 @@ def token_generate(u_id):
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
     return encoded_jwt.decode("utf-8") 
 
+
+
+
+
+    
+
 def verify_token(token):
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
     token.encode('utf-8')
@@ -75,6 +81,40 @@ def verify_token(token):
     return decoded_jwt['u_id']
 
 
+<<<<<<< src/database.py
+
+
+
+
+
+
+
+
+
+
+######################message code############################## 
+def new_message(message_id, channel_id, user_id, message ):
+    DATABASE = getData()
+    time = datetime.now()
+    new_message = {
+        'message_id': message_id,
+        'u_id': user_id,
+        'message': message,
+        'time': time,
+        'react': [],
+        'is_pinned': False,
+    for i in DATABASE['channels']:
+        if i['channel_id'] == channel_id:
+            i['messages'].append(new_message)
+            break
+    short_msg = {
+        'message_id': message_id,
+        'channel_id': channel_id,
+    }
+    DATABASE['messages'].append(short_msg)
+
+    return {}
+##########################################################
 def create_user(u_id, token, email, password, name_first, name_last):
     DATA = getData()
     
@@ -86,11 +126,6 @@ def create_user(u_id, token, email, password, name_first, name_last):
         'password': password, 
         'email': email,
     }
-    
-    DATA['users'].append(new_user)
-    return {}
-    
-
 def create_channel():
     pass
 
