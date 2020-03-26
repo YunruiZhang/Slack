@@ -6,8 +6,9 @@
 import jwt
 import json
 import urllib
-
+from datetime import datetime
 BASE_URL = 'http://127.0.0.1:8080'
+
 
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
@@ -41,7 +42,7 @@ EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
 DATABASE = {
     'users' : [],
     'channels' : [],
-    'messages' : [],
+    'messages' : []
 }
 
 SECRET = 'thesecret'
@@ -78,7 +79,29 @@ def verify_token(token):
 
     return decoded_jwt['u_id']
 
+######################message code############################## 
+def new_message(message_id, channel_id, user_id, message ):
+    DATABASE = getData()
+    time = datetime.now()
+    new_message = {
+        'message_id': message_id,
+        'u_id': user_id,
+        'message': message,
+        'time': time,
+        'react': [],
+        'is_pinned': False,
+    for i in DATABASE['channels']:
+        if i['channel_id'] == channel_id:
+            i['messages'].append(new_message)
+            break
+    short_msg = {
+        'message_id': message_id,
+        'channel_id': channel_id,
+    }
+    DATABASE['messages'].append(short_msg)
 
+    return {}
+##########################################################
 def create_user(u_id, token, email, password, name_first, name_last):
     DATA = getData()
     
@@ -90,7 +113,6 @@ def create_user(u_id, token, email, password, name_first, name_last):
         'password': password, 
         'email': email,
     }
-    
     DATA['users'].append(new_user)
     return {}
 
