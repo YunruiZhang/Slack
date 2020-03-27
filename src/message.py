@@ -157,7 +157,6 @@ def remove(message_id, channel_id):
     for i in data['messages']:
         if int(i['message_id']) == int(message_id):
             data['messages'].remove(i)
-            print(i)
             break
     #remove it in channel
     for j in data['channels']:
@@ -165,7 +164,6 @@ def remove(message_id, channel_id):
             for x in j['messages']:
                 if int(x['message_id']) == int(message_id):
                     j['messages'].remove(x)
-                    print(j)
                     break
     return{
     }
@@ -178,7 +176,6 @@ def edit(message_id, channel_id, message):
             for x in j['messages']:
                 if int(x['message_id']) == int(message_id):
                     x['message'] = message
-                    print(x)
                     break
     return{
     }
