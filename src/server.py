@@ -6,10 +6,9 @@ from error import InputError
 from channel import *
 from channels import *
 from database import *
-
+import auth
 
 import message
-import database
 
 def defaultHandler(err):
     response = err.get_response()
@@ -40,13 +39,13 @@ def message_send():
 def message_remove():
     jason = request.get_json()
     message.message_remove(jason['token'], jason['message_id'])
-    return dumps()
+    return {}
 
 @APP.route("/message/edit", methods = ['PUT'])
 def message_edit():
     jason = request.get_json()
     message.message_edit(jason['token'], jason['message_id'], jason['message'])
-    return dumps()
+    return {}
 
 @APP.route("/message/sendlater", methods = ['POST'])
 def message_sendlater():
@@ -204,5 +203,5 @@ def return_channel_create():
 
 
 if __name__ == "__main__":
-    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
+    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
 
