@@ -21,7 +21,7 @@ def test_message_send():
         'message': 'test',
     ]}.encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/message/send", data=data, headers={'Content-Type': 'application/json'})
-
+    assert 
 def test_message_send_except():
     urllib.request.urlopen(f"{BASE_URL}/message/send")
     u_id, token = get_user("user1")
