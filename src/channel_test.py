@@ -15,9 +15,11 @@ def test_channel_invite():
         # channel_id = 1 (Type: Integer)
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
-    channel_id_to_invite = channels.channels_create(owner_token,"Example Channel", True)['channel_id']
+
+    channel_id_to_invite = channels.channels_create(owner_token,"Example", True)['channel_id']
+
     assert channel.channel_invite(owner_token, channel_id_to_invite, u_id) == {}
-    
+
 def test_channel_invite_except():
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
@@ -277,12 +279,13 @@ def test_channels_create_except():
         assert channels.channels_create(token,"Public Channel With a Name That is Way Too Long", True)
 
 def get_user(username):
-    auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
+    #return auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
     
     # Can use this otherwise
     #return auth.auth_login("example@email.com","password")
 
     # Use this if auth functions aren't implemented
+    
     DATA = getData()
 
     DATA['users'].append( {'u_id' : int(username[-1]),
@@ -294,3 +297,4 @@ def get_user(username):
             })
 
     return(int(username[-1]), token_generate(int(username[-1])))
+    
