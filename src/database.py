@@ -45,6 +45,7 @@ SECRET = 'thesecret'
 def getData():
     global DATABASE
     return DATABASE
+    
 
 
 def token_generate(u_id):
