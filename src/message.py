@@ -1,7 +1,7 @@
 import database
 from error import AccessError, InputError
 from datetime import datetime
-
+import threading
 
 
 def message_send(token, channel_id, message):
@@ -10,8 +10,8 @@ def message_send(token, channel_id, message):
         raise InputError("Message is longer than 1000 characters")
     #verify the token
     var = database.verify_token(token)
-    """if var == False:
-        raise AccessError("The token does not exist")"""
+    if var == False:
+        raise AccessError("The token does not exist")
     # check if the channel exist and whether the user is in it
     flag = check_in_channel(var, channel_id)
     if flag == 2:
@@ -58,13 +58,13 @@ def message_edit(token, message_id, message):
         raise AccessError("The user don't have permission to remove this message")
     if message == '':
         remove(message_id, channel)
-    edit(message_id, channel)
+    edit(message_id, channel, message)
     return {
     }
 
 def message_sendlater(token, channel_id, message, time_sent):
     #if time_sent is in the past raise error
-    if datetime(int(time_sent)) < datetime.now():
+    if time_sent < str(datetime.now()):
         raise InputError("Cannot send a message in the past")
     #check whether the length of msg is smaller than 1000
     if len(message) > 1000:
@@ -92,10 +92,11 @@ def check_in_channel(user_id, channel_id):
     found_channel = 0
     found_user = 0
     for i in data['channels']:
-        if i['channel_id'] == channel_id:
+        if int(i['channel_id']) == int(channel_id):
             found_channel = 1
-            for x in i['all_members']:
-                if x['u_id'] == user_id:
+            #print(i)
+            for x in i['details']['all_members']:
+                if int(x['u_id']) == int(user_id):
                     found_user = 1
     # 0 stands for the channel id is valid and the user is in the channel
     # 1 stands for user is not in the channel
@@ -110,35 +111,38 @@ def check_in_channel(user_id, channel_id):
 def get_msg_id():
     data = database.getData()
     if len(data['messages']) == 0:
-        return 0
+        return 1
     else: 
         return data['messages'][-1]['message_id'] + 1
 
 def check_msg(message_id):
+    #print(message_id)
     data = database.getData()
     for i in data['messages']:
-        if i['message_id'] == message_id:
+        #print(i)
+        if int(i['message_id']) == int(message_id):
+            #print(i['channel_id'])
             return i['channel_id']
     return False
 
 def check_access(user_id, channel_id, message_id):
-    data = database.getData
+    data = database.getData()
     sender = 0
     owner = 0
     #check whether user_id is the sender of the message
-    for i in data['channels']:
-        if i['channel_id'] == channel_id:
-            for x in i['messages']:
-                if x['message_id'] == message_id:
-                    if x['u_id'] == user_id:
+    for channel in data['channels']:
+        if int(channel['channel_id']) == int(channel_id):
+            for x in channel['messages']:
+                if int(x['message_id']) == int(message_id):
+                    if int(x['u_id']) == int(user_id):
                         sender = 1
                         break
     
 
     for ch in data['channels']:
-        if ch['channel_id'] == channel_id:
-            for owner in ch['owner_members']:
-                if owner['u_id'] == user_id:
+        if int(ch['channel_id']) == int(channel_id):
+            for owner in ch['details']['owner_members']:
+                if int(owner['u_id']) == int(user_id):
                     owner = 1
                     break
     
@@ -151,15 +155,17 @@ def remove(message_id, channel_id):
     #remove it in message list inside database
     data = database.getData()
     for i in data['messages']:
-        if i['message_id'] == message_id:
+        if int(i['message_id']) == int(message_id):
             data['messages'].remove(i)
+            print(i)
             break
     #remove it in channel
     for j in data['channels']:
-        if j['channel_id'] == channel_id:
+        if int(j['channel_id']) == int(channel_id):
             for x in j['messages']:
-                if x['message_id'] == message_id:
+                if int(x['message_id']) == int(message_id):
                     j['messages'].remove(x)
+                    print(j)
                     break
     return{
     }
@@ -168,10 +174,11 @@ def edit(message_id, channel_id, message):
     #edit message it in channel
     data = database.getData()
     for j in data['channels']:
-        if j['channel_id'] == channel_id:
+        if int(j['channel_id']) == int(channel_id):
             for x in j['messages']:
-                if x['message_id'] == message_id:
+                if int(x['message_id']) == int(message_id):
                     x['message'] = message
+                    print(x)
                     break
     return{
     }

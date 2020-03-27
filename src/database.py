@@ -91,15 +91,19 @@ def new_message(message_id, channel_id, user_id, message ):
         'reacts': [],
         'is_pinned': False,
     }
-    for i in DATABASE['channels']:
-        if i['channel_id'] == channel_id:
-            i['messages'].append(new_message)
-            break
     short_msg = {
         'message_id': message_id,
-        'channel_id': channel_id,
+        'channel_id': int(channel_id),
     }
     DATABASE['messages'].append(short_msg)
+    #print(DATABASE['messages'])
+    for i in DATABASE['channels']:
+        if int(i['channel_id']) == int(channel_id):
+            #print('hello')
+            i['messages'].append(new_message)
+            #print(i['messages'])
+            break
+   
 
     return {}
 ##########################################################
