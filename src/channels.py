@@ -59,7 +59,7 @@ def channels_create(token, name, is_public):
 
     u_id_details = user_profile(token,curr_u_id)['user']
 
-    if len(DATABASE['channels']) > 1:
+    if len(DATABASE['channels']) != 0:
         channel_id = DATABASE['channels'][-1]['channel_id']+1
     else:
         channel_id = 1
