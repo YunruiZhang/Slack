@@ -13,7 +13,7 @@ import flask
 
 
 # set up
-URL = 'http://127.0.0.1.8000'
+URL = 'http://127.0.0.1.8005'
 email = '123@gmail.com'
 password = 'qwertyu1234'
 name_first = 'FIRSTNAME'
