@@ -2,27 +2,25 @@ from urllib.request import urlopen, Request
 from server import *
 from json import loads, dumps
 import pytest
-from auth import * 
+from auth import auth_register
 from error import InputError, AccessError
 from database import getData
-from channel_http_test import get_user
 
 
 # set up
 URL = 'http://127.0.0.1.8000'
-D = getData()
+email = '123@gmail.com'
+password = 'qwertyu1234'
+name_first = 'FIRSTNAME'
+name_last = 'LASTNAME'
 # create a user
-user = auth_register("")
+u = auth_register(email, password, name_first, name_last)
+u_id = u['u_id']
+
 # create a channel
-create_channel_data = dumps({'token': token, 'name': 'channel_one', 'is_public': True, }).encode('utf-8')
-channel_req = Request(URL+'/channels/create', data=create_channel_data, headers={'Content-Type':'application/json'})
-channel_payload = urlopen(channel_req)
-channel_id = int(channel_payload['channel_id'])
-# send a message
-send_message_data = dumps({'token': token, 'channel_id': channel_id, 'message': "FIRST_MESSAGE",}).encode('utf-8')
-message_req = Request(URL+'/message/send', data=send_message_data, headers={'Content-Type':'application/json'})
-message_payload = urlopen(message_req)
-message_id = int(message_payload['message_id'])
+
+# create a message
+
 
 
 # POST:/message/react
@@ -47,7 +45,7 @@ def test_message_unreact():
 
 # POST:/message/pin
 def test_message_pin():
-    
+    pass
 
 
 # POST:/message/unpin
