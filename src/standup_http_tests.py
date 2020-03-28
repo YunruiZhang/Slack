@@ -60,7 +60,7 @@ def test_standup_send():
     payload = urlopen(req)
 
     assert payload == {}
-    assert ch['standup']['message_buffer'] != []
+    assert ch['standup']['message_buffer'] != []  
 
 
 
