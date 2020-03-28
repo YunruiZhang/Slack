@@ -67,7 +67,7 @@ new_message = {
 
 # POST
 def message_react(token, message_id, react_id):
-'''Given a message within a channel the authorised user is part of, add a "react" to that particular message'''
+    '''Given a message within a channel the authorised user is part of, add a "react" to that particular message'''
     D = getData()
     msg = get_message_from_messageID(message_id)
     ch = get_channel_from_msgID(message_id)
@@ -79,7 +79,7 @@ def message_react(token, message_id, react_id):
     if not check_user_in_channel(userID, ch):
         raise InputError("User not in message's channel")
     # React_id is not a valid React ID. The only valid react ID the frontend has is 1
-    if react_id not 1:
+    if react_id != 1:
         raise InputError('Invalid react ID')
     # Message with ID message_id already contains an active React with ID react_id  
     for r in msg['reacts']:
@@ -89,7 +89,7 @@ def message_react(token, message_id, react_id):
     # Non-exception: add react
     new = {
         'react_id': react_id,
-        'u_ids': [user]
+        'u_ids': [user],
     }
     msg['reacts'].append(new)
     return {}
@@ -97,7 +97,7 @@ def message_react(token, message_id, react_id):
 
 # POST 
 def message_unreact(token, message_id, react_id):
-'''Given a message within a channel the authorised user is part of, remove a "react" to that particular messageGiven a message within a channel the authorised user is part of, remove a "react" to that particular message'''
+    '''Given a message within a channel the authorised user is part of, remove a "react" to that particular messageGiven a message within a channel the authorised user is part of, remove a "react" to that particular message'''
     D = getData()
     msg = get_message_from_messageID(message_id)
     ch = get_channel_from_msgID(message_id)
@@ -109,7 +109,7 @@ def message_unreact(token, message_id, react_id):
     if not check_user_in_channel(userID, ch):
         raise InputError("User not in message's channel")
     # React_id is not a valid React ID
-    if react_id not 1:
+    if react_id != 1:
         raise InputError('Invalid react ID')
     # Message with ID message_id does not contain an active React with ID react_id
     reacted = False
@@ -129,7 +129,7 @@ def message_unreact(token, message_id, react_id):
 
 # POST
 def message_pin(token, message_id):
-'''Given a message within a channel, mark it as "pinned" to be given special display treatment by the frontend'''
+    '''Given a message within a channel, mark it as "pinned" to be given special display treatment by the frontend'''
     D = getData()
     msg = get_message_from_messageID(message_id)
     userID = verify_token(token)
@@ -157,7 +157,7 @@ def message_pin(token, message_id):
 
 # POST
 def message_unpin(token, message_id):
-'''Given a message within a channel, remove it's mark as unpinned'''
+    '''Given a message within a channel, remove it's mark as unpinned'''
     D = getData()
     msg = get_message_from_messageID(message_id)
     userID = verify_token(token)

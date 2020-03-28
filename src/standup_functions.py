@@ -76,12 +76,12 @@ new_message = {
 
 # POST
 def standup_start(token, channel_id, length):
-'''For a given channel, start the standup period whereby 
-for the next "length" seconds if someone calls "standup_send" with a message, 
-it is buffered during the X second window then at the end of the X second window 
-a message will be added to the message queue in the channel 
-from the user who started the standup. 
-X is an integer that denotes the number of seconds that the standup occurs for'''
+    '''For a given channel, start the standup period whereby 
+    for the next "length" seconds if someone calls "standup_send" with a message, 
+    it is buffered during the X second window then at the end of the X second window 
+    a message will be added to the message queue in the channel 
+    from the user who started the standup. 
+    X is an integer that denotes the number of seconds that the standup occurs for'''
     D = getData()
     userID = verify_token(token)
     ch = get_channel_from_channelID(channel_id)
@@ -109,9 +109,9 @@ X is an integer that denotes the number of seconds that the standup occurs for''
 
 # GET
 def standup_active(token, channel_id):
-'''For a given channel, return whether a standup is active in it, 
-and what time the standup finishes. 
-If no standup is active, then time_finish returns None'''
+    '''For a given channel, return whether a standup is active in it, 
+    and what time the standup finishes. 
+    If no standup is active, then time_finish returns None'''
     # InputError:
     # Channel ID is not a valid channel
     if not check_channelID_valid(channel_id):
@@ -120,13 +120,13 @@ If no standup is active, then time_finish returns None'''
     # check
     ch = get_channel_from_channelID(channel_id)
     time_finish = ch['stand']
-    return { 'is_active': , time_finish }
+    return { 'is_active': time_finish!=None, 'time_finish': time_finish }
 
 
 # POST
 def standup_send(token, channel_id, message):
-'''Sending a message to get buffered in the standup queue, 
-assuming a standup is currently active'''
+    '''Sending a message to get buffered in the standup queue, 
+    assuming a standup is currently active'''
     D = getData()
     ch = get_channel_from_channelID(channel_id)
     userID = verify_token(token)

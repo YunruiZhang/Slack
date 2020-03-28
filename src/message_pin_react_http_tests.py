@@ -1,9 +1,9 @@
-from urllib.resuqst import urlopen, Request
-from message_pin_react_functions import message_react, message_unreact, message_pin, message_unpin
+from urllib.request import urlopen, Request
+from server import *
 from json import loads, dumps
 
 # set up
-URL = 'http://127.0.0.1.5000'
+URL = 'http://127.0.0.1.8000'
 # create a user
 user_payload = loads(urlopen(URL + '/auth/register'))
 token = user_payload['token']
