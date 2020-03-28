@@ -18,7 +18,7 @@ def test_message_send():
     data = json.dumps({
         'token': token,
         'channel_id': channel_id,
-        'message': 'test',
+        'message': 'test'
     }).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/message/send", data=data, headers={'Content-Type': 'application/json'})
     payload = json.load(urllib.request.urlopen(req))
