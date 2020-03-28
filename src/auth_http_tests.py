@@ -6,7 +6,7 @@ import urllib
 import json
 from flask import request
 
-BASE_URL = ""
+BASE_URL = "http://127.0.0.1:8081/"
 
 def test_register():
     '''
@@ -16,20 +16,21 @@ def test_register():
     successful registration of the user
     '''
     data = json.dumps({
-    	'email': 'paul@gmail.com'
-    	'password': '123password'
-    	'name_first': 'Paul'
-    	'name_last': 'Velliotis'
+    	'email' : 'paul@gmail.com',
+    	'password' : '123password',
+    	'name_first' : 'Paul',
+    	'name_last' : 'Velliotis'
     	}).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/register",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'},
-                                 method='POST')
+                                data=data,
+                                headers={'Content-Type': 'application/json'},
+                                method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
-    assert payload['u_id'] is not None && payload['token'] is not None
+    assert payload['u_id'] is not None and payload['token'] is not None
 
+'''
 def test_logout():
 	'''
 	This method will try to logout the user's account after 
@@ -37,16 +38,16 @@ def test_logout():
 	will be a dictionary that states whether the operation was 
 	successful or not
 	'''
-	data = json.dumps({
-    	'email': 'paul@gmail.com'
-    	'password': '123password'
-    	'name_first': 'Paul'
-    	'name_last': 'Velliotis'
+    data = json.dumps({
+    	'email' : 'paul@gmail.com',
+    	'password' : '123password',
+    	'name_first' : 'Paul',
+    	'name_last' : 'Velliotis'
     	}).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/register",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'},
-                                 method='POST')
+                                data=data,
+                                headers={'Content-Type':'application/json'},
+                                method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
@@ -56,14 +57,15 @@ def test_logout():
     		'token': user_token
     	}).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/logout",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'},
-                                 method='POST')
+                                data=data,
+                                headers={'Content-Type': 'application/json'},
+                                method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
     assert payload['is_success'] == True
 
+'''
 def test_login():
 	'''
 	This method will try to logout the user's account after 
@@ -72,15 +74,15 @@ def test_login():
 	successful or not
 	'''
 	data = json.dumps({
-    	'email': 'paul@gmail.com'
-    	'password': '123password'
-    	'name_first': 'Paul'
-    	'name_last': 'Velliotis'
+    	'email': 'paul@gmail.com',
+    	'password': '123password',
+    	'name_first': 'Paul',
+    	'name_last': 'Velliotis',
     	}).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/register",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'},
-                                 method='POST')
+                                data=data,
+                                headers={'Content-Type': 'application/json'},
+                                method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
@@ -91,9 +93,9 @@ def test_login():
     		'token': user_token
     	}).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/logout",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'},
-                                 method='POST')
+                                data=data,
+                                headers={'Content-Type': 'application/json'},
+                                method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
@@ -102,10 +104,10 @@ def test_login():
     		'password': '123password'
     	}).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/login",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'},
-                                 method='POST')
+                                data=data,
+                                headers={'Content-Type': 'application/json'},
+                                method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
-    assert payload['u_id'] == user_u_id && payload['token'] is not None
+    assert payload['u_id'] == user_u_id and payload['token'] is not None
