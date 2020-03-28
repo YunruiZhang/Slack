@@ -8,6 +8,7 @@ import database
 import hashlib
 import re
 import jwt
+import random
 
 from error import InputError, AccessError
 
@@ -68,12 +69,26 @@ def auth_logout(token):
     is a dictionary that states wether the method call was a sucess or
     not
     '''
+    
+    #Must check if the token is in the database to prevent a double 
+    #logout
+    
+    store = database.getData()
+    token_is_being_used = False
+    
+    for users in store['users']:
+        if users['token'] == token:
+            token_is_being_used = True
 
-    if database.verify_token(token) == token:
+    if (database.verify_token(token) == False) or (token_is_being_used == False):
         return {
             'is_success': False,
         }
     else:
+        for users in store['users']:
+            if users['token'] == token:
+                users['token'] = ""
+                
         return {
             'is_success': True,
         }
@@ -94,6 +109,13 @@ def auth_register(email, password, name_first, name_last):
     #20 characters the u_id will cutoff at the 20 chars count
     #login = name_first + name_last
     #u_id = (login[:20]) if len(login) > 20 else login
+    
+    login = name_first.lower().replace(" ", "") + name_last.lower().replace(" ", "")
+    handle = (login[:20]) if len(login) > 20 else login
+    
+    for users in store['users']:
+        if users['handle'] == handle:
+            handle = handle[:19] + str(random.randint(0,9))
 
     if len(store['users']) != 0:
         u_id = store['users'][-1]['u_id'] + 1
@@ -110,7 +132,6 @@ def auth_register(email, password, name_first, name_last):
     will also check if the email that was inputed is currently being
     used by a user in the database
     '''
-    index = 0
     for users in store['users']:
         if users['email'] == email:
             raise InputError(f"Error, email: {email} is already in use")
@@ -132,7 +153,7 @@ def auth_register(email, password, name_first, name_last):
     token = database.token_generate(u_id)
 
     #Creating the user and putting it in the database
-    database.create_user(u_id, token, email, hash(password), name_first, name_last)
+    database.create_user(u_id, handle, token, email, hash(password), name_first, name_last)
 
 
     return {

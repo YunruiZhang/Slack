@@ -76,11 +76,12 @@ def verify_token(token):
     return decoded_jwt['u_id']
 
 
-def create_user(u_id, token, email, password, name_first, name_last):
+def create_user(u_id, handle, token, email, password, name_first, name_last):
     DATA = getData()
     
     new_user = {
         'u_id': u_id,
+        'handle': handle,
         'token': token,
         'name_first': name_first, 
         'name_last': name_last, 
