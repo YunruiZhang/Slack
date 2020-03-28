@@ -2,22 +2,22 @@ import database
 from error import AccessError, InputError
 from datetime import datetime
 import threading
-
+from time import sleep
 
 def message_send(token, channel_id, message):
     #check whether the length of msg is smaller than 1000
     if len(message) > 1000:
-        raise InputError("Message is longer than 1000 characters")
+        raise InputError(description = 'Message is longer than 1000 characters')
     #verify the token
     var = database.verify_token(token)
     if var == False:
-        raise AccessError("The token does not exist")
+        raise AccessError(description = 'The token does not exist')
     # check if the channel exist and whether the user is in it
     flag = check_in_channel(var, channel_id)
     if flag == 2:
-        raise InputError("channel doesn't exist")
+        raise InputError(description = 'channel does not exist')
     if flag == 1:
-        raise AccessError("user is not in the channel")
+        raise AccessError(description = 'user is not in the channel')
     message_id = get_msg_id()
     database.new_message(message_id, channel_id, var, message)
     return {
@@ -28,15 +28,15 @@ def message_remove(token, message_id):
     # check whether the token is valid
     user_id = database.verify_token(token)
     if user_id == False:
-        raise AccessError("The token does not exist")
+        raise AccessError(description = 'The token does not exist')
     #check whether the message exist
     channel = check_msg(message_id)
     if channel == False:
-        raise InputError("The message does not exist")
+        raise InputError(description = 'The message does not exist')
     #check whether the user have access to remove it
     access = check_access(user_id, channel, message_id)
     if access == False:
-        raise AccessError("The user don't have permission to remove this message")
+        raise AccessError(description = 'The user doed not have permission to remove this message')
     #remove it
     remove(message_id, channel)
     
@@ -47,15 +47,15 @@ def message_edit(token, message_id, message):
      # check whether the token is valid
     user_id = database.verify_token(token)
     if user_id == False:
-        raise AccessError("The token does not exist")
+        raise AccessError(description = 'The token does not exist')
     #check whether the message exist
     channel = check_msg(message_id)
     if channel == False:
-        raise InputError("The message does not exist")
+        raise InputError(description = 'The message does not exist')
     #check whether the user have access to remove it
     access = check_access(user_id, channel, message_id)
     if access == False:
-        raise AccessError("The user don't have permission to remove this message")
+        raise AccessError(description = 'The user does not have permission to remove this message')
     if message == '':
         remove(message_id, channel)
     edit(message_id, channel, message)
@@ -65,20 +65,20 @@ def message_edit(token, message_id, message):
 def message_sendlater(token, channel_id, message, time_sent):
     #if time_sent is in the past raise error
     if time_sent < str(datetime.now()):
-        raise InputError("Cannot send a message in the past")
+        raise InputError(description = 'Cannot send a message in the past')
     #check whether the length of msg is smaller than 1000
     if len(message) > 1000:
-        raise InputError("Message is longer than 1000 characters")
+        raise InputError(description = 'Message is longer than 1000 characters')
     #verify the token
     var = database.verify_token(token)
     if var == False:
-        raise AccessError("The token does not exist")
+        raise AccessError(description = 'The token does not exist')
     # check if the channel exist and whether the user is in it
     flag = check_in_channel(var, channel_id)
     if flag == 2:
-        raise InputError("channel doesn't exist")
+        raise InputError(description = 'channel does not exist')
     if flag == 1:
-        raise AccessError("user is not in the channel")
+        raise AccessError(description = 'user is not in the channel')
     message_id = get_msg_id()
     #send the msg in time_sent
     threading.Thread(target=later_send, args=(message_id, channel_id, var, message, time_sent)).start()
@@ -181,7 +181,7 @@ def edit(message_id, channel_id, message):
     }
 def later_send(message_id, channel_id, user_id, message, time_sent):
     #wait until time_sent
-    while datetime.now() < time_sent:
+    while str(datetime.now()) < time_sent:
         sleep(0.1)
     database.new_message(message_id, channel_id, user_id, message)
     return{
