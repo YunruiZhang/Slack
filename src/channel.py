@@ -24,7 +24,7 @@ def channel_invite(token, channel_id, u_id):
     if not user_member_check(curr_channel, curr_u_id):
         raise AccessError('User is not a member of the channel')
 
-    u_id_details = user_profile(token,u_id)['user']
+    u_id_details = user_profile(token,u_id)
 
     user_to_add = {
         'u_id':u_id,
@@ -144,7 +144,7 @@ def channel_join(token, channel_id):
     if not user_owner_check(curr_channel,curr_u_id) and not curr_channel['public']:
         raise AccessError('User not an owner of private channel')
 
-    u_id_details = user_profile(token,curr_u_id)['user']
+    u_id_details = user_profile(token,curr_u_id)
 
     user_to_add = {
         'u_id':curr_u_id,
@@ -183,7 +183,7 @@ def channel_addowner(token, channel_id, u_id):
     if not user_owner_check(curr_channel, curr_u_id):
         raise AccessError('AccessError')
 
-    u_id_details = user_profile(token,u_id)['user']
+    u_id_details = user_profile(token,u_id)
 
     user_to_add = {
         'u_id':u_id,
