@@ -121,12 +121,9 @@ def create_user(u_id, token, email, password, name_first, name_last):
     DATA['users'].append(new_user)
     return {}
 
-def append_channel(new_channel):
+def reset():
     DATA = getData()
-    DATA['channels'].append(new_channel)
-    return 
-
-def create_message():
-    pass
-
-
+    del DATA['channels'][-]
+    del DATA['messages'][-]
+    del DATA['users'][-]
+    return {}
