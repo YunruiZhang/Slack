@@ -7,6 +7,8 @@ from channel import *
 from channels import *
 from database import *
 import auth
+from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
+from standup_functions import standup_start, standup_active, standup_send
 
 import message
 
@@ -200,6 +202,79 @@ def return_channel_create():
     name = payload['name']
     is_public = payload['is_public']    
     return channels_create(token,name,is_public) 
+
+
+#--------------------message_pin/react methods-------------------------------------#
+@APP.route("/message/react", methods=['POST'])
+def react_mesage():
+    payload = request.get_json()
+    token = payload['token']
+    react_id = int(payload['react_id'])
+    message_id = int(payload['message_id'])
+    
+    message_react(token, message_id, react_id)
+    return dumps({})
+
+
+@APP.route("/message/unreact", methods=['POST'])
+def unreact_message():
+    payload = request.get_json()
+    token = payload['token']
+    react_id = int(payload['react_id'])
+    message_id = int(payload['message_id'])
+    
+    message_unreact(token, message_id, react_id)
+    return dumps({})
+
+
+@APP.route("/message/pin", methods=['POST'])
+def pin_message():
+    payload = request.get_json()
+    token = payload['token']
+    message_id = int(payload['message_id'])
+
+    message_pin(token, message_id)
+    return dumps({})
+
+
+@APP.route("/message/unpin", methods=['POST'])
+def unpin_message():
+    payload = request.get_json()
+    token = payload['token']
+    message_id = int(payload['message_id'])
+
+    message_unpin(token, message_id)
+    return dumps({})
+
+
+#------------------standup methods----------------------------------#
+@APP.route('/standup/start', methods=['POST'])
+def start_standup():
+    payload = request.get_json()
+    token = payload['token']
+    channel_id = int(payload['channel_id'])
+    length = int(payload['length'])
+
+    response = dumps(standup_start(token, channel_id, length))
+    return response
+
+
+@APP.route('/standup/active', methods=['GET'])
+def is_active_standup():
+    payload = request.get_json()
+    token = payload['token']
+    channel_id = int(payload['channel_id'])
+    return dumps(standup_active(token, channel_id))
+
+
+@APP.route('/standup/send', methods=['POST'])
+def send_standup():
+    payload = request.get_json()
+    token = payload['token']
+    channel_id = int(payload['channel_id'])
+    message = payload['message']
+    return dumps(standup_send(token, channel_id, message))
+
 
 
 if __name__ == "__main__":
