@@ -49,10 +49,10 @@ def test_search():
     response = urllib.request.urlopen(f'{BASE_URL}/other/search?token={person1_token}&query_str={query_str}')
     message1_collection = json.load(response)
     
-    assert(message1_collection[0]['message_id'] = message1_id)
-    assert(message1_collection[0]['u_id'] = person1_u_id)
-    assert(message1_collection[0]['message'] = 'Hello world')
-    assert(message1_collection[0]['time_created'] = 0)
+    assert(message1_collection[0]['message_id'] == message1_id)
+    assert(message1_collection[0]['u_id'] == person1_u_id)
+    assert(message1_collection[0]['message'] == 'Hello world')
+    assert(message1_collection[0]['time_created'] == 0)
  
     
 def register_person():
