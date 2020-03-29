@@ -115,13 +115,12 @@ def test_user_profile():
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_u_id = login_person1['u_id']
     person1_token = login_person1['token']
-    assert user.user_profile(person1_token, person1_u_id) ==  {'user':{
+    assert user.user_profile(person1_token, person1_u_id) ==  {
         	'u_id': person1_u_id,
         	'email': 'cs1531@cse.unsw.edu.au',
         	'name_first': 'Hayden',
         	'name_last': 'Jacobs',
         	'handle': 'haydenjacobs',
-        }
         }, "user_profile fail"
     
 
