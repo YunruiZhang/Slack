@@ -7,7 +7,7 @@ from auth import auth_register
 from channel import channels_create
 from message import message_send
 from message_pin_react_functions import message_react, message_pin
-from stanup_functions import get_channel_from_channelID, standup_start
+from standup_functions import get_channel_from_channelID, standup_start
 from error import InputError, AccessError
 from database import getData
 import flask

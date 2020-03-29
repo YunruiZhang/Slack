@@ -267,8 +267,8 @@ def start_standup():
 @APP.route('/standup/active', methods=['GET'])
 def is_active_standup():
     payload = request.get_json()
-    token = payload['token']
-    channel_id = int(payload['channel_id'])
+    token = request.args.get('token')
+    channel_id = int(request.args.get('channel_id'))
     return dumps(standup_active(token, channel_id))
 
 
@@ -283,5 +283,5 @@ def send_standup():
 
 
 if __name__ == "__main__":
-    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
+    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8082))
 
