@@ -1,6 +1,6 @@
 from database import getData, verify_token
 from error import AccessError, InputError
-
+#from standup_functions import get_channel_from_channelID
 '''
 DATABASE = {
     'users' : [],
@@ -89,7 +89,7 @@ def message_react(token, message_id, react_id):
     # Non-exception: add react
     new = {
         'react_id': react_id,
-        'u_ids': [user],
+        'u_ids': userID,
     }
     msg['reacts'].append(new)
     return {}
@@ -139,14 +139,14 @@ def message_pin(token, message_id):
     if not check_valid_msg(message_id):
         raise InputError("Invalid message ID")
     # The authorised user is not an owner
-    if not check_owner(ch, u_id):
+    if not check_owner(ch, userID):
         raise InputError("User is not an owner")
     # Message with ID message_id is already pinned
     if msg['is_pinned'] == True:
         raise InputError("Given message already pinned")
     # -AccessError:
     # The authorised user is not a member of the channel that the message is within
-    if not check_user_in_channel(u_id, ch):
+    if not check_user_in_channel(userID, ch):
         raise AccessError("User is not a member of the channel")
     
     # Non-exception: pin the message
@@ -167,14 +167,14 @@ def message_unpin(token, message_id):
     if not check_valid_msg(message_id):
         raise InputError("Invalid message ID")
     # The authorised user is not an owner
-    if not check_owner(ch, u_id):
+    if not check_owner(ch, userID):
         raise InputError("User is not an owner")
     # Message with ID message_id is already unpinned
     if not msg['is_pinned']:
         raise InputError("Given message is already UN-pinned")
     # AccessError:
     # The authorised user is not a member of the channel that the message is within
-    if not check_user_in_channel(ch, userID):
+    if not check_user_in_channel(userID, ch):
         raise AccessError('User is not a member of the channel')
     
     # Non-exception: unpin the message
@@ -205,7 +205,7 @@ def get_message_from_messageID(message_id):
 
 
 def check_valid_msg(message_id):
-    D = getData
+    D = getData()
     for sm in D['messages']:
         if sm['message_id'] == message_id:
             return True
@@ -219,9 +219,11 @@ def check_user_in_channel(u_id, ch):
     return False
 
 
+
+
 def check_owner(ch, u_id):
     is_owner = False
-    for u in ch['owner_members']:
+    for u in ch['details']['owner_members']:
         if u['u_id'] == u_id:
             is_owner = True
     return is_owner

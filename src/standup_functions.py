@@ -3,7 +3,8 @@ import threading
 import datetime
 from message import get_msg_id
 import database
-
+from pytz import timezone
+from message_pin_react_functions import check_user_in_channel
 '''
 DATABASE = {
     'users' : [],
@@ -85,20 +86,20 @@ def standup_start(token, channel_id, length):
     D = getData()
     userID = verify_token(token)
     ch = get_channel_from_channelID(channel_id)
-
+    ch1 = ch['standup']
     # InputError:
     # Channel ID is not a valid channel
     if not check_channelID_valid(channel_id):
         raise InputError('Invalid channel ID')
     # An active standup is currently running in this channel
-    if ch['standup']['is_active'] == True:
+    if ch1['is_active'] == True:
         raise InputError("Existing active standup in the channel")
 
     # start a standup
     # set up a timer
     t = threading.Timer(length, standup_end, args=[userID, ch])
     t.start()
-    current_time = datetime.utcnow().replace(tzinfo=timezone.utc).timestamp()
+    current_time = datetime.datetime.utcnow().replace(tzinfo=timezone('UTC')).timestamp()
     time_finish = current_time + length
     # update time_finish
     ch['standup']['time_finish'] = time_finish
@@ -119,7 +120,7 @@ def standup_active(token, channel_id):
 
     # check
     ch = get_channel_from_channelID(channel_id)
-    time_finish = ch['stand']
+    time_finish = ch['standup']['time_finish']
     return { 'is_active': time_finish!=None, 'time_finish': time_finish }
 
 
@@ -147,7 +148,7 @@ def standup_send(token, channel_id, message):
     
     # add standup message
     user = get_user_from_userID(userID)
-    message_to_add = user['handle_str'] + ":" + message
+    message_to_add = user['handle'] + ":" + message
     ch['standup']['message_buffer'].append(message_to_add)
     return {}
 
@@ -186,7 +187,7 @@ def standup_end(u_id, channel):
 def get_user_from_userID(u_id):
     D = getData()
     for u in D['users']:
-        if u[u_id] == u_id:
+        if u['u_id'] == u_id:
             return u
     raise InputError("Invalid user ID")
 
