@@ -9,6 +9,9 @@ from database import *
 import auth
 from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 from standup_functions import standup_start, standup_active, standup_send
+#from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
+#from standup_functions import standup_start, standup_active, standup_send
+
 
 import message
 
@@ -89,11 +92,13 @@ def logout():
     '''
 
     data = request.get_json()
+    token = data['token']
 
-    auth_data = auth.auth_logout(data['token'])
+    auth_data = auth.auth_logout(token)
+    logout_status = auth_data['is_success']
 
     return dumps({
-        'is_success': auth_data['is_success'],
+        'is_success': logout_status,
         })
 
 
