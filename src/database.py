@@ -123,7 +123,7 @@ def create_user(u_id, token, email, password, name_first, name_last):
 
 def reset():
     DATA = getData()
-    del DATA['channels'][-]
-    del DATA['messages'][-]
-    del DATA['users'][-]
+    del DATA['channels'][:]
+    del DATA['messages'][:]
+    del DATA['users'][:]
     return {}

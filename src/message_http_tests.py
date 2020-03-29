@@ -9,6 +9,7 @@ import urllib
 import flask 
 import message
 from urllib.error import HTTPError
+from datetime import datetime
 BASE_URL = 'http://127.0.0.1:8081'
 
 def test_message_send():
@@ -47,6 +48,18 @@ def test_message_send():
     req = urllib.request.Request(f"{BASE_URL}/message/edit", data=data3, headers={'Content-Type': 'application/json'}, method='PUT')
     payload = json.load(urllib.request.urlopen(req))
     assert payload == {}
+    #test send later
+    time = datetime.now()
+    data4 = json.dumps({
+        'token': token,
+        'channel_id': channel_id,
+        'message': 'yep',
+        'time_sent': str(time)
+    }).encode('utf-8')
+    with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/message/sendlater", data=data4, headers={'Content-Type': 'application/json'})
+        payload = json.load(urllib.request.urlopen(req))
+    
 
 
 def get_user(username):
