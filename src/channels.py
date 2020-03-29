@@ -57,7 +57,7 @@ def channels_create(token, name, is_public):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    u_id_details = user_profile(token,curr_u_id)['user']
+    u_id_details = user_profile(token,curr_u_id)
 
     if len(DATABASE['channels']) != 0:
         channel_id = DATABASE['channels'][-1]['channel_id']+1
