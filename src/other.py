@@ -1,30 +1,28 @@
+from database import *
+from channel import *
+from error import *
+import re
+
+
 def users_all(token):
     all_user = []
-    Data = getdata()
+    Data = getData()
     
     operate_u_id = verify_token(token)
     if not operate_u_id:
         raise AccessError('Token Invalid')
     for user in Data['users']:
+        user.pop('password')
+        user.pop('token')
         all_user.append(user)
     
-    return{ 'list' : all_user }
+    return all_user 
    
-''' return {
-        'users': [
-            {
-                'u_id': 1,
-                'email': 'cs1531@cse.unsw.edu.au',
-                'name_first': 'Hayden',
-                'name_last': 'Jacobs',
-                'handle_str': 'hjacobs',
-            },
-        ],
-    }'''
+
 
 def search(token, query_str):
     search_message = []
-    Data = getdata()
+    Data = getData()
     
     for single_message in Data['messages']:
         if query_str in single_message['message']:
@@ -43,14 +41,4 @@ def search(token, query_str):
     
     return { 'messages' : search_message }
     
-    
-    '''return {
-        'messages': [
-            {
-                'message_id': 1,
-                'u_id': 1,
-                'message': 'Hello world',
-                'time_created': 1582426789,
-            }
-        ],
-    }'''
+ 
