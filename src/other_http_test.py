@@ -3,6 +3,7 @@ import json
 from flask import request
 import pytest
 BASE_URL = 'http://127.0.0.1:8081'
+query_str = 'world'
 
 def test_users_all():
     register_person()
@@ -45,13 +46,13 @@ def test_search():
     message1_id = json.load(response)['message_id']
     
     
-    response = urllib.request.urlopen(f'{BASE_URL}/other/search?token={person1_token}&query_str={'Hello'}')
+    response = urllib.request.urlopen(f'{BASE_URL}/other/search?token={person1_token}&query_str={query_str}')
     message1_collection = json.load(response)
     
-    assert(message1_collection[0]['message_id'] = message1_id)
-    assert(message1_collection[0]['u_id'] = person1_u_id)
-    assert(message1_collection[0]['message'] = 'Hello world')
-    assert(message1_collection[0]['time_created'] = 0)
+    assert(message1_collection[0]['message_id'] == message1_id)
+    assert(message1_collection[0]['u_id'] == person1_u_id)
+    assert(message1_collection[0]['message'] == 'Hello world')
+    assert(message1_collection[0]['time_created'] == 0)
  
     
 def register_person():
