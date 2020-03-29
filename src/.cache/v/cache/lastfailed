@@ -1,0 +1,18 @@
+{
+  "channel_http_test.py::test_channel_addowner": true,
+  "channel_http_test.py::test_channel_addowner_except": true,
+  "channel_http_test.py::test_channel_details": true,
+  "channel_http_test.py::test_channel_details_except": true,
+  "channel_http_test.py::test_channel_invite": true,
+  "channel_http_test.py::test_channel_invite_except": true,
+  "channel_http_test.py::test_channel_join": true,
+  "channel_http_test.py::test_channel_join_except": true,
+  "channel_http_test.py::test_channel_leave": true,
+  "channel_http_test.py::test_channel_leave_except": true,
+  "channel_http_test.py::test_channel_messages": true,
+  "channel_http_test.py::test_channel_messages_except": true,
+  "channel_http_test.py::test_channel_removeowner": true,
+  "channel_http_test.py::test_channel_removeowner_except": true,
+  "channel_http_test.py::test_channels_create": true,
+  "channel_http_test.py::test_http_channel_invite": true
+}
