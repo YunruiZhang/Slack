@@ -18,13 +18,21 @@ def user_profile(token, u_id):
 
     if not foundFlag:
         raise InputError('Invalid User ID')
-    return_user = {}
+
+    return_user = {
+        'u_id' : users['u_id'],
+        'email' : users['email'],
+        'name_first' : users['name_first'],
+        'name_last' : users['name_last'],
+        'handle' : users['handle']
+    }
+    '''
     return_user['u_id'] = users['u_id']
     return_user['email'] = users['email']
     return_user['name_first'] = users['name_first']
     return_user['name_last'] = users['name_last']
     return_user['handle'] = users['handle']
-    
+    '''
     return return_user
     '''
     return {'user': {

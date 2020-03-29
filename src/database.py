@@ -127,7 +127,12 @@ def create_user(u_id, handle, token, email, password, name_first, name_last):
 
 def reset():
     DATA = getData()
+    '''
     del DATA['channels'][:]
     del DATA['messages'][:]
     del DATA['users'][:]
+    '''
+    DATA['users'].clear()
+    DATA['messages'].clear()
+    DATA['channels'].clear()
     return {}
