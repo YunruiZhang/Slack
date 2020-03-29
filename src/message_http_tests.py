@@ -12,7 +12,7 @@ from urllib.error import HTTPError
 BASE_URL = 'http://127.0.0.1:8081'
 
 def test_message_send():
-    #test normal case
+    #test send
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
     data = json.dumps({
@@ -23,53 +23,30 @@ def test_message_send():
     req = urllib.request.Request(f"{BASE_URL}/message/send", data=data, headers={'Content-Type': 'application/json'})
     payload = json.load(urllib.request.urlopen(req))
     assert payload['message_id'] is not None
-def test_long_message():
-    #test long messgae
-    database.reset()
-    u_id, token = get_user("user1")
-    message = 'a' * 1001
-    data1 = json.dumps({
-        'token': token,
-        'channel_id': channel_id,
-        'message': message
-    }).encode('utf-8')
-    with pytest.raises(HTTPError) as e:
-        req = urllib.request.Request(f"{BASE_URL}/message/send", data=data1, headers={'Content-Type': 'application/json'})
-        json.load(urllib.request.urlopen(req))
-"""def test_not_in_channel():
-    #test not in channel
-    u_id2, token2 = get_user("user2")
-    data2 = json.dumps({
-        'token': token2,
-        'channel_id': channel_id,
-        'message': 'test'
-    }).encode('utf-8')
-    with pytest.raises(HTTPError) as e:
-        req = urllib.request.Request(f"{BASE_URL}/message/send", data=data2, headers={'Content-Type': 'application/json'})
-        json.load(urllib.request.urlopen(req))
-    
-def test_message_delete():
+
     #test remove 
-    database.reset()
-    u_id, token = get_user("user1")
-    channel_id = create_channel(token,"Example Channel",1,1)
-    data = json.dumps({
-        'token': token,
-        'channel_id': channel_id,
-        'message': 'test'
-    }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/message/send", data=data, headers={'Content-Type': 'application/json'})
-    data3 = json.dumps({
+    data2 = json.dumps({
         'token': token,
         'message_id': 1,
     }).encode('utf-8')
    
-    req = urllib.request.Request(f"{BASE_URL}/message/remove", data=data3, headers={'Content-Type': 'application/json'}, method='DELETE')
+    req = urllib.request.Request(f"{BASE_URL}/message/remove", data=data2, headers={'Content-Type': 'application/json'}, method='DELETE')
     payload = json.load(urllib.request.urlopen(req))
     assert payload == {}
 
-"""
+    #send another message
+    req = urllib.request.Request(f"{BASE_URL}/message/send", data=data, headers={'Content-Type': 'application/json'})
+    payload = json.load(urllib.request.urlopen(req))
+    #edit the message
+    data3 = json.dumps({
+        'token': token,
+        'message_id': 1,
+        'message': 'yep'
+    }).encode('utf-8')
 
+    req = urllib.request.Request(f"{BASE_URL}/message/edit", data=data3, headers={'Content-Type': 'application/json'}, method='PUT')
+    payload = json.load(urllib.request.urlopen(req))
+    assert payload == {}
 
 
 def get_user(username):

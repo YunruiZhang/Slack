@@ -130,9 +130,3 @@ def create_message():
     pass
 
 
-def reset():
-    DATA = getData()
-    del DATA['users'][:]
-    del DATA['channels'][:]
-    del DATA['messages'][:]
-    return
