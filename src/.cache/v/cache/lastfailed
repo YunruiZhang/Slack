@@ -13,8 +13,6 @@
   "message_test.py::test_message_remove_except": true,
   "message_test.py::test_message_send": true,
   "message_test.py::test_message_send_except": true,
-  "other_http_test.py::test_search": true,
-  "other_http_test.py::test_users_all": true,
   "other_test.py::test_search": true,
   "other_test.py::test_users_all": true,
   "standup_http_test.py::test_standup_active": true,

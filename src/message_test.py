@@ -119,7 +119,7 @@ def test_message_edit_except():
 	# AccessError (When none of the following are true):
 	#	Message with message_id was sent by the authorised user making this request	
 	#	The authorised user is an admin or owner of this channel or the slackr
-	with pytest.raises(AccessError):
+	with pytest.raises(InputError):
 		message_edit(member_token, m_id2, new_mes)
 	# member edit member's message but too long
 	m_id6 = message_send(member_token, c_id1, 'sixth message in channel 1')['message_id']
