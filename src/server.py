@@ -280,6 +280,11 @@ def send_standup():
     message = payload['message']
     return dumps(standup_send(token, channel_id, message))
 
+@APP.route('/workspace/reset', methods=['POST'])
+def reset_workspace():
+    payload = request.get_json()
+    return reset()
+
 
 
 if __name__ == "__main__":

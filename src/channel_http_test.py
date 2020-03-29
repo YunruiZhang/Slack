@@ -10,7 +10,7 @@ import urllib
 import flask 
 import sys
 
-BASE_URL = 'http://127.0.0.1:8080'
+BASE_URL = 'http://127.0.0.1:8081'
 
 def test_channel_invite():
     u_id, token = get_user("user1")
