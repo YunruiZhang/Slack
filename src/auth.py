@@ -95,7 +95,7 @@ def auth_register(email, password, name_first, name_last):
     #login = name_first + name_last
     #u_id = (login[:20]) if len(login) > 20 else login
 
-    if len(store['users']) != 0:
+    if len(store['users']) > 1:
         u_id = store['users'][-1]['u_id'] + 1
     else:
         u_id = 1
