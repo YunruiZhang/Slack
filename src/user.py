@@ -10,13 +10,13 @@ def user_profile(token, u_id):
     
     DATA = getData()
     
-    foundFlag = 0
+    foundFlag = False
     for users in DATA['users']:
-        if users['u_id'] == u_id:
-            foundFlag = 1
+        if int(users['u_id']) == int(u_id):
+            foundFlag = True
             break
 
-    if not foundFlag:
+    if foundFlag == False:
         raise InputError('Invalid User ID')
 
     return_user = {
@@ -59,9 +59,9 @@ def user_profile_setname(token, name_first, name_last):
    # if not operate_u_id:
       #  raise AccessError('Token Invalid')
     curr_u_id = verify_token(token)
-    user = None
+
     for user in Data['users']:
-        if int(user['u_id']) == curr_u_id:
+        if int(user['u_id']) == int(curr_u_id):
             break   
     
     user['name_first'] = name_first
@@ -83,9 +83,8 @@ def user_profile_setemail(token, email):
    # if not curr_u_id:
     #    raise AccessError('Token Invalid')
     
-    user = None
     for user in Data['users']:
-        if int(user['u_id']) == curr_u_id:
+        if int(user['u_id']) == int(curr_u_id):
             break   
     
     user['email'] = email   
@@ -106,9 +105,8 @@ def user_profile_sethandle(token, handle_str):
    # if not curr_u_id:
    #     raise AccessError('Token Invalid')
        
-    user = None
     for user in DATA['users']:
-        if int(user['u_id']) == curr_u_id:
+        if int(user['u_id']) == int(curr_u_id):
             break   
     
     user['handle'] = handle_str

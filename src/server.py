@@ -6,6 +6,7 @@ from error import InputError
 from channel import *
 from channels import *
 from database import *
+from other import *
 import auth
 from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 from standup_functions import standup_start, standup_active, standup_send
@@ -280,10 +281,56 @@ def send_standup():
     message = payload['message']
     return dumps(standup_send(token, channel_id, message))
 
+@APP.route("/user/profile", methods=['GET'])
+def return_profile():
+    token = request.args.get('token') 
+    u_id = request.args.get('u_id')
+    return user_profile(token,u_id)
+
+@APP.route("/user/profile/setname", methods=['PUT'])
+def return_set_name():
+    payload = request.get_json()
+    token = payload['token']
+    name_first = payload['name_first']
+    name_last = payload['name_last']
+    return user_profile_setname(token,name_first,name_last)
+
+@APP.route("/user/profile/setemail", methods=['PUT'])
+def return_set_email():
+    payload = request.get_json()
+    token = payload['token']
+    email = payload['email']
+    return user_profile_setemail(token,email)
+
+@APP.route("/user/profile/sethandle", methods=['PUT'])
+def return_set_handle():
+    payload = request.get_json()
+    token = payload['token']
+    handle = payload['handle']
+    return user_profile_sethandle(token,handle)
+
+@APP.route("/users/all", methods=['GET'])
+def return_all_users():
+    token = request.args.get('token') 
+    return users_all(token)
+
+@APP.route("/search", methods=['GET'])
+def return_message_search():
+    token = request.args.get('token') 
+    query_str = request.args.get('query_str')
+    return search(token,query_str)
+
 @APP.route('/workspace/reset', methods=['POST'])
 def reset_workspace():
-    #payload = request.get_json()
     return reset()
+
+@APP.route('/userpermission/change', methods=['POST'])
+def change_user_permission():
+    payload = request.get_json()
+    token = payload['token']
+    u_id = payload['u_id']
+    permission_id = payload['permission_id']
+    return change_permission(token,u_id,permission_id)
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))

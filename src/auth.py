@@ -144,8 +144,13 @@ def auth_register(email, password, name_first, name_last):
     #Creating a token
     token = database.token_generate(u_id)
 
+    if len(store['users']) != 0:
+        permission_id = 2
+    else:
+        permission_id = 1
+
     #Creating the user and putting it in the database
-    database.create_user(u_id, handle, token, email, hash(password), name_first, name_last)
+    database.create_user(u_id, permission_id, handle, token, email, hash(password), name_first, name_last)
 
 
     return {

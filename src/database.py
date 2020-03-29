@@ -6,6 +6,7 @@
 import jwt
 import json
 import urllib
+from error import InputError, AccessError
 from datetime import datetime
 BASE_URL = 'http://127.0.0.1:8080'
 
@@ -109,12 +110,13 @@ def new_message(message_id, channel_id, user_id, message ):
 
     return {}
 ##########################################################
-def create_user(u_id, handle, token, email, password, name_first, name_last):
+def create_user(u_id,permission_id, handle, token, email, password, name_first, name_last):
 
     DATA = getData()
     
     new_user = {
         'u_id': u_id,
+        'permission_id': permission_id,
         'handle': handle,
         'token': token,
         'name_first': name_first, 
@@ -136,3 +138,26 @@ def reset():
     DATA['messages'].clear()
     DATA['channels'].clear()
     return {}
+
+def change_permission(token,u_id,permission_id):
+    DATA = getData()
+
+    if permission_id != 1 and permission_id != 2:
+        raise InputError("Invalid permission ID")
+
+    owner_flag = False
+    user_to_change = None
+
+    for users in DATA['users']:
+        if users['u_id'] == u_id:
+            user_to_change = users
+        if users['u_id'] == verify_token(token):
+            if users['permission_id'] == 1:
+                owner_flag = True
+
+    if not owner_flag:
+        raise AccessError("Authorised user not an owner")
+
+    user_to_change['permission_id'] = permission_id
+
+    return {}       

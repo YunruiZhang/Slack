@@ -16,7 +16,7 @@ def users_all(token):
         user.pop('token')
         all_user.append(user)
     
-    return all_user 
+    return {"users":all_user} 
    
 
 

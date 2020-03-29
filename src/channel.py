@@ -180,7 +180,7 @@ def channel_addowner(token, channel_id, u_id):
     if user_owner_check(curr_channel, u_id):
         raise InputError('InputError')
 
-    if not user_owner_check(curr_channel, curr_u_id):
+    if not user_owner_check(curr_channel, curr_u_id) and not slackr_owner_check(curr_u_id):
         raise AccessError('AccessError')
 
     u_id_details = user_profile(token,u_id)
@@ -218,9 +218,9 @@ def channel_removeowner(token, channel_id, u_id):
     if not user_owner_check(curr_channel, u_id):
         raise InputError('InputError')
 
-    if not user_owner_check(curr_channel, curr_u_id):
+    if not user_owner_check(curr_channel, curr_u_id) and not slackr_owner_check(curr_u_id):
         raise AccessError('AccessError')
-   
+
     for owners in curr_channel['details']['owner_members']:
         if owners['u_id'] == u_id:
             curr_channel['details']['owner_members'].remove(owners)
@@ -256,5 +256,12 @@ def user_owner_check(channel, u_id):
     for members in channel['details']['owner_members']:
         if int(members['u_id']) == int(u_id):
             return True
-            break        
+    return False
+
+def slackr_owner_check(u_id):
+    user_list = getData()['users']
+    for users in user_list:
+        if users['u_id'] == u_id:
+            if int(users['permission_id']) == 1:
+                return True
     return False

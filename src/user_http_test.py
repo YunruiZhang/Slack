@@ -2,10 +2,14 @@ import urllib
 import json
 from flask import request
 import pytest
+from error import InputError, AccessError
+from urllib.error import HTTPError
 BASE_URL = 'http://127.0.0.1:8081'
 
 def test_user_profile():
-    
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     register_person()
     person1 = login_person()
     person1_token = person1['token']
@@ -14,13 +18,13 @@ def test_user_profile():
     return_person = json.load(response)
     
     assert(return_person['email'] == 'cs1531@cse.unsw.edu.au')
-    assert(return_person['password'] == 'abc123')
+    assert(return_person['handle'] == 'haydenjacobs')
     assert(return_person['name_first'] == 'Hayden')
     assert(return_person['name_last'] == 'Jacobs')
+    assert(return_person['u_id'] == 1)
     
- 
-    response = urllib.request.urlopen(f'{BASE_URL}/user/profile?token={person1_token}&u_id={10000000}')
     with pytest.raises(HTTPError) as e:
+        response = urllib.request.urlopen(f'{BASE_URL}/user/profile?token={person1_token}&u_id={100}')
         json.load(urllib.request.urlopen(req))
         
 def test_user_profile_setname():
@@ -33,10 +37,10 @@ def test_user_profile_setname():
         'name_first' : 'Python',
         'name_last' : 'Forever' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_setname",
+    req = urllib.request.Request(f"{BASE_URL}/user/profile/setname",
                                  data=data,
-                                 headers={'Content-Type': 'application/json'})
-   
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
+    json.load(urllib.request.urlopen(req))
     person2 = urllib_request_user_profile(person1_token,person1['u_id'])
     
     assert(person2['name_first'] == 'Python')
@@ -47,10 +51,11 @@ def test_user_profile_setname():
         'name_first' : 'n'*100,
         'name_last' : 'Forever' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_setname",
-                                 data=data2,
-                                 headers={'Content-Type': 'application/json'})
+
     with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/user/profile/setname",
+                                 data=data2,
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
         json.load(urllib.request.urlopen(req))
         
     data3 = json.dumps({
@@ -58,10 +63,11 @@ def test_user_profile_setname():
         'name_first' : 'Python',
         'name_last' : 'F' * 100
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_setname",
-                                 data=data3,
-                                 headers={'Content-Type': 'application/json'})
+    
     with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/user/profile/setname",
+                                 data=data3,
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
         json.load(urllib.request.urlopen(req))    
 
 def test_user_profile_setemail():
@@ -73,9 +79,10 @@ def test_user_profile_setemail():
         'token': person1_token, 
         'email': 'cs1533@cse.unsw.edu.au' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_setemail",
+    req = urllib.request.Request(f"{BASE_URL}/user/profile/setemail",
                                  data=data,
-                                 headers={'Content-Type': 'application/json'})
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
+    json.load(urllib.request.urlopen(req))
     person1 = urllib_request_user_profile(person1_token,person1['u_id'])
     assert person1['email'] == 'cs1533@cse.unsw.edu.au'
     
@@ -86,20 +93,22 @@ def test_user_profile_setemail():
         'token': person1_token, 
         'email': 'cs1532@cse.unsw.edu.au' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_setemail",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'})
+    
     with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/user/profile/setemail",
+                             data=data,
+                             headers={'Content-Type': 'application/json'}, method = "PUT")
         json.load(urllib.request.urlopen(req)) 
         
     data = json.dumps({
         'token': person1_token, 
         'email': '11111111' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_setemail",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'})
+    
     with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/user/profile/setemail",
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
         json.load(urllib.request.urlopen(req))
     
 def test_user_profile_sethandle():
@@ -111,9 +120,10 @@ def test_user_profile_sethandle():
         'token': person1_token, 
         'handle': 'lovepython' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_sethandle",
+    req = urllib.request.Request(f"{BASE_URL}/user/profile/sethandle",
                                  data=data,
-                                 headers={'Content-Type': 'application/json'})
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
+    json.load(urllib.request.urlopen(req))
     person2 = urllib_request_user_profile(person1_token,person1['u_id'])
     assert person1['handle'] == 'lovepython'
     
@@ -123,20 +133,22 @@ def test_user_profile_sethandle():
         'token': person1_token, 
         'handle': 'hdenmarry' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_sethandle",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'})
+    
     with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/user/profile/sethandle",
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
         json.load(urllib.request.urlopen(req)) 
         
     data = json.dumps({
         'token': person1_token, 
         'email': 'a' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/user_profile_sethandle",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'})
+    
     with pytest.raises(HTTPError) as e:
+        req = urllib.request.Request(f"{BASE_URL}/user/profile/sethandle",
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'}, method = "PUT")
         json.load(urllib.request.urlopen(req)) 
 
 def urllib_request_user_profile(token,u_id):
