@@ -25,7 +25,7 @@ def user_profile(token, u_id):
     return_user['name_last'] = users['name_last']
     return_user['handle'] = users['handle']
     
-    return {'user':return_user}
+    return return_user
     '''
     return {'user': {
         	'u_id': 1,
