@@ -84,7 +84,12 @@ def channels_create(token, name, is_public):
                     }
                 ],
             },
-            "messages":[]
+            "messages":[],
+            "standup": {
+                "time_finish": None,
+                "message_buffer": [],
+                "is_active": False,
+            }
         }
 
     DATABASE['channels'].append(new_channel)
