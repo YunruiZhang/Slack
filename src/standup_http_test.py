@@ -15,7 +15,7 @@ from datetime import datetime
 
 # set up
 URL = 'http://127.0.0.1.8009'
-email = '123@gmail.com'
+email = '1234@gmail.com'
 password = 'qwertyu1234'
 name_first = 'FIRSTNAME'
 name_last = 'LASTNAME'
