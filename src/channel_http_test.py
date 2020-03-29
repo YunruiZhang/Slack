@@ -2,6 +2,7 @@ import channel
 import channels
 import auth
 import pytest
+from other import *
 from database import *
 from error import InputError, AccessError
 from urllib.error import HTTPError
@@ -13,6 +14,9 @@ import sys
 BASE_URL = 'http://127.0.0.1:8081'
 
 def test_channel_invite():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
     channel_id = create_channel(token,"Example Channel",1,1)
@@ -27,9 +31,14 @@ def test_channel_invite():
     req = urllib.request.Request(f"{BASE_URL}/channel/join", data=data,headers={'Content-Type': 'application/json'})
     payload = json.load(urllib.request.urlopen(req))
     
+    #urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})
+
     assert payload == {}
 
 def test_channel_invite_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
     random_id, random_token = get_user("user3")
@@ -79,6 +88,8 @@ def test_channel_invite_except():
 
 
 def test_channel_details():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
     # Function channel_details(token, channel_id)
     # Returns {name, owner_members, all_members}
     # Given a Channel with ID channel_id that the authorised user is part of, provide basic details about the channel
@@ -95,6 +106,8 @@ def test_channel_details():
     assert 'all_members' in list_of_keys
 
 def test_channel_details_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
 
@@ -112,6 +125,9 @@ def test_channel_details_except():
         response = urllib.request.urlopen(f'{BASE_URL}/channel/details?token={new_token}&channel_id={channel_id}')
 
 def test_channel_messages():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channel_messages(token, channel_id, start)
     # Returns {messages, start, end}
     # Given a Channel with ID channel_id that the authorised user is part of, return up to 50 messages between index "start" and "start + 50". Message with index 0 is the most recent message in the channel. This function returns a new index "end" which is the value of "start + 50", or, if this function has returned the least recent messages in the channel, returns -1 in "end" to indicate there are no more messages to load after this return.
@@ -131,6 +147,9 @@ def test_channel_messages():
     assert payload['end'] <= start+50 or payload['end'] > -1
 
 def test_channel_messages_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
     # InputError:
@@ -155,6 +174,9 @@ def test_channel_messages_except():
 
 
 def test_channel_leave():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channel_leave(token, channel_id)
     # Returns {}
     # Given a channel ID, the user removed as a member of this channel
@@ -172,6 +194,9 @@ def test_channel_leave():
     assert payload == {}
 
 def test_channel_leave_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
     # InputError:
@@ -201,6 +226,9 @@ def test_channel_leave_except():
         payload = json.load(urllib.request.urlopen(req))
 
 def test_channel_join():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
     # Function channel_join(token, channel_id)
@@ -217,6 +245,9 @@ def test_channel_join():
     assert payload == {}
 
 def test_channel_join_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
     # InputError:
@@ -247,6 +278,9 @@ def test_channel_join_except():
         payload = json.load(urllib.request.urlopen(req))
 
 def test_channel_addowner():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channel_addowner(token, channel_id, u_id)
     # Returns {}
     # Make user with user id u_id an owner of this channel
@@ -266,6 +300,9 @@ def test_channel_addowner():
     assert payload == {}
 
 def test_channel_addowner_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # InputError:
     #   Channel ID is not a valid channel
     u_id, token = get_user("user1")
@@ -311,6 +348,9 @@ def test_channel_addowner_except():
         payload = json.load(urllib.request.urlopen(req))
 
 def test_channel_removeowner():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channel_addowner(token, channel_id, u_id)
     # Returns {}
     # Remove user with user id u_id an owner of this channel
@@ -335,6 +375,9 @@ def test_channel_removeowner():
     assert payload == {}
 
 def test_channel_removeowner_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     u_id, token = get_user("user1")
     owner_id, owner_token = get_user("user2")
     # InputError:
@@ -376,6 +419,9 @@ def test_channel_removeowner_except():
         payload = json.load(urllib.request.urlopen(req))
 
 def test_channels_list():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channels_list(token)
     # Returns {channels}
     # Provide a list of all channels (and their associated details) that the authorised user is part of
@@ -388,6 +434,9 @@ def test_channels_list():
     assert payload.keys() == {"channels"}
 
 def test_channels_listall():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channels_listall(token)
     # Returns {channels}
     # Provide a list of all channels (and their associated details)
@@ -399,6 +448,9 @@ def test_channels_listall():
     assert payload.keys() == {"channels"}
 
 def test_channels_create():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # Function channels_create(token, name, is_public)  
     # Returns {channel_id}
     # Creates a new channel with that name that is either a public or private channel
@@ -410,6 +462,9 @@ def test_channels_create():
     assert create_channel(token,"Example Channel",0,False).keys() == {"channel_id"}
 
 def test_channels_create_except():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
     # InputError:
     #   Name is more than 20 characters long
     u_id, token = get_user("user1")
@@ -418,24 +473,37 @@ def test_channels_create_except():
         channel_id =  create_channel(token,"Example Channel with a ridiculiously long name",0,1)
 
 def get_user(username):
-    #auth.auth_register(username+"@email.com", username+"pass", "John", "Doe")
-    
+    #response = auth.auth_register(username+"@email.com", "password123", "John", "Doe")
+
+    data = json.dumps({
+        'email': username+'@email.com',
+        'password': '123password',
+        'name_first': 'John',
+        'name_last': 'Doe'
+    }).encode('utf-8')
+
+    req = urllib.request.Request(f"{BASE_URL}/auth/register",data=data,headers={'Content-Type': 'application/json'}, method='POST')
+    response = urllib.request.urlopen(req)
+    payload = json.load(response)
+
+    return (payload['u_id'],payload['token'])
     # Can use this otherwise
     #return auth.auth_login("example@email.com","password")
 
     # Use this if auth functions aren't implemented
+    '''
     DATA = getData()
 
     DATA['users'].append( {'u_id' : int(username[-1]),
             'name_first': "example first", 
             'name_last': "example last", 
             'password': "badpassword", 
-            'handle_str': 'hayden',
+            'handle': 'hayden',
             'email': "email@example.com"
             })
 
     return(int(username[-1]), token_generate(int(username[-1])))
-
+    '''
 def create_channel(token,name,public,return_id):
 
     create_data = json.dumps({

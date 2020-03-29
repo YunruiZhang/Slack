@@ -282,10 +282,8 @@ def send_standup():
 
 @APP.route('/workspace/reset', methods=['POST'])
 def reset_workspace():
-    payload = request.get_json()
+    #payload = request.get_json()
     return reset()
-
-
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))

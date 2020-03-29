@@ -292,7 +292,7 @@ def get_user(username):
             'name_first': "example first", 
             'name_last': "example last", 
             'password': "badpassword", 
-            'handle_str': 'hayden',
+            'handle': 'hayden',
             'email': "email@example.com"
             })
 
