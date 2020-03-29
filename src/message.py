@@ -44,6 +44,8 @@ def message_remove(token, message_id):
     }
 
 def message_edit(token, message_id, message):
+    if len(message) > 1000:
+        raise InputError(description = 'Message is longer than 1000 characters')
      # check whether the token is valid
     user_id = database.verify_token(token)
     if user_id == False:
