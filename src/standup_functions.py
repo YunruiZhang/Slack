@@ -83,7 +83,7 @@ def standup_start(token, channel_id, length):
     a message will be added to the message queue in the channel 
     from the user who started the standup. 
     X is an integer that denotes the number of seconds that the standup occurs for'''
-    D = getData()
+    D = database.getData()
     userID = verify_token(token)
     ch = get_channel_from_channelID(channel_id)
     ch1 = ch['standup']
@@ -128,7 +128,7 @@ def standup_active(token, channel_id):
 def standup_send(token, channel_id, message):
     '''Sending a message to get buffered in the standup queue, 
     assuming a standup is currently active'''
-    D = getData()
+    D = database.getData()
     ch = get_channel_from_channelID(channel_id)
     userID = verify_token(token)
     # InputError:
@@ -157,21 +157,21 @@ def standup_send(token, channel_id, message):
 # HELPER fs
 
 def check_channelID_valid(channel_id):
-    D = getData()
+    D = database.getData()
     for ch in D['channels']:
         if ch['channel_id'] == channel_id:
             return True
     return False
 
 def get_channel_from_channelID(channel_id):
-    D = getData()
+    D = database.getData()
     for ch in D['channels']:
         if ch['channel_id'] == channel_id:
             return ch
     return InputError("Invalid channel ID")
 
 def standup_end(u_id, channel):
-    D = getData()
+    D = database.getData()
     channel['standup']['time_finish'] = None
     message_summary = "|".join(channel['standup']['message_buffer'])
     # reset message_buffer after the standup
@@ -179,13 +179,11 @@ def standup_end(u_id, channel):
     # send the merged message in the end of the standup
     message_id = get_msg_id()
     database.new_message(message_id, channel['channel_id'], u_id, message_summary)
-    return {
-        'message_id': message_id,
-    }
+
 
 
 def get_user_from_userID(u_id):
-    D = getData()
+    D = database.getData()
     for u in D['users']:
         if u['u_id'] == u_id:
             return u
