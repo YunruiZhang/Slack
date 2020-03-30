@@ -1,23 +1,18 @@
-import channel
-import channels
-import auth
-import pytest
-import database
-from error import InputError, AccessError
 import json
 import urllib
-import flask 
-import message
 from urllib.error import HTTPError
 from datetime import datetime
+import pytest
 BASE_URL = 'http://127.0.0.1:8081'
 
 def test_message_send():
-    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset", data={}, headers={'Content-Type': 'application/json'})
     json.load(urllib.request.urlopen(req))
     #test send
     u_id, token = get_user("user1")
-    channel_id = create_channel(token,"Example Channel",1,1)
+    #To comply with pylint
+    u_id = u_id
+    channel_id = create_channel(token, "Example Channel", 1, 1)
 
     data = json.dumps({
         'token': token,
@@ -29,12 +24,12 @@ def test_message_send():
     payload = json.load(urllib.request.urlopen(req))
     assert payload['message_id'] is not None
 
-    #test remove 
+    #test remove
     data2 = json.dumps({
         'token': token,
         'message_id': 1,
     }).encode('utf-8')
-   
+
     req = urllib.request.Request(f"{BASE_URL}/message/remove", data=data2, headers={'Content-Type': 'application/json'}, method='DELETE')
     payload = json.load(urllib.request.urlopen(req))
     assert payload == {}
@@ -60,18 +55,16 @@ def test_message_send():
         'message': 'yep',
         'time_sent': str(time)
     }).encode('utf-8')
-    with pytest.raises(HTTPError) as e:
+    with pytest.raises(HTTPError):
         req = urllib.request.Request(f"{BASE_URL}/message/sendlater", data=data4, headers={'Content-Type': 'application/json'})
         payload = json.load(urllib.request.urlopen(req))
-    
-
 
 def get_user(username):
     data = json.dumps({
-    	'email': username + '@gmail.com',
+        'email': username + '@gmail.com',
         'password': 'passno',
-    	'name_first': 'Paul',
-    	'name_last': 'Velliotis'
+        'name_first': 'Paul',
+        'name_last': 'Velliotis'
     }).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/register", data=data, headers={'Content-Type': 'application/json'}, method='POST')
     response = urllib.request.urlopen(req)
@@ -80,7 +73,7 @@ def get_user(username):
 
 
 
-def create_channel(token,name,public,return_id):
+def create_channel(token, name, public, return_id):
 
     create_data = json.dumps({
         "token" : token,
@@ -88,10 +81,9 @@ def create_channel(token,name,public,return_id):
         "is_public" : public
     }).encode('utf-8')
 
-    req = urllib.request.Request(f"{BASE_URL}/channels/create", data=create_data,headers={'Content-Type': 'application/json'})
+    req = urllib.request.Request(f"{BASE_URL}/channels/create", data=create_data, headers={'Content-Type': 'application/json'})
     channel_id_to_invite = json.load(urllib.request.urlopen(req))
 
     if return_id:
         return channel_id_to_invite['channel_id']
-    else:
-        return channel_id_to_invite
+    return channel_id_to_invite

@@ -4,14 +4,6 @@ that are associated to the auth file
 '''
 import urllib
 import json
-from urllib.error import HTTPError
-import sys
-from flask import request
-import pytest
-import auth
-import server
-import database
-from error import InputError, AccessError
 
 BASE_URL = "http://127.0.0.1:8081"
 
@@ -31,9 +23,9 @@ def test_register():
     }).encode('utf-8')
 
     req = urllib.request.Request(f"{BASE_URL}/auth/register",
-                                data=data,
-                                headers={'Content-Type': 'application/json'},
-                                method='POST')
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'},
+                                 method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
@@ -69,9 +61,9 @@ def test_logout():
         'token': user_token
         }).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/logout",
-                                data=data,
-                                headers={'Content-Type': 'application/json'},
-                                method='POST')
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'},
+                                 method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
@@ -107,9 +99,9 @@ def test_login():
         'token': user_token
         }).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/logout",
-                                data=data,
-                                headers={'Content-Type': 'application/json'},
-                                method='POST')
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'},
+                                 method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 
@@ -118,9 +110,9 @@ def test_login():
         'password': '123password'
         }).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/auth/login",
-                                data=data,
-                                headers={'Content-Type': 'application/json'},
-                                method='POST')
+                                 data=data,
+                                 headers={'Content-Type': 'application/json'},
+                                 method='POST')
     response = urllib.request.urlopen(req)
     payload = json.load(response)
 

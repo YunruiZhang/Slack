@@ -1,17 +1,6 @@
-from urllib.error import HTTPError
 import urllib
-from server import *
 import json
-import pytest
-from auth import auth_register
-from channel import channels_create
-from message import message_send
-from message_pin_react_functions import message_react, message_pin
-#from standup_functions import get_channel_from_channelID, standup_start
-from error import InputError, AccessError
-from database import getData
-import flask
-import datetime
+from server import *
 
 
 # set up
@@ -23,7 +12,7 @@ name_last = 'LASTNAME'
 
 # POST:/message/react
 def test_message_react_and_pins():
-    req = urllib.request.Request(f"{URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    req = urllib.request.Request(f"{URL}/workspace/reset", data={}, headers={'Content-Type': 'application/json'})
     json.load(urllib.request.urlopen(req))
 
     data = json.dumps({
@@ -33,7 +22,7 @@ def test_message_react_and_pins():
         'name_last': name_last
     }).encode('utf-8')
 
-    req = urllib.request.Request(f"{URL}/auth/register",data=data,headers={'Content-Type': 'application/json'}, method='POST')
+    req = urllib.request.Request(f"{URL}/auth/register", data=data, headers={'Content-Type': 'application/json'}, method='POST')
     response = json.load(urllib.request.urlopen(req))
 
     u_id = response['u_id']
@@ -48,7 +37,7 @@ def test_message_react_and_pins():
         "is_public" : True
     }).encode('utf-8')
 
-    req = urllib.request.Request(f"{URL}/channels/create", data=create_data,headers={'Content-Type': 'application/json'})
+    req = urllib.request.Request(f"{URL}/channels/create", data=create_data, headers={'Content-Type': 'application/json'})
     channel_id_to_invite = json.load(urllib.request.urlopen(req))
 
     channel_id = channel_id_to_invite['channel_id']
@@ -65,9 +54,9 @@ def test_message_react_and_pins():
 
     message_id = message_returned['message_id']
     data = json.dumps({
-        'token':token, 
-        'message_id': message_id, 
-        'react_id':1 
+        'token':token,
+        'message_id': message_id,
+        'react_id':1
     }).encode('utf-8')
 
     req = urllib.request.Request(f"{URL}/message/react", data=data, headers={'Content-Type':'application/json'})
@@ -89,4 +78,3 @@ def test_message_react_and_pins():
     req = urllib.request.Request(f"{URL}/message/unpin", data=data, headers={'Content-Type':'application/json'})
     payload = json.load(urllib.request.urlopen(req))
     assert payload == {}
-
