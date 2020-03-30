@@ -13,14 +13,18 @@ from datetime import datetime
 BASE_URL = 'http://127.0.0.1:8081'
 
 def test_message_send():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
     #test send
     u_id, token = get_user("user1")
     channel_id = create_channel(token,"Example Channel",1,1)
+
     data = json.dumps({
         'token': token,
         'channel_id': channel_id,
         'message': 'test'
     }).encode('utf-8')
+
     req = urllib.request.Request(f"{BASE_URL}/message/send", data=data, headers={'Content-Type': 'application/json'})
     payload = json.load(urllib.request.urlopen(req))
     assert payload['message_id'] is not None

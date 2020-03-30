@@ -1,27 +1,14 @@
 {
   "message_pin_react_http_test.py::test_message_pin": true,
-  "message_pin_react_http_test.py::test_message_react": true,
   "message_pin_react_http_test.py::test_message_unpin": true,
   "message_pin_react_http_test.py::test_message_unreact": true,
   "message_pin_react_http_tests.py::test_message_pin": true,
   "message_pin_react_http_tests.py::test_message_react": true,
   "message_pin_react_http_tests.py::test_message_unpin": true,
   "message_pin_react_http_tests.py::test_message_unreact": true,
-  "message_test.py::test_message_edit": true,
-  "message_test.py::test_message_edit_except": true,
-  "message_test.py::test_message_remove": true,
-  "message_test.py::test_message_remove_except": true,
-  "message_test.py::test_message_send": true,
-  "message_test.py::test_message_send_except": true,
-  "other_test.py::test_search": true,
-  "other_test.py::test_users_all": true,
   "standup_http_test.py::test_standup_active": true,
   "standup_http_test.py::test_standup_send": true,
-  "standup_http_test.py::test_standup_start": true,
   "standup_http_tests.py::test_standup_active": true,
   "standup_http_tests.py::test_standup_send": true,
-  "standup_http_tests.py::test_standup_start": true,
-  "user_test.py::test_user_profile_setemail": true,
-  "user_test.py::test_user_profile_sethandle": true,
-  "user_test.py::test_user_profile_setname": true
+  "standup_http_tests.py::test_standup_start": true
 }

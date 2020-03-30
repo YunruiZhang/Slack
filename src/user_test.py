@@ -2,7 +2,7 @@ import other,auth,message,channel,channels,user
 import pytest
 from error import InputError,AccessError
 import re
-
+from database import *
 token = 123456
 u_id = 1
 name_first = 'Python'
@@ -26,6 +26,7 @@ def check(email):
 
 #---------------------------------test invalid u_id--------------------------------------------#
 def test_invalid_u_id():
+    reset()
     person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
@@ -36,28 +37,32 @@ def test_invalid_u_id():
 
 #---------------------------------test invalid user's name--------------------------------------------#
 def test_invalid_name_first_long():
-    #person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
         assert user.user_profile_setname(person1_token, 'a'*52, 'Forever')
 
 def test_invalid_name_first_short():
-    #person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
         assert user.user_profile_setname(person1_token, '', 'Forever')
 
 def test_invalid_name_last_long():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
         assert user.user_profile_setname(person1_token, 'Python', 'a'*52)
 
 def test_invalid_name_last_short():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
@@ -68,7 +73,8 @@ def test_invalid_name_last_short():
 
 #---------------------------------test invalid user's email--------------------------------------------#        
 def test_invalid_used_email():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     person2 = auth.auth_register('cs1532@cse.unsw.edu.au', 'abc1234', 'Marry', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
@@ -76,7 +82,8 @@ def test_invalid_used_email():
         assert user.user_profile_sethandle(person1_token, 'cs1532@cse.unsw.edu.au')
 
 def test_invalid_email():
-  #  person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     #if check('123.com') != "Valid Email":
@@ -87,22 +94,25 @@ def test_invalid_email():
 
 #---------------------------------test invalid user's handle-------------------------------------------#
 def test_invalid_handle_long():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
         assert user.user_profile_sethandle(person1_token, 'a'*21)
         
 def test_invalid_handle_short():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
         assert user.user_profile_sethandle(person1_token, 'a')
         
 def test_invalid_used_handle():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
-   # person2 = auth.auth_register('cs1532@cse.unsw.edu.au', 'abc1234', 'Marry', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    person2 = auth.auth_register('cs1532@cse.unsw.edu.au', 'abc1234', 'Marry', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_token = login_person1['token']
     with pytest.raises(InputError) as e:
@@ -111,7 +121,8 @@ def test_invalid_used_handle():
 
 #---------------------------------test the user_profile function--------------------------------------------#
 def test_user_profile():
-  #  person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_u_id = login_person1['u_id']
     person1_token = login_person1['token']
@@ -127,7 +138,8 @@ def test_user_profile():
 
 #---------------------------------test the user_profile_setname function--------------------------------------------#
 def test_user_profile_setname():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_u_id = login_person1['u_id']
     person1_token = login_person1['token']
@@ -137,7 +149,8 @@ def test_user_profile_setname():
 
 #---------------------------------test the user_profile_setmail function--------------------------------------------#
 def test_user_profile_setemail():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_u_id = login_person1['u_id']
     person1_token = login_person1['token']
@@ -148,7 +161,8 @@ def test_user_profile_setemail():
 
 #---------------------------------test the user_profile_sethandle function--------------------------------------------#
 def test_user_profile_sethandle():
-   # person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
+    reset()
+    person1 = auth.auth_register('cs1531@cse.unsw.edu.au', 'abc123', 'Hayden', 'Jacobs')
     login_person1 = auth.auth_login('cs1531@cse.unsw.edu.au', 'abc123')
     person1_u_id = login_person1['u_id']
     person1_token = login_person1['token']

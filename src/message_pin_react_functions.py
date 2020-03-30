@@ -69,6 +69,7 @@ new_message = {
 def message_react(token, message_id, react_id):
     '''Given a message within a channel the authorised user is part of, add a "react" to that particular message'''
     D = getData()
+    print(message_id)
     msg = get_message_from_messageID(message_id)
     ch = get_channel_from_msgID(message_id)
     userID = verify_token(token)
@@ -187,8 +188,9 @@ def message_unpin(token, message_id):
 
 def get_channel_from_msgID(message_id):
     D = getData()
+    #raise InputError(f"{D}")
     for sm in D['messages']:
-        if sm['message_id'] == message_id:
+        if sm['message_id'] == int(message_id):
             for ch in D['channels']:
                 if ch['channel_id'] == sm['channel_id']:
                     return ch

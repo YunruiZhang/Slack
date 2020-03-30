@@ -9,7 +9,7 @@ from database import *
 from other import *
 import auth
 from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
-from standup_functions import standup_start, standup_active, standup_send
+from standup_functions import *
 #from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 #from standup_functions import standup_start, standup_active, standup_send
 
@@ -36,10 +36,8 @@ APP.register_error_handler(Exception, defaultHandler)
 @APP.route("/message/send", methods = ['POST'])
 def message_send():
     jason = request.get_json()
-    msg_id = message.message_send(jason['token'], jason['channel_id'], jason['message'])
-    return dumps({
-        'message_id': msg_id
-    })
+    return message.message_send(jason['token'], jason['channel_id'], jason['message'])
+   
     
 @APP.route("/message/remove", methods = ['DELETE'])
 def message_remove():
@@ -56,10 +54,8 @@ def message_edit():
 @APP.route("/message/sendlater", methods = ['POST'])
 def message_sendlater():
     jason= request.get_json()
-    id = message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
-    return dumps({
-        'message_id': id
-    })
+    return message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
+    
 #----------------------------------------------------------------------------------------------------------------------#
 
 #-------------------Auth Flask Server Methods---------------------#
@@ -215,42 +211,38 @@ def return_channel_create():
 def react_mesage():
     payload = request.get_json()
     token = payload['token']
-    react_id = int(payload['react_id'])
-    message_id = int(payload['message_id'])
-    
-    message_react(token, message_id, react_id)
-    return dumps({})
-
+    react_id = payload['react_id']
+    message_id = payload['message_id']
+    return message_react(token, message_id, react_id)
 
 @APP.route("/message/unreact", methods=['POST'])
 def unreact_message():
     payload = request.get_json()
     token = payload['token']
-    react_id = int(payload['react_id'])
-    message_id = int(payload['message_id'])
+    react_id = payload['react_id']
+    message_id = payload['message_id']
     
-    message_unreact(token, message_id, react_id)
-    return dumps({})
+    return message_unreact(token, message_id, react_id)
+
 
 
 @APP.route("/message/pin", methods=['POST'])
 def pin_message():
     payload = request.get_json()
     token = payload['token']
-    message_id = int(payload['message_id'])
+    message_id = payload['message_id']
 
-    message_pin(token, message_id)
-    return dumps({})
+    return message_pin(token, message_id)
 
 
 @APP.route("/message/unpin", methods=['POST'])
 def unpin_message():
     payload = request.get_json()
     token = payload['token']
-    message_id = int(payload['message_id'])
+    message_id = payload['message_id']
 
-    message_unpin(token, message_id)
-    return dumps({})
+    return message_unpin(token, message_id)
+
 
 
 #------------------standup methods----------------------------------#
@@ -260,17 +252,14 @@ def start_standup():
     token = payload['token']
     channel_id = int(payload['channel_id'])
     length = int(payload['length'])
-
-    response = dumps(standup_start(token, channel_id, length))
-    return response
+    return standup_start(token, channel_id, length)
 
 
 @APP.route('/standup/active', methods=['GET'])
 def is_active_standup():
-    payload = request.get_json()
     token = request.args.get('token')
     channel_id = int(request.args.get('channel_id'))
-    return dumps(standup_active(token, channel_id))
+    return standup_active(token, channel_id)
 
 
 @APP.route('/standup/send', methods=['POST'])
@@ -279,7 +268,7 @@ def send_standup():
     token = payload['token']
     channel_id = int(payload['channel_id'])
     message = payload['message']
-    return dumps(standup_send(token, channel_id, message))
+    return standup_send(token, channel_id, message)
 
 @APP.route("/user/profile", methods=['GET'])
 def return_profile():
