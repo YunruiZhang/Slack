@@ -1,0 +1,3 @@
+[MESSAGES CONTROL]
+
+disable = unused-wildcard-import, missing-docstring, wildcard-import,function-redefined,invalid-name, line-too-long,ungrouped-imports,anomalous-backslash-in-string,global-statement,bare-except,too-many-arguments,undefined-loop-variable

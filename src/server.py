@@ -12,8 +12,6 @@ from message_pin_react_functions import message_pin, message_unpin, message_reac
 from standup_functions import *
 #from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 #from standup_functions import standup_start, standup_active, standup_send
-
-
 import message
 
 def defaultHandler(err):
@@ -32,31 +30,30 @@ CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
-#------------------- msgserver-----------------------------------------------------------#
-@APP.route("/message/send", methods = ['POST'])
+#------------------- msgserver--------------------------------------------------#
+@APP.route("/message/send", methods=['POST'])
 def message_send():
     jason = request.get_json()
     return message.message_send(jason['token'], jason['channel_id'], jason['message'])
-   
-    
-@APP.route("/message/remove", methods = ['DELETE'])
+
+@APP.route("/message/remove", methods=['DELETE'])
 def message_remove():
     jason = request.get_json()
     message.message_remove(jason['token'], jason['message_id'])
     return {}
 
-@APP.route("/message/edit", methods = ['PUT'])
+@APP.route("/message/edit", methods=['PUT'])
 def message_edit():
     jason = request.get_json()
     message.message_edit(jason['token'], jason['message_id'], jason['message'])
     return {}
 
-@APP.route("/message/sendlater", methods = ['POST'])
+@APP.route("/message/sendlater", methods=['POST'])
 def message_sendlater():
-    jason= request.get_json()
+    jason = request.get_json()
     return message.message_sendlater(jason['token'], jason['channel_id'], jason['message'], jason['time_sent'])
-    
-#----------------------------------------------------------------------------------------------------------------------#
+
+#----------------------------------------------------------------------------#
 
 #-------------------Auth Flask Server Methods---------------------#
 
@@ -72,14 +69,13 @@ def login():
 
     auth_data = auth.auth_login(email, password)
 
-    
     u_id = auth_data['u_id']
     token = auth_data['token']
 
     return dumps({
-    		'u_id': u_id,
-    		'token': token,
-    	})
+        'u_id': u_id,
+        'token': token,
+    })
 
 @APP.route('/auth/logout', methods=['POST'])
 def logout():
@@ -129,7 +125,7 @@ def register():
 def echo():
     data = request.args.get('data')
     if data == 'echo':
-   	    raise InputError(description='Cannot echo "echo"')
+        raise InputError(description='Cannot echo "echo"')
     return dumps({
         'data': data
     })
@@ -142,20 +138,20 @@ def return_channel_invite():
     token = payload['token']
     channel_id = payload['channel_id']
     u_id = payload['u_id']
-    return channel_invite(token,channel_id,u_id)
+    return channel_invite(token, channel_id, u_id)
 
 @APP.route("/channel/details", methods=['GET'])
 def return_channel_details():
     token = request.args.get('token')
     channel_id = request.args.get('channel_id')
-    return channel_details(token,channel_id)
+    return channel_details(token, channel_id)
 
 @APP.route("/channel/messages", methods=['GET'])
 def return_channel_messages():
     token = request.args.get('token')
     channel_id = request.args.get('channel_id')
     start = request.args.get('start')
-    return channel_messages(token,channel_id,start)
+    return channel_messages(token, channel_id, start)
 
 @APP.route("/channel/leave", methods=['POST'])
 def return_channel_leave():
@@ -169,7 +165,7 @@ def return_channel_join():
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
-    return channel_join(token,channel_id)
+    return channel_join(token, channel_id)
 
 @APP.route("/channel/addowner", methods=['POST'])
 def return_channel_addowner():
@@ -177,24 +173,24 @@ def return_channel_addowner():
     token = payload['token']
     channel_id = payload['channel_id']
     u_id = payload['u_id']
-    return channel_addowner(token,channel_id,u_id)
+    return channel_addowner(token, channel_id, u_id)
 
 @APP.route("/channel/removeowner", methods=['POST'])
 def return_channel_removeowner():
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
-    u_id = payload['u_id']  
-    return channel_removeowner(token,channel_id,u_id)
+    u_id = payload['u_id']
+    return channel_removeowner(token, channel_id, u_id)
 
 @APP.route("/channels/list", methods=['GET'])
 def return_channels_list():
-    token = request.args.get('token') 
+    token = request.args.get('token')
     return channels_list(token)
 
 @APP.route("/channels/listall", methods=['GET'])
 def return_channels_listall():
-    token = request.args.get('token') 
+    token = request.args.get('token')
     return channels_listall(token)
 
 @APP.route("/channels/create", methods=['POST'])
@@ -202,9 +198,8 @@ def return_channel_create():
     payload = request.get_json()
     token = payload['token']
     name = payload['name']
-    is_public = payload['is_public']    
-    return channels_create(token,name,is_public) 
-
+    is_public = payload['is_public']
+    return channels_create(token, name, is_public)
 
 #--------------------message_pin/react methods-------------------------------------#
 @APP.route("/message/react", methods=['POST'])
@@ -221,10 +216,8 @@ def unreact_message():
     token = payload['token']
     react_id = payload['react_id']
     message_id = payload['message_id']
-    
+
     return message_unreact(token, message_id, react_id)
-
-
 
 @APP.route("/message/pin", methods=['POST'])
 def pin_message():
@@ -261,20 +254,19 @@ def is_active_standup():
     channel_id = int(request.args.get('channel_id'))
     return standup_active(token, channel_id)
 
-
 @APP.route('/standup/send', methods=['POST'])
 def send_standup():
     payload = request.get_json()
     token = payload['token']
     channel_id = int(payload['channel_id'])
-    message = payload['message']
-    return standup_send(token, channel_id, message)
+    message_to_send = payload['message']
+    return standup_send(token, channel_id, message_to_send)
 
 @APP.route("/user/profile", methods=['GET'])
 def return_profile():
-    token = request.args.get('token') 
+    token = request.args.get('token')
     u_id = request.args.get('u_id')
-    return user_profile(token,u_id)
+    return user_profile(token, u_id)
 
 @APP.route("/user/profile/setname", methods=['PUT'])
 def return_set_name():
@@ -282,32 +274,32 @@ def return_set_name():
     token = payload['token']
     name_first = payload['name_first']
     name_last = payload['name_last']
-    return user_profile_setname(token,name_first,name_last)
+    return user_profile_setname(token, name_first, name_last)
 
 @APP.route("/user/profile/setemail", methods=['PUT'])
 def return_set_email():
     payload = request.get_json()
     token = payload['token']
     email = payload['email']
-    return user_profile_setemail(token,email)
+    return user_profile_setemail(token, email)
 
 @APP.route("/user/profile/sethandle", methods=['PUT'])
 def return_set_handle():
     payload = request.get_json()
     token = payload['token']
     handle = payload['handle']
-    return user_profile_sethandle(token,handle)
+    return user_profile_sethandle(token, handle)
 
 @APP.route("/users/all", methods=['GET'])
 def return_all_users():
-    token = request.args.get('token') 
+    token = request.args.get('token')
     return users_all(token)
 
 @APP.route("/search", methods=['GET'])
 def return_message_search():
-    token = request.args.get('token') 
+    token = request.args.get('token')
     query_str = request.args.get('query_str')
-    return search(token,query_str)
+    return search(token, query_str)
 
 @APP.route('/workspace/reset', methods=['POST'])
 def reset_workspace():
@@ -319,8 +311,7 @@ def change_user_permission():
     token = payload['token']
     u_id = payload['u_id']
     permission_id = payload['permission_id']
-    return change_permission(token,u_id,permission_id)
+    return change_permission(token, u_id, permission_id)
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
-

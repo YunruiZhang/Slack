@@ -1,13 +1,11 @@
 # user is a list of dictionarys contain user info. there are uid, email, password in the dictioary
 # tokens is a list of token which is valid
-# channels is a list of dicts contain existing channels info.   
-# msgs is a list of dicts contain msg infos including the channel id which the msg in 
+# channels is a list of dicts contain existing channels info.
+# msgs is a list of dicts contain msg infos including the channel id which the msg in
 # and the sender of it , the time it sent and the msg itself.
-import jwt
-import json
-import urllib
-from error import InputError, AccessError
 from datetime import datetime
+import jwt
+from error import InputError, AccessError
 BASE_URL = 'http://127.0.0.1:8080'
 
 
@@ -51,8 +49,6 @@ SECRET = 'thesecret'
 def getData():
     global DATABASE
     return DATABASE
-    
-
 
 def token_generate(u_id):
     '''
@@ -69,7 +65,7 @@ def token_generate(u_id):
     }
     '''
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
-    return encoded_jwt.decode("utf-8") 
+    return encoded_jwt.decode("utf-8")
 
 def verify_token(token):
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
@@ -81,11 +77,11 @@ def verify_token(token):
 
     return decoded_jwt['u_id']
 
-######################message code############################## 
-def new_message(message_id, channel_id, user_id, message ):
-    DATABASE = getData()
+######################message code##############################
+def new_message(message_id, channel_id, user_id, message):
+    DATA = getData()
     time = datetime.now()
-    new_message = {
+    new_message_to_send = {
         'message_id': message_id,
         'u_id': user_id,
         'message': message,
@@ -97,49 +93,41 @@ def new_message(message_id, channel_id, user_id, message ):
         'message_id': message_id,
         'channel_id': int(channel_id),
     }
-    DATABASE['messages'].append(short_msg)
+    DATA['messages'].append(short_msg)
     #print(DATABASE['messages'])
-    for i in DATABASE['channels']:
+    for i in DATA['channels']:
         if int(i['channel_id']) == int(channel_id):
             #print('hello')
-            i['messages'].append(new_message)
+            i['messages'].append(new_message_to_send)
             #print(i['messages'])
             break
-   
-
-
     return {}
 ##########################################################
-def create_user(u_id,permission_id, handle, token, email, password, name_first, name_last):
+def create_user(u_id, permission_id, handle, token, email, password, name_first, name_last):
 
     DATA = getData()
-    
+
     new_user = {
         'u_id': u_id,
         'permission_id': permission_id,
         'handle': handle,
         'token': token,
-        'name_first': name_first, 
-        'name_last': name_last, 
-        'password': password, 
-        'email': email,
+        'name_first': name_first,
+        'name_last': name_last,
+        'password': password,
+        'email': email
     }
     DATA['users'].append(new_user)
     return {}
 
 def reset():
     DATA = getData()
-    '''
-    del DATA['channels'][:]
-    del DATA['messages'][:]
-    del DATA['users'][:]
-    '''
     DATA['users'].clear()
     DATA['messages'].clear()
     DATA['channels'].clear()
     return {}
 
-def change_permission(token,u_id,permission_id):
+def change_permission(token, u_id, permission_id):
     DATA = getData()
 
     if permission_id != 1 and permission_id != 2:
@@ -160,4 +148,4 @@ def change_permission(token,u_id,permission_id):
 
     user_to_change['permission_id'] = permission_id
 
-    return {}       
+    return {}

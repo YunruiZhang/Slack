@@ -5,11 +5,8 @@ method called valid_email that is used to validate emails that are entered by th
 user.
 '''
 import random
-import hashlib
 import re
-import jwt
 from database import *
-
 from error import InputError, AccessError
 
 
@@ -47,8 +44,8 @@ def auth_login(email, password):
         if users['email'] == email:
             if users['password'] == hash(password):
                 return {
-                        'u_id': users['u_id'],
-                        'token': token_generate(users['u_id'])
+                    'u_id': users['u_id'],
+                    'token': token_generate(users['u_id'])
                 }
             else:
                 raise InputError("Password is not correct")
@@ -110,7 +107,7 @@ def auth_register(email, password, name_first, name_last):
         if users['handle'] == handle:
             handle = handle[:19] + str(random.randint(0, 9))
 
-    if len(store['users']) != 0:
+    if store['users']:
         u_id = store['users'][-1]['u_id'] + 1
     else:
         u_id = 1
@@ -144,7 +141,7 @@ def auth_register(email, password, name_first, name_last):
     #Creating a token
     token = token_generate(u_id)
 
-    if len(store['users']) != 0:
+    if store['users']:
         permission_id = 2
     else:
         permission_id = 1
