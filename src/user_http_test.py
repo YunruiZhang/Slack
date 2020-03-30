@@ -1,5 +1,6 @@
 import urllib
 import json
+from database import *
 from flask import request
 import pytest
 from error import InputError, AccessError
@@ -28,24 +29,30 @@ def test_user_profile():
         json.load(urllib.request.urlopen(req))
         
 def test_user_profile_setname():
-    
-    #register_person()
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
+    register_person()
     person1 = login_person()
     person1_token = person1['token']
+
+    print("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1X2lkIjoxfQ.QuUHSc3fJ3QqTk5-BPvGBAAURmU1IZq_tPVtiSqqh0s")
+    print(person1["token"])
+
     data = json.dumps({
         'token': person1_token,  
         'name_first' : 'Python',
         'name_last' : 'Forever' 
     }).encode('utf-8')
-    req = urllib.request.Request(f"{BASE_URL}/user/profile/setname",
-                                 data=data,
-                                 headers={'Content-Type': 'application/json'}, method = "PUT")
+
+    req = urllib.request.Request(f"{BASE_URL}/user/profile/setname", data=data,headers={'Content-Type': 'application/json'}, method = "PUT")
+
     json.load(urllib.request.urlopen(req))
     person2 = urllib_request_user_profile(person1_token,person1['u_id'])
     
     assert(person2['name_first'] == 'Python')
     assert(person2['name_last'] == 'Forever')
-    
+
     data2 = json.dumps({
         'token': person1_token,
         'name_first' : 'n'*100,
@@ -71,8 +78,10 @@ def test_user_profile_setname():
         json.load(urllib.request.urlopen(req))    
 
 def test_user_profile_setemail():
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
     
-    #register_person()
+    register_person()
     person1 = login_person()
     person1_token = person1['token']
     data = json.dumps({
@@ -112,8 +121,10 @@ def test_user_profile_setemail():
         json.load(urllib.request.urlopen(req))
     
 def test_user_profile_sethandle():
-    
-    #register_person()
+    req = urllib.request.Request(f"{BASE_URL}/workspace/reset",data={},headers={'Content-Type': 'application/json'})    
+    json.load(urllib.request.urlopen(req))
+
+    register_person()
     person1 = login_person()
     person1_token = person1['token']
     data = json.dumps({
@@ -125,9 +136,9 @@ def test_user_profile_sethandle():
                                  headers={'Content-Type': 'application/json'}, method = "PUT")
     json.load(urllib.request.urlopen(req))
     person2 = urllib_request_user_profile(person1_token,person1['u_id'])
-    assert person1['handle'] == 'lovepython'
+    assert person2['handle'] == 'lovepython'
     
-    #register_person_second()
+    register_person_second()
     person2 = login_person_second()
     data = json.dumps({
         'token': person1_token, 

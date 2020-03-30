@@ -8,7 +8,7 @@ import random
 import hashlib
 import re
 import jwt
-import database
+from database import *
 
 from error import InputError, AccessError
 
@@ -32,7 +32,7 @@ def auth_login(email, password):
     '''
 
     #Get the Database
-    store = database.getData()
+    store = getData()
 
     #Checks that the email entered is valid
     if not valid_email(email):
@@ -42,16 +42,16 @@ def auth_login(email, password):
     #that there is a matching email and then check to see if the
     #password matches the email account.  Then return the user's
     #u_id along with a new token
-    index = 0
-    while len(store['users']) is not index:
-        if store['users'][index]['email'] == email:
-            if store['users'][index]['password'] == hash(password):
+
+    for users in store['users']:
+        if users['email'] == email:
+            if users['password'] == hash(password):
                 return {
-                    'u_id': store['users'][index]['u_id'],
-                    'token': database.token_generate('u_id'),
+                        'u_id': users['u_id'],
+                        'token': token_generate(users['u_id'])
                 }
-            raise InputError("Password is not correct")
-        index += 1
+            else:
+                raise InputError("Password is not correct")
 
     #If the code has gotten to this point, raise InputError since
     #the given email did not match any in the database
@@ -67,14 +67,14 @@ def auth_logout(token):
     #Must check if the token is in the database to prevent a double
     #logout
 
-    store = database.getData()
+    store = getData()
     token_is_being_used = False
 
     for users in store['users']:
         if users['token'] == token:
             token_is_being_used = True
 
-    if not database.verify_token(token) or not token_is_being_used:
+    if not verify_token(token) or not token_is_being_used:
         return {
             'is_success': False,
         }
@@ -96,7 +96,7 @@ def auth_register(email, password, name_first, name_last):
     to re-register
     '''
 
-    store = database.getData()
+    store = getData()
 
     #Gets the first and last name to make a u_id but if it is longer than
     #20 characters the u_id will cutoff at the 20 chars count
@@ -142,7 +142,7 @@ def auth_register(email, password, name_first, name_last):
         raise InputError("Last name is not valid")
 
     #Creating a token
-    token = database.token_generate(u_id)
+    token = token_generate(u_id)
 
     if len(store['users']) != 0:
         permission_id = 2
@@ -150,7 +150,7 @@ def auth_register(email, password, name_first, name_last):
         permission_id = 1
 
     #Creating the user and putting it in the database
-    database.create_user(u_id, permission_id, handle, token, email, hash(password), name_first, name_last)
+    create_user(u_id, permission_id, handle, token, email, hash(password), name_first, name_last)
 
 
     return {

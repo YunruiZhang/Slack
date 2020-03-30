@@ -21,9 +21,6 @@
   "standup_http_tests.py::test_standup_active": true,
   "standup_http_tests.py::test_standup_send": true,
   "standup_http_tests.py::test_standup_start": true,
-  "user_http_test.py::test_user_profile_setemail": true,
-  "user_http_test.py::test_user_profile_sethandle": true,
-  "user_http_test.py::test_user_profile_setname": true,
   "user_test.py::test_user_profile_setemail": true,
   "user_test.py::test_user_profile_sethandle": true,
   "user_test.py::test_user_profile_setname": true

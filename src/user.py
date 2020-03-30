@@ -3,9 +3,6 @@ from channel import *
 from error import *
 import re
 
-
-
-
 def user_profile(token, u_id):
     
     DATA = getData()
@@ -48,24 +45,19 @@ def user_profile(token, u_id):
 def user_profile_setname(token, name_first, name_last):
     Data = getData()
 
-    
     if not user_name_length_check(name_first):
         raise InputError('Length of first name is invalid') 
         
     if not user_name_length_check(name_last):
         raise InputError('Length of last name is invalid') 
-    if not verify_token(token):
-        operate_u_id = verify_token(token)
-   # if not operate_u_id:
-      #  raise AccessError('Token Invalid')
+   
     curr_u_id = verify_token(token)
 
     for user in Data['users']:
         if int(user['u_id']) == int(curr_u_id):
+            user['name_first'] = name_first
+            user['name_last'] = name_last
             break   
-    
-    user['name_first'] = name_first
-    user['name_last'] = name_last
     
     return {
     }
@@ -114,15 +106,6 @@ def user_profile_sethandle(token, handle_str):
     
     return {
     }
-    
-
-
-
-
-
-
-
-
 
 def user_email_check(email):
     DATA = getData()

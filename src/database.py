@@ -79,6 +79,8 @@ def verify_token(token):
     except:
         return False
 
+    print(decoded_jwt)
+
     return decoded_jwt['u_id']
 
 ######################message code############################## 
