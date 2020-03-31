@@ -7,6 +7,7 @@ import database
 from error import InputError, AccessError
 
 def test_message_send():
+	database.reset()
 	#get a user
 	result = get_user("user1")
 	u_id = result['u_id']
