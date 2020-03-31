@@ -151,7 +151,7 @@ def test_user_profile_sethandle():
 
     data = json.dumps({
         'token': person1_token,
-        'email': 'a'
+        'handle': 'a'
     }).encode('utf-8')
 
     with pytest.raises(HTTPError) as e:
