@@ -85,13 +85,17 @@ def new_message(message_id, channel_id, user_id, message):
         'message_id': message_id,
         'u_id': user_id,
         'message': message,
-        'time_created': time,
-        'reacts': [],
-        'is_pinned': False,
+        'time_created': time.timestamp(),
+        'reacts': {
+        	#Only likes for now (ID 1)
+            'react_id': 1, 
+            'u_ids': []
+         },
+        'is_pinned': False
     }
     short_msg = {
         'message_id': message_id,
-        'channel_id': int(channel_id),
+        'channel_id': int(channel_id)
     }
     DATA['messages'].append(short_msg)
     #print(DATABASE['messages'])

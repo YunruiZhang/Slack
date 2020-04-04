@@ -245,7 +245,7 @@ def start_standup():
     token = payload['token']
     channel_id = int(payload['channel_id'])
     length = int(payload['length'])
-    return standup_start(token, channel_id, length)
+    return {standup_start(token, channel_id, length)['time_finish']}
 
 
 @APP.route('/standup/active', methods=['GET'])
@@ -266,7 +266,7 @@ def send_standup():
 def return_profile():
     token = request.args.get('token')
     u_id = request.args.get('u_id')
-    return user_profile(token, u_id)
+    return {'user':user_profile(token, u_id)}
 
 @APP.route("/user/profile/setname", methods=['PUT'])
 def return_set_name():
@@ -287,7 +287,7 @@ def return_set_email():
 def return_set_handle():
     payload = request.get_json()
     token = payload['token']
-    handle = payload['handle']
+    handle = payload['handle_str']
     return user_profile_sethandle(token, handle)
 
 @APP.route("/users/all", methods=['GET'])
@@ -305,7 +305,7 @@ def return_message_search():
 def reset_workspace():
     return reset()
 
-@APP.route('/userpermission/change', methods=['POST'])
+@APP.route('/admin/userpermission/change', methods=['POST'])
 def change_user_permission():
     payload = request.get_json()
     token = payload['token']
@@ -315,3 +315,4 @@ def change_user_permission():
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
+

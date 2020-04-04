@@ -21,7 +21,7 @@ def message_send(token, channel_id, message):
     message_id = get_msg_id()
     database.new_message(message_id, channel_id, var, message)
     return {
-        'message_id': message_id,
+        'message_id': message_id
     }
 
 def message_remove(token, message_id):
@@ -66,7 +66,7 @@ def message_edit(token, message_id, message):
 
 def message_sendlater(token, channel_id, message, time_sent):
     #if time_sent is in the past raise error
-    if time_sent < str(datetime.now()):
+    if time_sent < datetime.now().timestamp():
         raise InputError(description='Cannot send a message in the past')
     #check whether the length of msg is smaller than 1000
     if len(message) > 1000:

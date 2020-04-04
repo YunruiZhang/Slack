@@ -22,15 +22,17 @@ def message_react(token, message_id, react_id):
         raise InputError('Invalid react ID')
     # Message with ID message_id already contains an active React with ID react_id
     for r in msg['reacts']:
-        if r['react_id'] == react_id:
+        if r['react_id'] == react_id and r['is_this_user_reacted']:
             raise InputError("Same react already exsited")
 
     # Non-exception: add react
-    new = {
-        'react_id': react_id,
-        'u_ids': userID,
-    }
-    msg['reacts'].append(new)
+    #new = {
+    #    'react_id': react_id,
+    #    'u_ids': userID,
+    #    'is_this_user_reacted': True
+    #}
+    msg['reacts']['u_ids'].append(userID)
+    #msg['reacts']['is_this_user_reacted'] = True
     return {}
 
 
@@ -54,15 +56,17 @@ def message_unreact(token, message_id, react_id):
     # Message with ID message_id does not contain an active React with ID react_id
     reacted = False
     for r in msg['reacts']:
-        if r['react_id'] == react_id:
+        if int(r['u_id']) == int(userID):
             reacted = True
+            msg['reacts'].remove(r)
+            break
     if not reacted:
         raise InputError('No such react in given message')
 
     # Non-exception: remove react
-    for r in msg['reacts']:
-        if r['react_id'] == react_id:
-            msg['reacts'].remove(r)
+    #for r in msg['reacts']:
+    #    if r['react_id'] == react_id:
+    #        msg['reacts'].remove(r)
     return {}
 
 # POST

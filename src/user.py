@@ -24,7 +24,7 @@ def user_profile(token, u_id):
         'email' : users['email'],
         'name_first' : users['name_first'],
         'name_last' : users['name_last'],
-        'handle_str' : users['handle']
+        'handle_str' : users['handle_str']
     }
 
     return return_user
@@ -88,7 +88,7 @@ def user_profile_sethandle(token, handle_str):
         if int(user['u_id']) == int(curr_u_id):
             break
 
-    user['handle'] = handle_str
+    user['handle_str'] = handle_str
 
     return {
     }
@@ -103,7 +103,7 @@ def user_email_check(email):
 def user_handle_check(handle):
     DATA = getData()
     for users in DATA['users']:
-        if users['handle'] == handle:
+        if users['handle_str'] == handle:
             return False
     return True
 

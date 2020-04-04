@@ -88,7 +88,7 @@ def channels_create(token, name, is_public):
         "standup": {
             "time_finish": None,
             "message_buffer": [],
-            "is_active": False,
+            "is_active": False
         }
     }
 
