@@ -14,9 +14,9 @@ def users_all(token):
             'u_id': user['u_id'],
             'name_first': user['name_first'],
             'name_last':user['name_last'],
-            'permission_id': user['permission_id'],
+            #'permission_id': user['permission_id'],
             'email': user['email'],
-            'handle': user['handle']
+            'handle_str': user['handle']
         }
         all_user.append(to_add)
 
