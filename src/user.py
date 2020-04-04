@@ -24,7 +24,7 @@ def user_profile(token, u_id):
         'email' : users['email'],
         'name_first' : users['name_first'],
         'name_last' : users['name_last'],
-        'handle' : users['handle']
+        'handle_str' : users['handle']
     }
 
     return return_user

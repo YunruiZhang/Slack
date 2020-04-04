@@ -85,7 +85,7 @@ def new_message(message_id, channel_id, user_id, message):
         'message_id': message_id,
         'u_id': user_id,
         'message': message,
-        'time': time,
+        'time_created': time,
         'reacts': [],
         'is_pinned': False,
     }
@@ -110,7 +110,7 @@ def create_user(u_id, permission_id, handle, token, email, password, name_first,
     new_user = {
         'u_id': u_id,
         'permission_id': permission_id,
-        'handle': handle,
+        'handle_str': handle,
         'token': token,
         'name_first': name_first,
         'name_last': name_last,
