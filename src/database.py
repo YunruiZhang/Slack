@@ -86,11 +86,11 @@ def new_message(message_id, channel_id, user_id, message):
         'u_id': user_id,
         'message': message,
         'time_created': time.timestamp(),
-        'reacts': {
+        'reacts': [{
         	#Only likes for now (ID 1)
             'react_id': 1, 
             'u_ids': []
-         },
+         }],
         'is_pinned': False
     }
     short_msg = {

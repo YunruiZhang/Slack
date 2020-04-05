@@ -22,8 +22,11 @@ def message_react(token, message_id, react_id):
         raise InputError('Invalid react ID')
     # Message with ID message_id already contains an active React with ID react_id
     for r in msg['reacts']:
-        if r['react_id'] == react_id and r['is_this_user_reacted']:
-            raise InputError("Same react already exsited")
+        if r['react_id'] == react_id:
+            for users in r['u_ids']:
+                if users == userID:
+                    raise InputError("Same react already exsited")
+            break;
 
     # Non-exception: add react
     #new = {
@@ -31,7 +34,7 @@ def message_react(token, message_id, react_id):
     #    'u_ids': userID,
     #    'is_this_user_reacted': True
     #}
-    msg['reacts']['u_ids'].append(userID)
+    r['u_ids'].append(userID)
     #msg['reacts']['is_this_user_reacted'] = True
     return {}
 
