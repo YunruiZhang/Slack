@@ -53,7 +53,8 @@ def standup_active(token, channel_id):
     # check
     ch = get_channel_from_channelID(channel_id)
     time_finish = ch['standup']['time_finish']
-    return {'is_active': time_finish != None, 'time_finish': time_finish}
+    is_active = ch['standup']['is_active']
+    return {'is_active': is_active, 'time_finish': time_finish}
 
 # POST
 def standup_send(token, channel_id, message):
@@ -78,7 +79,7 @@ def standup_send(token, channel_id, message):
 
     # add standup message
     user = get_user_from_userID(userID)
-    message_to_add = user['handle'] + ":" + message
+    message_to_add = user['handle_str'] + ":" + message
     ch['standup']['message_buffer'].append(message_to_add)
     return {}
 

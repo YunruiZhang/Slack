@@ -16,7 +16,7 @@ def users_all(token):
             'name_last':user['name_last'],
             #'permission_id': user['permission_id'],
             'email': user['email'],
-            'handle_str': user['handle']
+            'handle_str': user['handle_str']
         }
         all_user.append(to_add)
 
@@ -36,6 +36,6 @@ def search(token, query_str):
             if query_str in i['message']:
                 search_message.append(i)
 
-    newlist = sorted(search_message, key=lambda k: k['time'])
+    newlist = sorted(search_message, key=lambda k: k['time_created'])
 
     return {'messages' : newlist}
