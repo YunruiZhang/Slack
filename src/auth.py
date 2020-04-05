@@ -104,7 +104,7 @@ def auth_register(email, password, name_first, name_last):
     handle = (login[:20]) if len(login) > 20 else login
 
     for users in store['users']:
-        if users['handle'] == handle:
+        if users['handle_str'] == handle:
             handle = handle[:19] + str(random.randint(0, 9))
 
     if store['users']:
