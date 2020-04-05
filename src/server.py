@@ -245,7 +245,7 @@ def start_standup():
     token = payload['token']
     channel_id = int(payload['channel_id'])
     length = int(payload['length'])
-    return {standup_start(token, channel_id, length)['time_finish']}
+    return standup_start(token, channel_id, length)
 
 
 @APP.route('/standup/active', methods=['GET'])

@@ -2,7 +2,7 @@ import datetime
 import threading
 from pytz import timezone
 import database
-from message import get_msg_id
+from message import get_msg_id, message_send
 from database import verify_token
 from error import InputError, AccessError
 from message_pin_react_functions import check_user_in_channel
@@ -28,7 +28,7 @@ def standup_start(token, channel_id, length):
 
     # start a standup
     # set up a timer
-    t = threading.Timer(length, standup_end, args=[userID, ch])
+    t = threading.Timer(length, standup_end, args=[userID, ch, token])
     t.start()
     current_time = datetime.datetime.utcnow().replace(tzinfo=timezone('UTC')).timestamp()
     time_finish = current_time + length
@@ -79,7 +79,7 @@ def standup_send(token, channel_id, message):
 
     # add standup message
     user = get_user_from_userID(userID)
-    message_to_add = user['handle_str'] + ":" + message
+    message_to_add = user['handle_str'] + ": " + message
     ch['standup']['message_buffer'].append(message_to_add)
     return {}
 
@@ -100,15 +100,15 @@ def get_channel_from_channelID(channel_id):
             return ch
     return InputError("Invalid channel ID")
 
-def standup_end(u_id, channel):
+def standup_end(u_id, channel,token):
     channel['standup']['time_finish'] = None
-    message_summary = "|".join(channel['standup']['message_buffer'])
+    message_summary = "\n".join(channel['standup']['message_buffer'])
     # reset message_buffer after the standup
     channel['standup']['message_buffer'] = None
     # send the merged message in the end of the standup
     message_id = get_msg_id()
-    database.new_message(message_id, channel['channel_id'], u_id, message_summary)
-
+    #database.new_message(message_id, channel['channel_id'], u_id, message_summary)
+    message_send(token,channel['channel_id'],message_summary)
 
 
 def get_user_from_userID(u_id):
