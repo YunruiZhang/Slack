@@ -118,6 +118,19 @@ def register():
         'u_id': u_id,
         'token': token,
         })
+
+@APP.route("/auth/passwordreset/request", methods=['POST'])
+def return_password_request():
+    payload = request.get_json()
+    email = payload['email']
+    return password_request(email)
+
+@APP.route("/auth/passwordreset/reset", methods=['POST'])
+def return_password_reset():
+    payload = request.get_json()
+    reset_code = payload['reset_code']
+    new_password = payload['new_password']
+    return channel_invite(reset_code, new_password)
 #-----------------------------------------------------------------------------#
 
 # Example
