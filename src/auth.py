@@ -8,7 +8,11 @@ import random
 import re
 from database import *
 from error import InputError, AccessError
-
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import zlib
+from base64 import urlsafe_b64encode as b64e, urlsafe_b64decode as b64d
 
 def valid_email(email):
     '''
@@ -154,3 +158,50 @@ def auth_register(email, password, name_first, name_last):
         'u_id': u_id,
         'token': token,
     }
+
+def password_request(email):
+    data = getData()
+
+    for users in data["users"]:
+        if users["email"] == email:
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
+                server.login("T18AWELV", "t18awelv")
+
+                msg = MIMEMultipart()
+                msg['From'] = "Slackr"
+                msg['To'] = users["name_first"]
+                msg['Subject'] = "Slackr email reset"
+
+                secret_code = obscure(email.encode('utf-8')+"|".encode('utf-8')+(users["password"]).encode('utf-8'))
+                body = "Your secret code is: " + secret_code.decode('utf-8') # The /n separates the message from the headers
+                msg.attach(MIMEText(body, 'plain'))
+                server.sendmail("T18AWELV@gmail.com", email, msg.as_string())
+                return {}
+                break
+
+def password_reset(reset_code, new_password):
+    code = unobscure(reset_code).decode('utf-8')
+
+    email,old_password = code[:code.find("|")],code[code.find("|")+1:]
+    data = getData()
+
+    if len(new_password) < 6:
+        raise InputError("Password is too short")
+
+    for users in data["users"]:
+        if users["email"] == email:
+            if users["password"] == int(old_password):  
+                users["password"] = hash(new_password)
+                return {}
+
+    raise InputError("Reset code invalid")
+
+def obscure(data: bytes) -> bytes:
+    return b64e(zlib.compress(data, 9))
+
+def unobscure(obscured: bytes) -> bytes:
+    return zlib.decompress(b64d(obscured))
+
