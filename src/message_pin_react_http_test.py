@@ -61,6 +61,8 @@ def test_message_react_and_pins():
 
     req = urllib.request.Request(f"{URL}/message/react", data=data, headers={'Content-Type':'application/json'})
     payload = json.load(urllib.request.urlopen(req))
+    print(payload)
+
     assert payload == {}
 
 # POST:/message/unreact

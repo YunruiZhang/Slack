@@ -16,11 +16,13 @@ def test_user_profile():
     response = urllib.request.urlopen(f'{BASE_URL}/user/profile?token={person1_token}&u_id={person1_u_id}')
     return_person = json.load(response)
 
-    assert return_person['email'] == 'cs1531@cse.unsw.edu.au'
-    assert return_person['handle'] == 'haydenjacobs'
-    assert return_person['name_first'] == 'Hayden'
-    assert return_person['name_last'] == 'Jacobs'
-    assert return_person['u_id'] == 1
+    print(return_person)
+
+    assert return_person['user']['email'] == 'cs1531@cse.unsw.edu.au'
+    assert return_person['user']['handle_str'] == 'haydenjacobs'
+    assert return_person['user']['name_first'] == 'Hayden'
+    assert return_person['user']['name_last'] == 'Jacobs'
+    assert return_person['user']['u_id'] == 1
 
     with pytest.raises(HTTPError) as e:
         response = urllib.request.urlopen(f'{BASE_URL}/user/profile?token={person1_token}&u_id={100}')
@@ -34,8 +36,8 @@ def test_user_profile_setname():
     person1 = login_person()
     person1_token = person1['token']
 
-    print("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1X2lkIjoxfQ.QuUHSc3fJ3QqTk5-BPvGBAAURmU1IZq_tPVtiSqqh0s")
-    print(person1["token"])
+    #print("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1X2lkIjoxfQ.QuUHSc3fJ3QqTk5-BPvGBAAURmU1IZq_tPVtiSqqh0s")
+    #print(person1["token"])
 
     data = json.dumps({
         'token': person1_token,
@@ -48,8 +50,8 @@ def test_user_profile_setname():
     json.load(urllib.request.urlopen(req))
     person2 = urllib_request_user_profile(person1_token, person1['u_id'])
 
-    assert person2['name_first'] == 'Python'
-    assert person2['name_last'] == 'Forever'
+    assert person2['user']['name_first'] == 'Python'
+    assert person2['user']['name_last'] == 'Forever'
 
     data2 = json.dumps({
         'token': person1_token,
@@ -91,7 +93,7 @@ def test_user_profile_setemail():
                                  headers={'Content-Type': 'application/json'}, method="PUT")
     json.load(urllib.request.urlopen(req))
     person1 = urllib_request_user_profile(person1_token, person1['u_id'])
-    assert person1['email'] == 'cs1533@cse.unsw.edu.au'
+    assert person1['user']['email'] == 'cs1533@cse.unsw.edu.au'
 
     register_person_second()
     person2 = login_person_second()
@@ -127,20 +129,20 @@ def test_user_profile_sethandle():
     person1_token = person1['token']
     data = json.dumps({
         'token': person1_token,
-        'handle': 'lovepython'
+        'handle_str': 'lovepython'
     }).encode('utf-8')
     req = urllib.request.Request(f"{BASE_URL}/user/profile/sethandle",
                                  data=data,
                                  headers={'Content-Type': 'application/json'}, method="PUT")
     json.load(urllib.request.urlopen(req))
     person2 = urllib_request_user_profile(person1_token, person1['u_id'])
-    assert person2['handle'] == 'lovepython'
+    assert person2['user']['handle_str'] == 'lovepython'
 
     register_person_second()
     person2 = login_person_second()
     data = json.dumps({
         'token': person1_token,
-        'handle': 'hdenmarry'
+        'handle_str': 'hdenmarry'
     }).encode('utf-8')
 
     with pytest.raises(HTTPError) as e:
@@ -149,9 +151,9 @@ def test_user_profile_sethandle():
                                      headers={'Content-Type': 'application/json'}, method="PUT")
         json.load(urllib.request.urlopen(req))
 
-    data = json.dumps({
+    data = json.dumps({	
         'token': person1_token,
-        'handle': 'a'
+        'handle_str': 'a'
     }).encode('utf-8')
 
     with pytest.raises(HTTPError) as e:

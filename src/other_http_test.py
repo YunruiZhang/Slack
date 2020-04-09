@@ -1,4 +1,5 @@
 import urllib
+import urllib.request
 import json
 
 BASE_URL = 'http://127.0.0.1:8081'
@@ -15,10 +16,9 @@ def test_users_all():
     return_person = json.load(response)
 
     assert return_person['users'][0]['email'] == 'cs1531@cse.unsw.edu.au'
-    assert return_person['users'][0]['handle'] == 'haydenjacobs'
+    assert return_person['users'][0]['handle_str'] == 'haydenjacobs'
     assert return_person['users'][0]['name_first'] == 'Hayden'
     assert return_person['users'][0]['name_last'] == 'Jacobs'
-    assert return_person['users'][0]['permission_id'] == 1
     assert return_person['users'][0]['u_id'] == 1
 
 def test_search():

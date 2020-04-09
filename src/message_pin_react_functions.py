@@ -58,11 +58,14 @@ def message_unreact(token, message_id, react_id):
         raise InputError('Invalid react ID')
     # Message with ID message_id does not contain an active React with ID react_id
     reacted = False
+
     for r in msg['reacts']:
-        if int(r['u_id']) == int(userID):
-            reacted = True
-            msg['reacts'].remove(r)
-            break
+        if r['react_id'] == react_id:
+            for users in r['u_ids']:
+                if users == userID:
+                    reacted = True
+                    r['u_ids'].remove(users)
+
     if not reacted:
         raise InputError('No such react in given message')
 

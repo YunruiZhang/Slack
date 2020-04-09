@@ -16,8 +16,7 @@ def test_users_all():
         'email': 'cs1531@cse.unsw.edu.au',
         'name_first': 'Hayden',
         'name_last': 'Jacobs',
-        'handle': 'haydenjacobs',
-        'permission_id':1,
+        'handle_str': 'haydenjacobs',
     }
                                                                ]}
 

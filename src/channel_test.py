@@ -313,7 +313,7 @@ def get_user(username):
                           'name_first': "example first",
                           'name_last': "example last",
                           'password': "badpassword",
-                          'handle': 'hayden',
+                          'handle_str': 'hayden',
                           'email': "email@example.com"
                          })
 

@@ -125,7 +125,7 @@ def test_user_profile():
         'email': 'cs1531@cse.unsw.edu.au',
         'name_first': 'Hayden',
         'name_last': 'Jacobs',
-        'handle': 'haydenjacobs',
+        'handle_str': 'haydenjacobs',
         }, "user_profile fail"
 
 #---------------------------------test the user_profile_setname function--------------------------------------------#
