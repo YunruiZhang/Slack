@@ -13,6 +13,7 @@ from standup_functions import *
 #from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 #from standup_functions import standup_start, standup_active, standup_send
 import message
+from flask import send_from_directory
 
 def defaultHandler(err):
     response = err.get_response()
@@ -302,6 +303,22 @@ def return_set_handle():
     token = payload['token']
     handle = payload['handle_str']
     return user_profile_sethandle(token, handle)
+
+@APP.route('/user/profile/uploadphoto', methods=['POST'])
+def upload_profile_photo():
+    payload = request.get_json()
+    token = payload['token']
+    img_url = payload['img_url']
+    x_start = payload['x_start']
+    y_start = payload['y_start']
+    x_end = payload['x_end']
+    y_end = payload['y_end']
+    return profile_picture(token, img_url, x_start, y_start, x_end, y_end)
+
+@APP.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
 
 @APP.route("/users/all", methods=['GET'])
 def return_all_users():

@@ -128,7 +128,7 @@ def create_user(u_id, permission_id, handle, token, email, password, name_first,
         'name_last': name_last,
         'password': password,
         'email': email,
-        #'profile_img_url':pathlib.Path(str(pathlib.Path().absolute())+"/profile_photos/profile_id"+str(u_id)+".jpg")
+        #'profile_img_url':""
     }
     DATA['users'].append(new_user)
     update_database(DATA)
