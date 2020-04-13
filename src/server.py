@@ -326,6 +326,13 @@ def change_user_permission():
     permission_id = payload['permission_id']
     return change_permission(token, u_id, permission_id)
 
+@APP.route('/admin/user/remove', methods=['POST'])
+def remove_the_user():
+    payload = request.get_json()
+    token = payload['token']
+    u_id = payload['u_id']
+    return remove_users(token, u_id)
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
 

@@ -174,3 +174,26 @@ def change_permission(token, u_id, permission_id):
     user_to_change['permission_id'] = permission_id
     update_database(DATA)
     return {}
+
+def remove_users(token, u_id):
+    DATA = getData()
+
+    owner_flag = False
+    user_to_change = None
+
+    for users in DATA['users']:
+        if users['u_id'] == u_id:
+            user_to_change = users
+        if users['u_id'] == verify_token(token):
+            if users['permission_id'] == 1:
+                owner_flag = True
+
+    if not owner_flag:
+        raise AccessError("Authorised user not an owner")
+
+    if not user_to_change:
+        raise InputError("User ID does not refer to valid user")
+
+    DATA['users'].remove(user_to_change)
+    update_database(DATA)
+    return {}
