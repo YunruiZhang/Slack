@@ -7,6 +7,8 @@ from datetime import datetime
 import jwt
 from error import InputError, AccessError
 BASE_URL = 'http://127.0.0.1:8080'
+import pathlib
+import json
 
 
 '''
@@ -47,7 +49,12 @@ DATABASE = {
 SECRET = 'thesecret'
 
 def getData():
-    global DATABASE
+    #global DATABASE
+    
+    a_file = open("database.json", "r")
+    DATABASE = json.load(a_file)
+    a_file.close()
+
     return DATABASE
 
 def token_generate(u_id):
@@ -87,7 +94,7 @@ def new_message(message_id, channel_id, user_id, message):
         'message': message,
         'time_created': time.timestamp(),
         'reacts': [{
-        	#Only likes for now (ID 1)
+            #Only likes for now (ID 1)
             'react_id': 1, 
             'u_ids': []
          }],
@@ -105,6 +112,7 @@ def new_message(message_id, channel_id, user_id, message):
             i['messages'].append(new_message_to_send)
             #print(i['messages'])
             break
+    update_database(DATA)
     return {}
 ##########################################################
 def create_user(u_id, permission_id, handle, token, email, password, name_first, name_last):
@@ -119,16 +127,29 @@ def create_user(u_id, permission_id, handle, token, email, password, name_first,
         'name_first': name_first,
         'name_last': name_last,
         'password': password,
-        'email': email
+        'email': email,
+        #'profile_img_url':pathlib.Path(str(pathlib.Path().absolute())+"/profile_photos/profile_id"+str(u_id)+".jpg")
     }
     DATA['users'].append(new_user)
+    update_database(DATA)
     return {}
 
-def reset():
-    DATA = getData()
-    DATA['users'].clear()
-    DATA['messages'].clear()
-    DATA['channels'].clear()
+def reset_db():
+    DATA =  {
+        'users' : [],
+        'channels' : [],
+        'messages' : []
+    }
+
+    update_database(DATA)
+
+    return {}
+
+def update_database(DATA):
+    #print(DATA)
+    a_file = open("database.json", "w")
+    json.dump(DATA, a_file)
+    a_file.close()
     return {}
 
 def change_permission(token, u_id, permission_id):
@@ -151,5 +172,28 @@ def change_permission(token, u_id, permission_id):
         raise AccessError("Authorised user not an owner")
 
     user_to_change['permission_id'] = permission_id
+    update_database(DATA)
+    return {}
 
+def remove_users(token, u_id):
+    DATA = getData()
+
+    owner_flag = False
+    user_to_change = None
+
+    for users in DATA['users']:
+        if users['u_id'] == u_id:
+            user_to_change = users
+        if users['u_id'] == verify_token(token):
+            if users['permission_id'] == 1:
+                owner_flag = True
+
+    if not owner_flag:
+        raise AccessError("Authorised user not an owner")
+
+    if not user_to_change:
+        raise InputError("User ID does not refer to valid user")
+
+    DATA['users'].remove(user_to_change)
+    update_database(DATA)
     return {}

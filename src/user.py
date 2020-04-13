@@ -2,6 +2,15 @@ import re
 from database import *
 from channel import *
 from error import *
+from PIL import Image
+import urllib
+import io
+from io import StringIO
+import os
+from flask import Flask, flash, request, redirect, url_for
+from werkzeug.utils import secure_filename
+import imghdr
+import pathlib
 
 def user_profile(token, u_id):
 
@@ -26,7 +35,7 @@ def user_profile(token, u_id):
         'name_last' : users['name_last'],
         'handle_str' : users['handle_str']
     }
-
+    update_database(DATA)
     return return_user
 
 def user_profile_setname(token, name_first, name_last):
@@ -45,7 +54,7 @@ def user_profile_setname(token, name_first, name_last):
             user['name_first'] = name_first
             user['name_last'] = name_last
             break
-
+    update_database(Data)
     return {
     }
 
@@ -67,7 +76,7 @@ def user_profile_setemail(token, email):
             break
 
     user['email'] = email
-
+    update_database(Data)
     return {
     }
 
@@ -89,9 +98,38 @@ def user_profile_sethandle(token, handle_str):
             break
 
     user['handle_str'] = handle_str
-
+    update_database(DATA)
     return {
     }
+
+def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
+    DATA = getData()
+    fd = urllib.request.urlopen(img_url)
+    image_file = io.BytesIO(fd.read())
+
+    if not fd:
+        raise InputError("Image URL invalid")
+
+    if imghdr.what(image_file) != "jpeg":
+        raise InputError("Not a JPG file")
+
+    img = Image.open(image_file)
+    width, height = img.size
+
+    if x_start < 0 or y_start < 0:
+        raise InputError("Coordinates not within the bounds of the image")
+
+    if x_end-x_start > width or y_end - y_start > height:
+        raise InputError("Coordinates not within the bounds of the image")      
+
+    cropped_image = img.crop((x_start, y_start, x_end, y_end))
+    u_id = verify_token(token)
+
+    cropped_image.save(pathlib.Path(str(pathlib.Path().absolute())+"/profile_photos/profile_id"+u_id+".jpg"))
+    #cropped_image.show()
+    update_database(DATA)
+    return {}
+
 
 def user_email_check(email):
     DATA = getData()

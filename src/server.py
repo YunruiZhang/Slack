@@ -123,14 +123,14 @@ def register():
 def return_password_request():
     payload = request.get_json()
     email = payload['email']
-    return password_request(email)
+    return auth.password_request(email)
 
 @APP.route("/auth/passwordreset/reset", methods=['POST'])
 def return_password_reset():
     payload = request.get_json()
     reset_code = payload['reset_code']
     new_password = payload['new_password']
-    return channel_invite(reset_code, new_password)
+    return auth.password_reset(reset_code, new_password)
 #-----------------------------------------------------------------------------#
 
 # Example
@@ -316,7 +316,7 @@ def return_message_search():
 
 @APP.route('/workspace/reset', methods=['POST'])
 def reset_workspace():
-    return reset()
+    return reset_db()
 
 @APP.route('/admin/userpermission/change', methods=['POST'])
 def change_user_permission():
@@ -325,6 +325,13 @@ def change_user_permission():
     u_id = payload['u_id']
     permission_id = payload['permission_id']
     return change_permission(token, u_id, permission_id)
+
+@APP.route('/admin/user/remove', methods=['POST'])
+def remove_the_user():
+    payload = request.get_json()
+    token = payload['token']
+    u_id = payload['u_id']
+    return remove_users(token, u_id)
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))

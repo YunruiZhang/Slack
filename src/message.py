@@ -20,6 +20,7 @@ def message_send(token, channel_id, message):
         raise AccessError(description='user is not in the channel')
     message_id = get_msg_id()
     database.new_message(message_id, channel_id, var, message)
+
     return {
         'message_id': message_id
     }
@@ -161,6 +162,7 @@ def remove(message_id, channel_id):
                 if int(x['message_id']) == int(message_id):
                     j['messages'].remove(x)
                     break
+    database.update_database(data)
     return{
     }
 
@@ -173,6 +175,7 @@ def edit(message_id, channel_id, message):
                 if int(x['message_id']) == int(message_id):
                     x['message'] = message
                     break
+    database.update_database(data)
     return{
     }
 def later_send(message_id, channel_id, user_id, message, time_sent):

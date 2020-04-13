@@ -1,4 +1,4 @@
-from database import getData, verify_token
+from database import *
 from error import AccessError, InputError
 #from standup_functions import get_channel_from_channelID
 
@@ -6,6 +6,7 @@ from error import AccessError, InputError
 def message_react(token, message_id, react_id):
     '''Given a message within a channel the authorised
     user is part of, add a "react" to that particular message'''
+    DATA = getData()
     print(message_id)
     msg = get_message_from_messageID(message_id)
     ch = get_channel_from_msgID(message_id)
@@ -35,6 +36,7 @@ def message_react(token, message_id, react_id):
     #    'is_this_user_reacted': True
     #}
     r['u_ids'].append(userID)
+    update_database(DATA)
     #msg['reacts']['is_this_user_reacted'] = True
     return {}
 
@@ -44,6 +46,7 @@ def message_unreact(token, message_id, react_id):
     '''Given a message within a channel the authorised user is part of,
     remove a "react" to that particular messageGiven a message within a
     channel the authorised user is part of, remove a "react" to that particular message'''
+    DATA=getData()
     msg = get_message_from_messageID(message_id)
     ch = get_channel_from_msgID(message_id)
     userID = verify_token(token)
@@ -73,12 +76,14 @@ def message_unreact(token, message_id, react_id):
     #for r in msg['reacts']:
     #    if r['react_id'] == react_id:
     #        msg['reacts'].remove(r)
+    update_database(DATA)
     return {}
 
 # POST
 def message_pin(token, message_id):
     '''Given a message within a channel, mark it as "pinned" to be
     given special display treatment by the frontend'''
+    DATA=getData()
     msg = get_message_from_messageID(message_id)
     userID = verify_token(token)
     ch = get_channel_from_msgID(message_id)
@@ -99,11 +104,13 @@ def message_pin(token, message_id):
 
     # Non-exception: pin the message
     msg['is_pinned'] = True
+    update_database(DATA)
     return {}
 
 # POST
 def message_unpin(token, message_id):
     '''Given a message within a channel, remove it's mark as unpinned'''
+    DATA = getData()
     msg = get_message_from_messageID(message_id)
     userID = verify_token(token)
     ch = get_channel_from_msgID(message_id)
@@ -124,6 +131,7 @@ def message_unpin(token, message_id):
 
     # Non-exception: unpin the message
     msg['is_pinned'] = False
+    update_database(DATA)
     return {}
 
 #################

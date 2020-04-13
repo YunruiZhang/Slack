@@ -1,9 +1,8 @@
 import datetime
 import threading
 from pytz import timezone
-import database
+from database import *
 from message import get_msg_id, message_send
-from database import verify_token
 from error import InputError, AccessError
 from message_pin_react_functions import check_user_in_channel
 
@@ -15,6 +14,7 @@ def standup_start(token, channel_id, length):
     a message will be added to the message queue in the channel
     from the user who started the standup.
     X is an integer that denotes the number of seconds that the standup occurs for'''
+    DATA = getData()
     userID = verify_token(token)
     ch = get_channel_from_channelID(channel_id)
     ch1 = ch['standup']
@@ -36,6 +36,7 @@ def standup_start(token, channel_id, length):
     ch['standup']['time_finish'] = time_finish
     ch['standup']['is_active'] = True
 
+    update_database(DATA)
     return {'time_finish': time_finish}
 
 # GET
@@ -45,6 +46,7 @@ def standup_active(token, channel_id):
     If no standup is active, then time_finish returns None'''
     # InputError:
     # Channel ID is not a valid channel
+    DATA = getData()
     if not verify_token(token):
         raise AccessError("Not an Authorised User")
     if not check_channelID_valid(channel_id):
@@ -54,12 +56,14 @@ def standup_active(token, channel_id):
     ch = get_channel_from_channelID(channel_id)
     time_finish = ch['standup']['time_finish']
     is_active = ch['standup']['is_active']
+    update_database(DATA)
     return {'is_active': is_active, 'time_finish': time_finish}
 
 # POST
 def standup_send(token, channel_id, message):
     '''Sending a message to get buffered in the standup queue,
     assuming a standup is currently active'''
+    DATA = getData()
     ch = get_channel_from_channelID(channel_id)
     userID = verify_token(token)
     # InputError:
@@ -81,38 +85,42 @@ def standup_send(token, channel_id, message):
     user = get_user_from_userID(userID)
     message_to_add = user['handle_str'] + ": " + message
     ch['standup']['message_buffer'].append(message_to_add)
+    update_database(DATA)
     return {}
 
 #######################################
 # HELPER fs
 
 def check_channelID_valid(channel_id):
-    D = database.getData()
+    D = getData()
     for ch in D['channels']:
         if ch['channel_id'] == channel_id:
             return True
     return False
 
 def get_channel_from_channelID(channel_id):
-    D = database.getData()
+    D = getData()
     for ch in D['channels']:
         if ch['channel_id'] == channel_id:
             return ch
     return InputError("Invalid channel ID")
 
 def standup_end(u_id, channel,token):
+    DATA= getData()
     channel['standup']['time_finish'] = None
+    channel['standup']['is_active'] = False
     message_summary = "\n".join(channel['standup']['message_buffer'])
     # reset message_buffer after the standup
     channel['standup']['message_buffer'] = None
     # send the merged message in the end of the standup
     message_id = get_msg_id()
     #database.new_message(message_id, channel['channel_id'], u_id, message_summary)
+    update_database(DATA)
     message_send(token,channel['channel_id'],message_summary)
 
 
 def get_user_from_userID(u_id):
-    D = database.getData()
+    D = getData()
     for u in D['users']:
         if u['u_id'] == u_id:
             return u

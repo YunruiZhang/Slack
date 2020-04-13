@@ -93,7 +93,7 @@ def channels_create(token, name, is_public):
     }
 
     DATA['channels'].append(new_channel)
-
+    update_database(DATA)
     return {
         'channel_id': channel_id
     }

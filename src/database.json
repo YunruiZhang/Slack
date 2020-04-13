@@ -1,0 +1,1 @@
+{"users": [{"u_id": 1, "permission_id": 1, "handle_str": "masteracc", "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1X2lkIjoxfQ.QuUHSc3fJ3QqTk5-BPvGBAAURmU1IZq_tPVtiSqqh0s", "name_first": "master", "name_last": "acc", "password": "b'eNrLSM3JyTc0MgYADZUCqw=='", "email": "test@email.com"}], "channels": [], "messages": []}
