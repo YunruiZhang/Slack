@@ -32,7 +32,7 @@ def channel_invite(token, channel_id, u_id):
     }
 
     curr_channel['details']['all_members'].append(user_to_add)
-
+    update_database(DATA)
     return {}
 
 def channel_details(token, channel_id):
@@ -117,6 +117,8 @@ def channel_leave(token, channel_id):
         if int(members['u_id']) == int(curr_u_id):
             curr_channel['details']['all_members'].remove(members)
 
+    update_database(DATA)
+
     return {
     }
 
@@ -148,7 +150,7 @@ def channel_join(token, channel_id):
     }
 
     curr_channel['details']['all_members'].append(user_to_add)
-
+    update_database(DATA)
     return {
     }
 
@@ -186,7 +188,7 @@ def channel_addowner(token, channel_id, u_id):
     }
 
     curr_channel['details']['owner_members'].append(user_to_add)
-
+    update_database(DATA)
     return {
     }
 
@@ -217,7 +219,7 @@ def channel_removeowner(token, channel_id, u_id):
     for owners in curr_channel['details']['owner_members']:
         if owners['u_id'] == u_id:
             curr_channel['details']['owner_members'].remove(owners)
-
+    update_database(DATA)
     return {
     }
 

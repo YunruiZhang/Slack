@@ -46,7 +46,7 @@ def auth_login(email, password):
 
     for users in store['users']:
         if users['email'] == email:
-            if users['password'] == hash(password):
+            if users['password'] == str(obscure(password.encode('utf-8'))):
                 return {
                     'u_id': users['u_id'],
                     'token': token_generate(users['u_id'])
@@ -151,7 +151,7 @@ def auth_register(email, password, name_first, name_last):
         permission_id = 1
 
     #Creating the user and putting it in the database
-    create_user(u_id, permission_id, handle, token, email, hash(password), name_first, name_last)
+    create_user(u_id, permission_id, handle, token, email, str(obscure(password.encode('utf-8'))), name_first, name_last)
 
 
     return {
@@ -175,7 +175,7 @@ def password_request(email):
                 msg['To'] = users["name_first"]
                 msg['Subject'] = "Slackr email reset"
 
-                secret_code = obscure(email.encode('utf-8')+"|".encode('utf-8')+(users["password"]).encode('utf-8'))
+                secret_code = obscure(email.encode('utf-8')+"|".encode('utf-8')+(str(users["password"])).encode('utf-8'))
                 body = "Your secret code is: " + secret_code.decode('utf-8') # The /n separates the message from the headers
                 msg.attach(MIMEText(body, 'plain'))
                 server.sendmail("T18AWELV@gmail.com", email, msg.as_string())
@@ -193,8 +193,9 @@ def password_reset(reset_code, new_password):
 
     for users in data["users"]:
         if users["email"] == email:
-            if users["password"] == int(old_password):  
-                users["password"] = hash(new_password)
+            if users["password"] == old_password:  
+                users["password"] = str(obscure(new_password.encode('utf-8')))
+                update_database(data)
                 return {}
 
     raise InputError("Reset code invalid")
