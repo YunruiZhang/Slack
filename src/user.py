@@ -125,13 +125,27 @@ def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
     cropped_image = img.crop((x_start, y_start, x_end, y_end))
     u_id = verify_token(token)
 
-    cropped_image.save(pathlib.Path(str(pathlib.Path().absolute())+"/profile_photos/profile_id"+u_id+".jpg"))
+    UPLOAD_FOLDER = './profile_photos'
+    ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
+
+    app = Flask(__name__)
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    filename = secure_filename(cropped_image.filename)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #cropped_image.save(pathlib.Path(str(pathlib.Path().absolute())+"/profile_photos/profile_id"+u_id+".jpg"))
     #cropped_image.show()
+
+    for users in DATA['users']:
+        if users["u_id"] == int(u_id):
+            users["profile_img_url"] = str(url_for('uploaded_file',filename=filename))
+            break
+
     update_database(DATA)
     return {}
 
 
-def user_email_check(email):
+def user_email_check(email): 
     DATA = getData()
     for users in DATA['users']:
         if users['email'] == email:

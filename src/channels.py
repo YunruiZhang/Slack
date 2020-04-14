@@ -89,6 +89,12 @@ def channels_create(token, name, is_public):
             "time_finish": None,
             "message_buffer": [],
             "is_active": False
+        },
+        "hangman": {
+            "is_active":False,
+            "word_to_guess": None,
+            "guess_string": None,
+            "guess_list" : []
         }
     }
 
