@@ -350,6 +350,22 @@ def remove_the_user():
     u_id = payload['u_id']
     return remove_users(token, u_id)
 
+@APP.route('/hangman/start', methods=['POST'])
+def start_hangman():
+    payload = request.get_json()
+    token = payload['token']
+    channel_id = payload['channel_id']
+    return hangman_start(token, channel_id)
+
+@APP.route('/hangman/guess', methods=['POST'])
+def guess_hangman():
+    payload = request.get_json()
+    token = payload['token']
+    channel_id = payload['channel_id']
+    character = payload['character']
+    return hangman_guess(token, channel_id,character)
+
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
 
