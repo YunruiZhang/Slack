@@ -105,13 +105,14 @@ def hangman_start(token, channel_id):
             channel["hangman"]["guess_string"] = list(word_string)
             break
     update_database(DATA)
-    message_send(bot_token, channel_id, "Welcome to Hangman!\n\nWord:"+word_string)
+    message_send(bot_token, channel_id, "Welcome to Hangman!\n\nWord: "+" ".join(word_string))
     return {}
 
 def hangman_guess(token, channel_id, character):
     DATA = getData()
     character = character.upper()
     found_flag = False
+
     for channel in DATA["channels"]:
         if channel["channel_id"] == int(channel_id):
             if channel["hangman"]["is_active"]:
@@ -120,6 +121,7 @@ def hangman_guess(token, channel_id, character):
 
     if not found_flag:
         raise InputError("No active hangman game")
+
     bot_token = None
     for users in DATA["users"]:
         if users['email'] == "hangmanbot@t18a-welv.com":
@@ -131,44 +133,66 @@ def hangman_guess(token, channel_id, character):
     word_to_guess = channel["hangman"]["word_to_guess"]
     guess_string = channel["hangman"]["guess_string"]
 
-    guessed_string = []
-    for characters in channel["hangman"]["guess_list"]:
-        guessed_string.append(characters+" ")
-
     #print(word_to_guess)
     #print(character)
     #print(character in word_to_guess)
+
+    #Wrong Guess
     if character not in word_to_guess:
         channel["hangman"]["guess_list"].append(character)
+        guessed_string = []
+        for characters in channel["hangman"]["guess_list"]:
+            guessed_string.append(characters+" ")
         update_database(DATA)
         DATA = getData
+        #Killed the guy
         if len(channel["hangman"]["guess_list"]) == 9:
             message_send(bot_token, channel_id,word_to_guess+"\nYou lost!\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: "+"".join(guessed_string))
+            channel["hangman"]["is_active"] = False
+            channel["hangman"]["word_to_guess"] = None
+            channel["hangman"]["guess_string"] = None
+            channel["hangman"]["guess_lists"] = None
             DATA = getData()
+            #update_database(DATA)
         else:
             print(bot_token)
             print(guess_string)
 
-            message_send(bot_token, channel_id, "".join(guess_string)+"\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: "+"".join(guessed_string))
+            message_send(bot_token, channel_id, ""+" ".join(guess_string)+"\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: "+"".join(guessed_string))
             DATA = getData()
+            #update_database(DATA)
+
     else:
+        guessed_string = []
+        for characters in channel["hangman"]["guess_list"]:
+            guessed_string.append(characters)
         for index in range(0,len(word_to_guess)):
             if list(word_to_guess)[index] == character:
                 guess_string[index] = character
-       
-        if "".join(guessed_string) == word_to_guess:
+        
+        update_database(DATA)
+        DATA = getData()
+
+        #print("".join(guessed_string))
+        #print(word_to_guess)
+
+        if "_" not in guess_string:
             message_send(bot_token, channel_id, word_to_guess+"\nCongratulations! You have won hangman.")
-            DATA = getData()
             channel["hangman"]["is_active"] = False
             channel["hangman"]["word_to_guess"] = None
             channel["hangman"]["guess_string"] = None
             channel["hangman"]["guess_list"] = None
+            
+            DATA = getData()
+            #update_database(DATA)
         else:
             #print(str(guess_string)+"\n"+str(hangman_ascii(len(channel["hangman"]["guess_list"])))+"\nYou have guessed: "+str(guessed_string))
             channel["hangman"]["guess_string"] = guess_string
-            print("".join(guess_string)+"\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: ".join(guessed_string))
-            message_send(bot_token, channel_id, "".join(guess_string)+"\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: "+"".join(guessed_string))
+            update_database(DATA)
+            #print(" ".join(guess_string)+"\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: ".join(guessed_string))
+            message_send(bot_token, channel_id, ""+" ".join(guess_string)+"\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: "+"".join(guessed_string))
             DATA = getData()
+            #update_database(DATA)
     update_database(DATA)
     return {}
 

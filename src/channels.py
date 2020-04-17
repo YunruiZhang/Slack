@@ -93,7 +93,7 @@ def channels_create(token, name, is_public):
         "hangman": {
             "is_active":False,
             "word_to_guess": None,
-            "guess_string": None,
+            "guess_string": [],
             "guess_list" : []
         }
     }
