@@ -1,6 +1,6 @@
 import sys
 from json import dumps
-from flask import Flask, request
+from flask import Flask, request,send_from_directory
 from flask_cors import CORS
 from error import InputError
 from channel import *
@@ -10,10 +10,8 @@ from other import *
 import auth
 from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 from standup_functions import *
-#from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
-#from standup_functions import standup_start, standup_active, standup_send
 import message
-from flask import send_from_directory
+import os
 
 def defaultHandler(err):
     response = err.get_response()
@@ -26,10 +24,13 @@ def defaultHandler(err):
     response.content_type = 'application/json'
     return response
 
-APP = Flask(__name__)
+root_dir = os.path.dirname(os.getcwd())
+
+APP = Flask(__name__,static_folder = os.path.join(root_dir, 'static'))
 CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
+APP.config['STATIC_ROUTE'] = '/COMP1531/project/iteration3/back-end/T18A-WELV/src/static'
 APP.register_error_handler(Exception, defaultHandler)
 #------------------- msgserver--------------------------------------------------#
 @APP.route("/message/send", methods=['POST'])
@@ -315,10 +316,10 @@ def upload_profile_photo():
     y_end = payload['y_end']
     return profile_picture(token, img_url, x_start, y_start, x_end, y_end)
 
-@APP.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+@APP.route("/static/<filename>")
+def download_photo(filename):
+    #return os.path.join(APP.root_path, 'static')
+    return send_from_directory(os.path.join(APP.root_path, 'static'),filename)    
 
 @APP.route("/users/all", methods=['GET'])
 def return_all_users():

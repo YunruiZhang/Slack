@@ -3,14 +3,11 @@ from database import *
 from channel import *
 from error import *
 from PIL import Image
-import urllib
+from urllib.request import Request, urlopen
+from flask import url_for
 import io
 from io import StringIO
 import os
-from flask import Flask, flash, request, redirect, url_for
-from werkzeug.utils import secure_filename
-import imghdr
-import pathlib
 
 def user_profile(token, u_id):
 
@@ -28,12 +25,17 @@ def user_profile(token, u_id):
     if not foundFlag:
         raise InputError('Invalid User ID')
 
+    img_path = "profile_id"+str(u_id)+".jpg"
+    default_pic = url_for('static', filename=img_path,_external=True)
+    #print(default_pic)
+
     return_user = {
         'u_id' : users['u_id'],
         'email' : users['email'],
         'name_first' : users['name_first'],
         'name_last' : users['name_last'],
-        'handle_str' : users['handle_str']
+        'handle_str' : users['handle_str'],
+        'profile_img_url': default_pic
     }
     update_database(DATA)
     return return_user
@@ -104,46 +106,37 @@ def user_profile_sethandle(token, handle_str):
 
 def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
     DATA = getData()
-    fd = urllib.request.urlopen(img_url)
-    image_file = io.BytesIO(fd.read())
+    
+    req = Request(img_url, headers={'User-Agent': 'Mozilla/5.0'})
+    image_file = Image.open(urlopen(req))
+    #image_file = io.BytesIO(fd.read())
 
-    if not fd:
-        raise InputError("Image URL invalid")
+    #if not fd:
+    #    raise InputError("Image URL invalid")
 
-    if imghdr.what(image_file) != "jpeg":
-        raise InputError("Not a JPG file")
+    #if image_file.what(image_file) != "jpeg":
+    #    raise InputError("Not a JPG file")
 
-    img = Image.open(image_file)
-    width, height = img.size
+    width, height = image_file.size
 
-    if x_start < 0 or y_start < 0:
+    if int(x_start) < 0 or int(y_start) < 0:
         raise InputError("Coordinates not within the bounds of the image")
 
-    if x_end-x_start > width or y_end - y_start > height:
+    if int(x_end)-int(x_start) > width or int(y_end) - int(y_start) > height:
         raise InputError("Coordinates not within the bounds of the image")      
 
-    cropped_image = img.crop((x_start, y_start, x_end, y_end))
+    cropped_image = image_file.crop((int(x_start), int(y_start), int(x_end), int(y_end)))
     u_id = verify_token(token)
 
-    UPLOAD_FOLDER = './profile_photos'
-    ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
-
-    app = Flask(__name__)
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-    filename = secure_filename(cropped_image.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #cropped_image.save(pathlib.Path(str(pathlib.Path().absolute())+"/profile_photos/profile_id"+u_id+".jpg"))
-    #cropped_image.show()
-
-    for users in DATA['users']:
-        if users["u_id"] == int(u_id):
-            users["profile_img_url"] = str(url_for('uploaded_file',filename=filename))
-            break
-
-    update_database(DATA)
+   
+    cropped_image.save(pathlib.Path(str(pathlib.Path().absolute())+"/static/profile_id"+str(u_id)+".jpg"))
+    cropped_image.show()
+    file = os.path.join(str(pathlib.Path().absolute())+'/static',str(u_id)+"profile_picture.html")
+    with open(file, "w") as f:
+        f.write("<!doctype html>\n<title>User "+str(u_id)+" Profile Photo</title>\n<img src='profile_id"+str(u_id)+".jpg'>")
+        f.close()
+   
     return {}
-
 
 def user_email_check(email): 
     DATA = getData()

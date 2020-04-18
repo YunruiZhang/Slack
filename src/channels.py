@@ -1,6 +1,7 @@
 from user import *
 from other import *
 from database import *
+from flask import url_for
 from error import InputError, AccessError
 
 def channels_list(token):
@@ -64,6 +65,9 @@ def channels_create(token, name, is_public):
     else:
         channel_id = 1
 
+    img_path = "profile_id"+str(curr_u_id)+".jpg"
+    default_pic = url_for('static', filename=img_path,_external=True)
+
     new_channel = {
         "channel_id":channel_id,
         "public": is_public,
@@ -73,14 +77,16 @@ def channels_create(token, name, is_public):
                 {
                     "u_id": curr_u_id,
                     "name_first": u_id_details['name_first'],
-                    "name_last": u_id_details['name_last']
+                    "name_last": u_id_details['name_last'],
+                    "profile_img_url": default_pic
                 }
             ],
             "all_members": [
                 {
                     "u_id": curr_u_id,
                     "name_first": u_id_details['name_first'],
-                    "name_last": u_id_details['name_last']
+                    "name_last": u_id_details['name_last'],
+                    "profile_img_url": default_pic
                 }
             ],
         },
