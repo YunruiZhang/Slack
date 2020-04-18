@@ -4,6 +4,7 @@ from error import *
 from auth import *
 from message import *
 import urllib.request
+from flask import url_for
 from random import randint
 
 def users_all(token):
@@ -20,7 +21,8 @@ def users_all(token):
             'name_last':user['name_last'],
             #'permission_id': user['permission_id'],
             'email': user['email'],
-            'handle_str': user['handle_str']
+            'handle_str': user['handle_str'],
+            #'profile_img_url': user['profile_img_url']
         }
         all_user.append(to_add)
 
