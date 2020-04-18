@@ -22,7 +22,7 @@ def users_all(token):
             #'permission_id': user['permission_id'],
             'email': user['email'],
             'handle_str': user['handle_str'],
-            #'profile_img_url': user['profile_img_url']
+            'profile_img_url': user['profile_img_url']
         }
         all_user.append(to_add)
 
