@@ -9,7 +9,7 @@ import os
 import shutil
 import jwt
 from error import InputError, AccessError
-BASE_URL = 'http://127.0.0.1:8080'
+BASE_URL = 'http://127.0.0.1:8081'
 
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:

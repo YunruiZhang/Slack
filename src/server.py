@@ -1,3 +1,7 @@
+'''
+This file contains information about anything relating to the server.  The 
+methods in this file link all the routes to functions. 
+'''
 import sys
 from json import dumps
 import os

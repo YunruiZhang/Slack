@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to the user.  The 
+methods in this file relate to getting the users details and editing said
+details (This includes the profile picture).  There are some helper methods 
+that just check the existence of channels and users.
+'''
 import re
 import pathlib
 from urllib.request import Request, urlopen

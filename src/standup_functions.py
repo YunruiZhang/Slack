@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to standups.  The 
+methods in this file relate to starting, checking if active, ending and 
+sending the standup. There are some helper methods that just check the 
+existence of channels and users.
+'''
 import datetime
 import threading
 from pytz import timezone

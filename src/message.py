@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to messages.  The 
+methods in this file relate to sending, removing, editing and the send 
+later function.  There are some helper methods that just check the 
+existence of channels and users.
+'''
 from datetime import datetime, timezone
 import threading
 from time import sleep

@@ -127,7 +127,7 @@ def auth_register(email, password, name_first, name_last):
 
     for users in store['users']:
         if users['email'] == email:
-            raise InputError(f"Error, email: {email} is already in use")
+            raise InputError("Error, email: is already in use")
 
 
     #Checks if password is Valid

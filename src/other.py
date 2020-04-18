@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to all the other
+functions.  The methods in this file relate to listing all users, searching,
+and hangman.  There are some helper methods that just check the 
+existence of channels and users and the game state of hangman.
+'''
 import urllib.request
 from random import randint
 from database import *

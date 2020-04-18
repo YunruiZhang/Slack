@@ -1,3 +1,8 @@
+'''
+This file contains information about anything relating to channels.  The 
+methods in this file relate to listing a single or all channels and creating
+new channels. 
+'''
 from user import *
 from flask import url_for
 from database import *

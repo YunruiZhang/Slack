@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to message pins
+and reacts.  The methods in this file relate to reacting and pinning 
+messages.  There are some helper methods that just check the existence 
+of channels and users.
+'''
 from database import *
 from error import AccessError, InputError
 #from standup_functions import get_channel_from_channelID

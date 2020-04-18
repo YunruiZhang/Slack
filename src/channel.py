@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to a single channel.  The 
+methods in this file relate to inviting/joining/leaving channels, adding/removing
+owners, getting message details and channel details.  There are some helper
+methods that just check the existence of channels and users.
+'''
 from user import *
 from other import *
 from channels import *
