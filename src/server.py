@@ -1,6 +1,7 @@
 import sys
 from json import dumps
-from flask import Flask, request,send_from_directory
+import os
+from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 from error import InputError
 from channel import *
@@ -11,7 +12,6 @@ import auth
 from message_pin_react_functions import message_pin, message_unpin, message_react, message_unreact
 from standup_functions import *
 import message
-import os
 
 def defaultHandler(err):
     response = err.get_response()
@@ -26,7 +26,7 @@ def defaultHandler(err):
 
 root_dir = os.path.dirname(os.getcwd())
 
-APP = Flask(__name__,static_folder = os.path.join(root_dir, 'static'))
+APP = Flask(__name__, static_folder=os.path.join(root_dir, 'static'))
 CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
@@ -319,7 +319,7 @@ def upload_profile_photo():
 @APP.route("/static/<filename>")
 def download_photo(filename):
     #return os.path.join(APP.root_path, 'static')
-    return send_from_directory(os.path.join(APP.root_path, 'static'),filename)    
+    return send_from_directory(os.path.join(APP.root_path, 'static'), filename)
 
 @APP.route("/users/all", methods=['GET'])
 def return_all_users():
@@ -364,9 +364,7 @@ def guess_hangman():
     token = payload['token']
     channel_id = payload['channel_id']
     character = payload['character']
-    return hangman_guess(token, channel_id,character)
-
+    return hangman_guess(token, channel_id, character)
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8081))
-

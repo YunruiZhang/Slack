@@ -1,7 +1,7 @@
 from user import *
-from other import *
-from database import *
 from flask import url_for
+from database import *
+from other import *
 from error import InputError, AccessError
 
 def channels_list(token):

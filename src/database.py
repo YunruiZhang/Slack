@@ -4,13 +4,12 @@
 # msgs is a list of dicts contain msg infos including the channel id which the msg in
 # and the sender of it , the time it sent and the msg itself.
 from datetime import datetime
-import jwt
-from error import InputError, AccessError
-BASE_URL = 'http://127.0.0.1:8080'
-import pathlib
 import json
 import os
 import shutil
+import jwt
+from error import InputError, AccessError
+BASE_URL = 'http://127.0.0.1:8080'
 
 '''
 EXAMPLE OF HOW THE CHANNELS DATABASE STRUCTURE LOOKS:
@@ -51,12 +50,11 @@ SECRET = 'thesecret'
 
 def getData():
     #global DATABASE
-    
     a_file = open("database.json", "r")
-    DATABASE = json.load(a_file)
+    DATABASE_TO_RETURN = json.load(a_file)
     a_file.close()
 
-    return DATABASE
+    return DATABASE_TO_RETURN
 
 def token_generate(u_id):
     '''
@@ -96,9 +94,9 @@ def new_message(message_id, channel_id, user_id, message):
         'time_created': time.timestamp(),
         'reacts': [{
             #Only likes for now (ID 1)
-            'react_id': 1, 
+            'react_id': 1,
             'u_ids': []
-         }],
+        }],
         'is_pinned': False
     }
     short_msg = {
@@ -136,7 +134,7 @@ def create_user(u_id, permission_id, handle, token, email, password, name_first,
     return {}
 
 def reset_db():
-    DATA =  {
+    DATA = {
         'users' : [],
         'channels' : [],
         'messages' : []

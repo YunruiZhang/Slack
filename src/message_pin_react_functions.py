@@ -8,8 +8,8 @@ def message_react(token, message_id, react_id):
     user is part of, add a "react" to that particular message'''
     DATA = getData()
     print(message_id)
-    msg = get_message_from_messageID(DATA,message_id)
-    ch = get_channel_from_msgID(DATA,message_id)
+    msg = get_message_from_messageID(DATA, message_id)
+    ch = get_channel_from_msgID(DATA, message_id)
     userID = verify_token(token)
     # /InputError when any of:
     # Message_id is not a valid message within a channel that
@@ -27,8 +27,8 @@ def message_react(token, message_id, react_id):
             for users in r['u_ids']:
                 if users == userID:
                     raise InputError("Same react already exsited")
-            break;
-    print(r)
+            break
+
     # Non-exception: add react
     #new = {
     #    'react_id': react_id,
@@ -49,9 +49,9 @@ def message_unreact(token, message_id, react_id):
     '''Given a message within a channel the authorised user is part of,
     remove a "react" to that particular messageGiven a message within a
     channel the authorised user is part of, remove a "react" to that particular message'''
-    DATA=getData()
-    msg = get_message_from_messageID(DATA,message_id)
-    ch = get_channel_from_msgID(DATA,message_id)
+    DATA = getData()
+    msg = get_message_from_messageID(DATA, message_id)
+    ch = get_channel_from_msgID(DATA, message_id)
     userID = verify_token(token)
     # InputError:
     # Message_id is not a valid message within a channel that the authorised user has joined
@@ -86,10 +86,10 @@ def message_unreact(token, message_id, react_id):
 def message_pin(token, message_id):
     '''Given a message within a channel, mark it as "pinned" to be
     given special display treatment by the frontend'''
-    DATA=getData()
-    msg = get_message_from_messageID(DATA,message_id)
+    DATA = getData()
+    msg = get_message_from_messageID(DATA, message_id)
     userID = verify_token(token)
-    ch = get_channel_from_msgID(DATA,message_id)
+    ch = get_channel_from_msgID(DATA, message_id)
     # -InputError:
     # message_id is not a valid message
     if not check_valid_msg(message_id):
@@ -114,9 +114,9 @@ def message_pin(token, message_id):
 def message_unpin(token, message_id):
     '''Given a message within a channel, remove it's mark as unpinned'''
     DATA = getData()
-    msg = get_message_from_messageID(DATA,message_id)
+    msg = get_message_from_messageID(DATA, message_id)
     userID = verify_token(token)
-    ch = get_channel_from_msgID(DATA,message_id)
+    ch = get_channel_from_msgID(DATA, message_id)
     # InputError:
     # message_id is not a valid message
     if not check_valid_msg(message_id):
@@ -140,7 +140,7 @@ def message_unpin(token, message_id):
 #################
 # HELPER funcitons
 
-def get_channel_from_msgID(D,message_id):
+def get_channel_from_msgID(D, message_id):
     #D = getData()
     #raise InputError(f"{D}")
     for sm in D['messages']:
@@ -151,8 +151,8 @@ def get_channel_from_msgID(D,message_id):
     return InputError("channel not found")
 
 
-def get_message_from_messageID(D,message_id):
-    ch = get_channel_from_msgID(D,message_id)
+def get_message_from_messageID(D, message_id):
+    ch = get_channel_from_msgID(D, message_id)
     for m in ch['messages']:
         if m['message_id'] == message_id:
             return m
