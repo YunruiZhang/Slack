@@ -1,3 +1,9 @@
+'''
+This file contains information about anything relating to a single channel.  The 
+methods in this file relate to inviting/joining/leaving channels, adding/removing
+owners, getting message details and channel details.  There are some helper
+methods that just check the existence of channels and users.
+'''
 from user import *
 from other import *
 from channels import *
@@ -11,7 +17,7 @@ def channel_invite(token, channel_id, u_id):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    if not channel_id_check(DATA,channel_id) or not u_id_check(u_id):
+    if not channel_id_check(DATA, channel_id) or not u_id_check(u_id):
         raise InputError('Invalid User or Channel ID')
 
     curr_channel = None
@@ -42,7 +48,7 @@ def channel_details(token, channel_id):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    if not channel_id_check(DATA,channel_id):
+    if not channel_id_check(DATA, channel_id):
         raise InputError('Channel ID is invalid')
 
     curr_channel = None
@@ -63,7 +69,7 @@ def channel_messages(token, channel_id, start):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    if not channel_id_check(DATA,channel_id):
+    if not channel_id_check(DATA, channel_id):
         raise InputError('Channel id id invalid')
 
     curr_channel = None
@@ -101,7 +107,7 @@ def channel_leave(token, channel_id):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    if not channel_id_check(DATA,channel_id):
+    if not channel_id_check(DATA, channel_id):
         raise InputError('InputError')
 
     curr_channel = None
@@ -129,7 +135,7 @@ def channel_join(token, channel_id):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    if not channel_id_check(DATA,channel_id):
+    if not channel_id_check(DATA, channel_id):
         raise InputError('Channel ID is invalid')
 
     curr_channel = None
@@ -161,7 +167,7 @@ def channel_addowner(token, channel_id, u_id):
     if not curr_u_id:
         raise AccessError('Token Invalid')
 
-    if not channel_id_check(DATA,channel_id):
+    if not channel_id_check(DATA, channel_id):
         raise InputError('InputError')
 
     if not curr_u_id:
@@ -195,7 +201,7 @@ def channel_addowner(token, channel_id, u_id):
 def channel_removeowner(token, channel_id, u_id):
     DATA = getData()
 
-    if not channel_id_check(DATA,channel_id):
+    if not channel_id_check(DATA, channel_id):
         raise InputError('InputError')
 
     curr_u_id = verify_token(token)
@@ -231,7 +237,7 @@ def u_id_check(u_id):
     return False
 
 
-def channel_id_check(DATA,channel_id):
+def channel_id_check(DATA, channel_id):
     #DATA = getData()
     print(DATA)
     for channels in DATA['channels']:

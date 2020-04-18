@@ -1,15 +1,19 @@
+'''
+This file contains information about anything relating to the user.  The 
+methods in this file relate to getting the users details and editing said
+details (This includes the profile picture).  There are some helper methods 
+that just check the existence of channels and users.
+'''
 import re
+import pathlib
+from urllib.request import Request, urlopen
+from urllib.parse import urlparse
+from os.path import splitext, basename
+from flask import url_for
+from PIL import Image
 from database import *
 from channel import *
 from error import *
-from PIL import Image
-from urllib.request import Request, urlopen
-from flask import url_for
-import io
-from io import StringIO
-import os
-from urllib.parse import urlparse
-from os.path import splitext, basename
 
 def user_profile(token, u_id):
 
@@ -104,7 +108,7 @@ def user_profile_sethandle(token, handle_str):
 
 def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
     DATA = getData()
-    
+
     disassembled = urlparse(img_url)
     filename, file_ext = splitext(basename(disassembled.path))
 
@@ -124,17 +128,16 @@ def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
         raise InputError("Coordinates not within the bounds of the image")
 
     if int(x_end)-int(x_start) > width or int(y_end) - int(y_start) > height:
-        raise InputError("Coordinates not within the bounds of the image")      
+        raise InputError("Coordinates not within the bounds of the image")
 
     cropped_image = image_file.crop((int(x_start), int(y_start), int(x_end), int(y_end)))
     u_id = verify_token(token)
 
-   
     cropped_image.save(pathlib.Path(str(pathlib.Path().absolute())+"/static/"+filename+".jpg"))
     cropped_image.show()
-    
+
     img_path = filename+".jpg"
-    default_pic = url_for('static', filename=img_path,_external=True)
+    default_pic = url_for('static', filename=img_path, _external=True)
 
     for users in DATA["users"]:
         if users["u_id"] == int(u_id):
@@ -145,7 +148,7 @@ def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
 
     return {}
 
-def user_email_check(email): 
+def user_email_check(email):
     DATA = getData()
     for users in DATA['users']:
         if users['email'] == email:

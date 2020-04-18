@@ -1,4 +1,10 @@
-from datetime import datetime
+'''
+This file contains information about anything relating to messages.  The 
+methods in this file relate to sending, removing, editing and the send 
+later function.  There are some helper methods that just check the 
+existence of channels and users.
+'''
+from datetime import datetime, timezone
 import threading
 from time import sleep
 from error import AccessError, InputError
@@ -180,7 +186,7 @@ def edit(message_id, channel_id, message):
     }
 def later_send(message_id, channel_id, user_id, message, time_sent):
     #wait until time_sent
-    while str(datetime.now()) < time_sent:
+    while datetime.now().replace(tzinfo=timezone.utc).timestamp() < int(time_sent):
         sleep(0.1)
     database.new_message(message_id, channel_id, user_id, message)
     return{

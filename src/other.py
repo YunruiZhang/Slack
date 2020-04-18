@@ -1,11 +1,16 @@
+'''
+This file contains information about anything relating to all the other
+functions.  The methods in this file relate to listing all users, searching,
+and hangman.  There are some helper methods that just check the 
+existence of channels and users and the game state of hangman.
+'''
+import urllib.request
+from random import randint
 from database import *
 from channel import *
 from error import *
 from auth import *
 from message import *
-import urllib.request
-from flask import url_for
-from random import randint
 
 def users_all(token):
     all_user = []
@@ -56,7 +61,10 @@ def hangman_start(token, channel_id):
     response = urllib.request.urlopen(word_url)
     long_txt = response.read().decode()
     words = long_txt.splitlines()
-    
+
+    if not verify_token(token):
+        raise AccessError("Not valid user")
+
     found_flag = False
     for users in DATA["users"]:
         if users['email'] == "hangmanbot@t18a-welv.com":
@@ -89,7 +97,7 @@ def hangman_start(token, channel_id):
     update_database(DATA)
 
     #print(words)
-    word_to_guess = words[randint(0,len(words))].upper()
+    word_to_guess = words[randint(0, len(words))].upper()
     word_string = ""
     for character in word_to_guess:
         if character != "":
@@ -118,11 +126,14 @@ def hangman_guess(token, channel_id, character):
     for channel in DATA["channels"]:
         if channel["channel_id"] == int(channel_id):
             if channel["hangman"]["is_active"]:
-                found_flag=True
+                found_flag = True
                 break
 
     if not found_flag:
         raise InputError("No active hangman game")
+
+    if not verify_token(token):
+        raise AccessError("Not valid user")
 
     bot_token = None
     for users in DATA["users"]:
@@ -130,7 +141,7 @@ def hangman_guess(token, channel_id, character):
             found_flag = True
             bot_id = users['u_id']
             bot_token = users['token']
-            break   
+            break
 
     word_to_guess = channel["hangman"]["word_to_guess"]
     guess_string = channel["hangman"]["guess_string"]
@@ -149,7 +160,7 @@ def hangman_guess(token, channel_id, character):
         DATA = getData
         #Killed the guy
         if len(channel["hangman"]["guess_list"]) == 9:
-            message_send(bot_token, channel_id,word_to_guess+"\nYou lost!\n"+hangman_ascii(len(channel["hangman"]["guess_list"]))+"\nYou have guessed: "+"".join(guessed_string))
+            message_send(bot_token, channel_id, word_to_guess + "\nYou lost!\n" + hangman_ascii(len(channel["hangman"]["guess_list"])) + "\nYou have guessed: " + "".join(guessed_string))
             channel["hangman"]["is_active"] = False
             channel["hangman"]["word_to_guess"] = None
             channel["hangman"]["guess_string"] = None
@@ -168,10 +179,10 @@ def hangman_guess(token, channel_id, character):
         guessed_string = []
         for characters in channel["hangman"]["guess_list"]:
             guessed_string.append(characters)
-        for index in range(0,len(word_to_guess)):
+        for index in range(0, len(word_to_guess)):
             if list(word_to_guess)[index] == character:
                 guess_string[index] = character
-        
+
         update_database(DATA)
         DATA = getData()
 
@@ -184,7 +195,7 @@ def hangman_guess(token, channel_id, character):
             channel["hangman"]["word_to_guess"] = None
             channel["hangman"]["guess_string"] = None
             channel["hangman"]["guess_list"] = None
-            
+
             DATA = getData()
             #update_database(DATA)
         else:
