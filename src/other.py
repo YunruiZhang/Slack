@@ -1,7 +1,7 @@
 '''
 This file contains information about anything relating to all the other
 functions.  The methods in this file relate to listing all users, searching,
-and hangman.  There are some helper methods that just check the 
+and hangman.  There are some helper methods that just check the
 existence of channels and users and the game state of hangman.
 '''
 import urllib.request
@@ -13,6 +13,15 @@ from auth import *
 from message import *
 
 def users_all(token):
+    """ Gets all the users in Slackr
+
+    Parameters:
+        token(str): Token of the active user
+
+    Returns:
+       users (dictionary): List of dictionaries, where each dictionary contains
+       types u_id, email, name_first, name_last, handle_str, profile_img_url
+    """
     all_user = []
     Data = getData()
 
@@ -34,6 +43,16 @@ def users_all(token):
     return {"users":all_user}
 
 def search(token, query_str):
+    """ Searches all the messages in Slackr
+
+    Parameters:
+        token(str): Token of the active user
+        query_str(str): Query to search
+
+    Returns:
+       messages (dictionary): List of dictionaries, where each dictionary contains types
+       { message_id, u_id, message, time_created, reacts, is_pinned  }
+    """
 
     if not verify_token(token):
         raise AccessError('Invalid Token')
@@ -52,6 +71,15 @@ def search(token, query_str):
     return {'messages' : newlist}
 
 def hangman_start(token, channel_id):
+    """ Start a game of hangman
+
+    Parameters:
+        token(str): Token of the active user
+        channel_id(int): ID of the channel
+
+    Returns:
+       None
+    """
     DATA = getData()
 
     bot_id = None
@@ -119,6 +147,16 @@ def hangman_start(token, channel_id):
     return {}
 
 def hangman_guess(token, channel_id, character):
+    """ Make a guess for a game of hangman
+
+    Parameters:
+        token(str): Token of the active user
+        channel_id(int): ID of the channel
+        character(char): Character to guess
+
+    Returns:
+       None
+    """
     DATA = getData()
     character = character.upper()
     found_flag = False
@@ -210,6 +248,14 @@ def hangman_guess(token, channel_id, character):
     return {}
 
 def hangman_ascii(wrong_guesses):
+    """ ASCII designs for hangman state
+
+    Parameters:
+        wrong_guesses(int): The number of wrong guesses
+
+    Returns:
+       string (str): String of the game state as ASCII art
+    """
     if (wrong_guesses) == 1:
         return "    ========="
     elif (wrong_guesses) == 2:

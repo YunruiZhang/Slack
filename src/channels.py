@@ -1,8 +1,8 @@
-'''
-This file contains information about anything relating to channels.  The 
+"""
+This file contains information about anything relating to channels.  The
 methods in this file relate to listing a single or all channels and creating
-new channels. 
-'''
+new channels.
+"""
 from user import *
 from flask import url_for
 from database import *
@@ -10,6 +10,15 @@ from other import *
 from error import InputError, AccessError
 
 def channels_list(token):
+    """ Lists all channels in active user is a member of
+
+    Parameters:
+        token (str): The token of the active user
+
+    Returns:
+        channels (list): List of dictionaries, where each dictionary contains types { channel_id, name }
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -33,6 +42,15 @@ def channels_list(token):
     }
 
 def channels_listall(token):
+    """ Lists all channels in slacker
+
+    Parameters:
+        token (str): The token of the active user
+
+    Returns:
+        channels (list): List of dictionaries, where each dictionary contains types { channel_id, name }
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -53,6 +71,17 @@ def channels_listall(token):
     }
 
 def channels_create(token, name, is_public):
+    """ Creates a new channel with name name
+
+    Parameters:
+        token (str): The token of the active user
+        name (str): Name of new channel
+        is_public(bool): If channel is public or private
+
+    Returns:
+        channel_id (int): Channel ID of the new channel
+
+    """
 
     DATA = getData()
 

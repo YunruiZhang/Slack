@@ -1,7 +1,7 @@
 '''
-This file contains information about anything relating to messages.  The 
-methods in this file relate to sending, removing, editing and the send 
-later function.  There are some helper methods that just check the 
+This file contains information about anything relating to messages.  The
+methods in this file relate to sending, removing, editing and the send
+later function.  There are some helper methods that just check the
 existence of channels and users.
 '''
 from datetime import datetime, timezone
@@ -11,6 +11,17 @@ from error import AccessError, InputError
 import database
 
 def message_send(token, channel_id, message):
+    """ Sends a message
+
+    Parameters:
+        token (str): The token of the active user
+        channel_id(int): ID of the current channel
+        message(str): Message to send
+
+    Returns:
+        message_id(int): ID of the message
+
+    """
     #check whether the length of msg is smaller than 1000
     if len(message) > 1000:
         raise InputError(description='Message is longer than 1000 characters')
@@ -32,6 +43,16 @@ def message_send(token, channel_id, message):
     }
 
 def message_remove(token, message_id):
+    """ Remove a message
+
+    Parameters:
+        token (str): The token of the active user
+        message_id(int): The ID of the message to remove
+
+    Returns:
+        None
+
+    """
     # check whether the token is valid
     user_id = database.verify_token(token)
     if not user_id:
@@ -51,6 +72,17 @@ def message_remove(token, message_id):
     }
 
 def message_edit(token, message_id, message):
+    """ Edit a message
+
+    Parameters:
+        token (str): The token of the active user
+        message_id(int): The ID of the message to edit
+        message(str): The new message
+
+    Returns:
+        None
+
+    """
     if len(message) > 1000:
         raise InputError(description='Message is longer than 1000 characters')
      # check whether the token is valid
@@ -72,6 +104,18 @@ def message_edit(token, message_id, message):
     }
 
 def message_sendlater(token, channel_id, message, time_sent):
+    """ Send a meessage later
+
+    Parameters:
+        token (str): The token of the active user
+        channel_id(int): The ID of the current channel
+        message(str): The message to send
+        time_sent(int (UNIX timestamp)): The time to send the message
+
+    Returns:
+        message_id(int):The ID of the message
+
+    """
     #if time_sent is in the past raise error
     if time_sent < datetime.now().timestamp():
         raise InputError(description='Cannot send a message in the past')
@@ -97,6 +141,17 @@ def message_sendlater(token, channel_id, message, time_sent):
 
 
 def check_in_channel(user_id, channel_id):
+    """ Checks if user is in channel
+
+    Parameters:
+        user_id (int): The ID of the user
+        channel_id (int): The channel ID
+
+    Returns:
+        0 stands for the channel id is valid and the user is in the channel
+        1 stands for user is not in the channel
+        2 stands for invalid channel id
+    """
     data = database.getData()
     found_channel = 0
     found_user = 0
@@ -117,6 +172,15 @@ def check_in_channel(user_id, channel_id):
     return 2
 
 def get_msg_id():
+    """ Generate a message ID
+
+    Parameters:
+        None
+
+    Returns:
+        message_id(int): The ID for the new message
+    """
+
     data = database.getData()
     if not data['messages']:
         return 1
@@ -124,6 +188,17 @@ def get_msg_id():
 
 def check_msg(message_id):
     #print(message_id)
+    """ Gets channel message is in if it exists
+
+    Parameters:
+        message (int): The message ID
+
+    Returns:
+        if True:
+            channel_id(int):The ID of the channel the message is in
+        if False:
+            False
+    """
     data = database.getData()
     for i in data['messages']:
         #print(i)
@@ -133,6 +208,16 @@ def check_msg(message_id):
     return False
 
 def check_access(user_id, channel_id, message_id):
+    """ Checks if user is in sender or owner
+
+    Parameters:
+        user_id (int): The ID of the user
+        channel_id (int): The channel ID
+        message_id (int): The ID of the message
+
+    Returns:
+        bool : True or False if valid
+    """
     data = database.getData()
     sender = 0
     owner = 0
@@ -155,6 +240,15 @@ def check_access(user_id, channel_id, message_id):
     return sender == 1 or owner == 1
 
 def remove(message_id, channel_id):
+    """ Removes message from database
+
+    Parameters:
+        message_id (int): The ID of the message
+        channel_id (int): The channel ID
+
+    Returns:
+       None
+    """
     #remove it in message list inside database
     data = database.getData()
     for i in data['messages']:
@@ -173,6 +267,16 @@ def remove(message_id, channel_id):
     }
 
 def edit(message_id, channel_id, message):
+    """ Edit message in database
+
+    Parameters:
+        message_id (int): The ID of the message
+        channel_id (int): The channel ID
+        message(str): The new message
+
+    Returns:
+       None
+    """
     #edit message it in channel
     data = database.getData()
     for j in data['channels']:
@@ -185,6 +289,18 @@ def edit(message_id, channel_id, message):
     return{
     }
 def later_send(message_id, channel_id, user_id, message, time_sent):
+    """ Sends a message later
+
+    Parameters:
+        message_id (int): The ID of the message
+        channel_id (int): The channel ID
+        user_id(int): The user ID
+        message(str): Message to send
+        time_sent(int (UNIX timestamp)): The time to send the message
+
+    Returns:
+       None
+    """
     #wait until time_sent
     while datetime.now().replace(tzinfo=timezone.utc).timestamp() < int(time_sent):
         sleep(0.1)
