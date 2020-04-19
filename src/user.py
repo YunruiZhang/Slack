@@ -1,7 +1,7 @@
 '''
-This file contains information about anything relating to the user.  The 
+This file contains information about anything relating to the user.  The
 methods in this file relate to getting the users details and editing said
-details (This includes the profile picture).  There are some helper methods 
+details (This includes the profile picture).  There are some helper methods
 that just check the existence of channels and users.
 '''
 import re
@@ -16,7 +16,17 @@ from channel import *
 from error import *
 
 def user_profile(token, u_id):
+    """ Gets the details of user with u_id
 
+    Parameters:
+        u_id (int): User ID
+        token (str): The token of the active user
+
+    Returns:
+        user (dictionary): A dictionary of all the user's
+        details
+
+    """
     DATA = getData()
 
     if not verify_token(token):
@@ -43,6 +53,17 @@ def user_profile(token, u_id):
     return return_user
 
 def user_profile_setname(token, name_first, name_last):
+    """ Changes the name of the current user
+
+    Parameters:
+        token (str): Token of the current user
+        name_first (str): The new first name
+        name_last (str): The new last name
+
+    Returns:
+        {} : Empty dictionary
+
+    """
     Data = getData()
 
     if not user_name_length_check(name_first):
@@ -63,6 +84,16 @@ def user_profile_setname(token, name_first, name_last):
     }
 
 def user_profile_setemail(token, email):
+    """ Changes the email of the current user
+
+    Parameters:
+        token (str): Token of the current user
+        email (str): The new email
+
+    Returns:
+        {} : Empty dictionary
+
+    """
     Data = getData()
 
     if not user_email_check(email):
@@ -85,6 +116,16 @@ def user_profile_setemail(token, email):
     }
 
 def user_profile_sethandle(token, handle_str):
+    """ Changes the handle of the current user
+
+    Parameters:
+        token (str): Token of the current user
+        handle_str (str): The new email
+
+    Returns:
+        {} : Empty dictionary
+
+    """
     DATA = getData()
 
     if not user_handle_length_check(handle_str):
@@ -107,6 +148,20 @@ def user_profile_sethandle(token, handle_str):
     }
 
 def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
+    """ Changes the profile picture of the current user
+
+    Parameters:
+        token (str): Token of the current user
+        img_url (str): The URL of the image
+        x_start (int): The starting x coordinate
+        y_start (int): The starting y coordinate
+        x_end (int): The ending x coordinate
+        y_end (int): The ending y coordinate
+
+    Returns:
+        {} : Empty dictionary
+
+    """
     DATA = getData()
 
     disassembled = urlparse(img_url)
@@ -149,6 +204,16 @@ def profile_picture(token, img_url, x_start, y_start, x_end, y_end):
     return {}
 
 def user_email_check(email):
+    """ Checks to see if an email exists
+
+    Parameters:
+        email (str): Email to search for
+
+    Returns:
+        bool : True or False depending if the email was
+        found
+
+    """
     DATA = getData()
     for users in DATA['users']:
         if users['email'] == email:
@@ -156,6 +221,16 @@ def user_email_check(email):
     return True
 
 def user_handle_check(handle):
+    """ Checks to see if an handle exists
+
+    Parameters:
+        handle (str): Email to search for
+
+    Returns:
+        bool : True or False depending if the handle was
+        found
+
+    """
     DATA = getData()
     for users in DATA['users']:
         if users['handle_str'] == handle:
@@ -163,11 +238,31 @@ def user_handle_check(handle):
     return True
 
 def user_name_length_check(name):
+    """ Checks to see if name is valid
+
+    Parameters:
+        name (str): Name to check
+
+    Returns:
+        bool : True or False depending if the name was
+        valid
+
+    """
     if not name or len(name) > 50:
         return False
     return True
 
 def user_handle_length_check(handle):
+    """ Checks to see if handle is valid
+
+    Parameters:
+        handle (str): Handle to check
+
+    Returns:
+        bool : True or False depending if the handle was
+        valid
+
+    """
     if len(handle) < 2 or len(handle) > 20:
         return False
     return True
@@ -179,4 +274,14 @@ regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 # Define a function for
 # for validating an Email
 def check(email):
+    """ Checks to see if email is valid
+
+    Parameters:
+        email (str): Email to check
+
+    Returns:
+        bool : True or False depending if the email was
+        valid
+
+    """
     return re.search(regex, email)

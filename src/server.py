@@ -1,6 +1,6 @@
 '''
-This file contains information about anything relating to the server.  The 
-methods in this file link all the routes to functions. 
+This file contains information about anything relating to the server.  The
+methods in this file link all the routes to functions.
 '''
 import sys
 from json import dumps
@@ -127,12 +127,18 @@ def register():
 
 @APP.route("/auth/passwordreset/request", methods=['POST'])
 def return_password_request():
+    '''
+    Method will allow users to request to reset their password
+    '''
     payload = request.get_json()
     email = payload['email']
     return auth.password_request(email)
 
 @APP.route("/auth/passwordreset/reset", methods=['POST'])
 def return_password_reset():
+    '''
+    Method will allow users to reset their password
+    '''
     payload = request.get_json()
     reset_code = payload['reset_code']
     new_password = payload['new_password']
@@ -153,6 +159,9 @@ def echo():
 
 @APP.route("/channel/invite", methods=['POST'])
 def return_channel_invite():
+    '''
+    Method will allow users to invite other members to join channel
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
@@ -161,12 +170,18 @@ def return_channel_invite():
 
 @APP.route("/channel/details", methods=['GET'])
 def return_channel_details():
+    '''
+    Method will allow users to get channel details
+    '''
     token = request.args.get('token')
     channel_id = request.args.get('channel_id')
     return channel_details(token, channel_id)
 
 @APP.route("/channel/messages", methods=['GET'])
 def return_channel_messages():
+    '''
+    Method will allow users to get channel messages
+    '''
     token = request.args.get('token')
     channel_id = request.args.get('channel_id')
     start = request.args.get('start')
@@ -174,6 +189,9 @@ def return_channel_messages():
 
 @APP.route("/channel/leave", methods=['POST'])
 def return_channel_leave():
+    '''
+    Method will allow users to leave channel
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
@@ -181,6 +199,9 @@ def return_channel_leave():
 
 @APP.route("/channel/join", methods=['POST'])
 def return_channel_join():
+    '''
+    Method will allow users to join a channel
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
@@ -188,6 +209,9 @@ def return_channel_join():
 
 @APP.route("/channel/addowner", methods=['POST'])
 def return_channel_addowner():
+    '''
+    Method will allow users to add owner to channel
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
@@ -196,6 +220,9 @@ def return_channel_addowner():
 
 @APP.route("/channel/removeowner", methods=['POST'])
 def return_channel_removeowner():
+    '''
+    Method will allow users to remove owner from channel
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
@@ -204,16 +231,25 @@ def return_channel_removeowner():
 
 @APP.route("/channels/list", methods=['GET'])
 def return_channels_list():
+    '''
+    Method will allow users to get list of their channels
+    '''
     token = request.args.get('token')
     return channels_list(token)
 
 @APP.route("/channels/listall", methods=['GET'])
 def return_channels_listall():
+    '''
+    Method will allow users to get a list of all channels
+    '''
     token = request.args.get('token')
     return channels_listall(token)
 
 @APP.route("/channels/create", methods=['POST'])
 def return_channel_create():
+    '''
+    Method will allow users to create new channel
+    '''
     payload = request.get_json()
     token = payload['token']
     name = payload['name']
@@ -223,6 +259,9 @@ def return_channel_create():
 #--------------------message_pin/react methods-------------------------------------#
 @APP.route("/message/react", methods=['POST'])
 def react_mesage():
+    '''
+    Method will allow users to react to message
+    '''
     payload = request.get_json()
     token = payload['token']
     react_id = payload['react_id']
@@ -231,6 +270,9 @@ def react_mesage():
 
 @APP.route("/message/unreact", methods=['POST'])
 def unreact_message():
+    '''
+    Method will allow users to unreact to message
+    '''
     payload = request.get_json()
     token = payload['token']
     react_id = payload['react_id']
@@ -240,6 +282,9 @@ def unreact_message():
 
 @APP.route("/message/pin", methods=['POST'])
 def pin_message():
+    '''
+    Method will allow users to pin a message
+    '''
     payload = request.get_json()
     token = payload['token']
     message_id = payload['message_id']
@@ -249,6 +294,9 @@ def pin_message():
 
 @APP.route("/message/unpin", methods=['POST'])
 def unpin_message():
+    '''
+    Method will allow users to unpin a message
+    '''
     payload = request.get_json()
     token = payload['token']
     message_id = payload['message_id']
@@ -260,6 +308,9 @@ def unpin_message():
 #------------------standup methods----------------------------------#
 @APP.route('/standup/start', methods=['POST'])
 def start_standup():
+    '''
+    Method will allow users to start a standup
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = int(payload['channel_id'])
@@ -269,12 +320,18 @@ def start_standup():
 
 @APP.route('/standup/active', methods=['GET'])
 def is_active_standup():
+    '''
+    Method will allow users to check if a standup is active
+    '''
     token = request.args.get('token')
     channel_id = int(request.args.get('channel_id'))
     return standup_active(token, channel_id)
 
 @APP.route('/standup/send', methods=['POST'])
 def send_standup():
+    '''
+    Method will allow users to send a standup
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = int(payload['channel_id'])
@@ -283,12 +340,18 @@ def send_standup():
 
 @APP.route("/user/profile", methods=['GET'])
 def return_profile():
+    '''
+    Method will allow users to get their profile details
+    '''
     token = request.args.get('token')
     u_id = request.args.get('u_id')
     return {'user':user_profile(token, u_id)}
 
 @APP.route("/user/profile/setname", methods=['PUT'])
 def return_set_name():
+    '''
+    Method will allow users to change their name
+    '''
     payload = request.get_json()
     token = payload['token']
     name_first = payload['name_first']
@@ -297,6 +360,9 @@ def return_set_name():
 
 @APP.route("/user/profile/setemail", methods=['PUT'])
 def return_set_email():
+    '''
+    Method will allow users to change their email
+    '''
     payload = request.get_json()
     token = payload['token']
     email = payload['email']
@@ -304,6 +370,9 @@ def return_set_email():
 
 @APP.route("/user/profile/sethandle", methods=['PUT'])
 def return_set_handle():
+    '''
+    Method will allow users to change their handle
+    '''
     payload = request.get_json()
     token = payload['token']
     handle = payload['handle_str']
@@ -311,6 +380,9 @@ def return_set_handle():
 
 @APP.route('/user/profile/uploadphoto', methods=['POST'])
 def upload_profile_photo():
+    '''
+    Method will allow users to change their profile image
+    '''
     payload = request.get_json()
     token = payload['token']
     img_url = payload['img_url']
@@ -322,26 +394,41 @@ def upload_profile_photo():
 
 @APP.route("/static/<filename>")
 def download_photo(filename):
+    '''
+    Method will allow users to get their profile image
+    '''
     #return os.path.join(APP.root_path, 'static')
     return send_from_directory(os.path.join(APP.root_path, 'static'), filename)
 
 @APP.route("/users/all", methods=['GET'])
 def return_all_users():
+    '''
+    Method will allow users to list all users on slackr
+    '''
     token = request.args.get('token')
     return users_all(token)
 
 @APP.route("/search", methods=['GET'])
 def return_message_search():
+    '''
+    Method will allow users to search all messages
+    '''
     token = request.args.get('token')
     query_str = request.args.get('query_str')
     return search(token, query_str)
 
 @APP.route('/workspace/reset', methods=['POST'])
 def reset_workspace():
+    '''
+    Method will allow users to reset the database
+    '''
     return reset_db()
 
 @APP.route('/admin/userpermission/change', methods=['POST'])
 def change_user_permission():
+    '''
+    Method will allow users to change user permissions
+    '''
     payload = request.get_json()
     token = payload['token']
     u_id = payload['u_id']
@@ -350,6 +437,9 @@ def change_user_permission():
 
 @APP.route('/admin/user/remove', methods=['POST'])
 def remove_the_user():
+    '''
+    Method will allow users to remove users
+    '''
     payload = request.get_json()
     token = payload['token']
     u_id = payload['u_id']
@@ -357,6 +447,9 @@ def remove_the_user():
 
 @APP.route('/hangman/start', methods=['POST'])
 def start_hangman():
+    '''
+    Method will allow users to start a game of hangman
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']
@@ -364,6 +457,9 @@ def start_hangman():
 
 @APP.route('/hangman/guess', methods=['POST'])
 def guess_hangman():
+    '''
+    Method will allow users to make a guess in hangman
+    '''
     payload = request.get_json()
     token = payload['token']
     channel_id = payload['channel_id']

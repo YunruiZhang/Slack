@@ -49,6 +49,15 @@ DATABASE = {
 SECRET = 'thesecret'
 
 def getData():
+    """ Gets the current state of the database from database.json
+
+    Parameters:
+        None
+
+    Returns:
+        DATABASE (dictionary): Dictionary of the database
+
+    """
     #global DATABASE
     a_file = open("database.json", "r")
     DATABASE_TO_RETURN = json.load(a_file)
@@ -57,23 +66,32 @@ def getData():
     return DATABASE_TO_RETURN
 
 def token_generate(u_id):
-    '''
+    """ Generates a new token for user with u_id
 
-    {
-        "alg": "HS256",
-        "typ": "JWT"
-    }
-    {
-        "u_id": "u_id"
-    }
-    {
-        SECRET
-    }
-    '''
+    Parameters:
+        u_id (int): The u_id of the user
+
+    Returns:
+        token (str): Token for the current user
+
+    """
+
     encoded_jwt = jwt.encode({'u_id': u_id}, SECRET, algorithm='HS256')
     return encoded_jwt.decode("utf-8")
 
 def verify_token(token):
+    """ Verifies token
+
+    Parameters:
+        token (str): The token of the active user
+
+    Returns:
+        If True:
+            u_id (int): User ID of active user
+        If False:
+            False
+
+    """
     # IF THE TOKEN IS VALID THEN IT RETURNS THE U_ID OTHERWISE IT RETURNS FALSE
     token.encode('utf-8')
     try:
@@ -85,6 +103,18 @@ def verify_token(token):
 
 ######################message code##############################
 def new_message(message_id, channel_id, user_id, message):
+    """ Creates and sends a new message
+
+    Parameters:
+        user_id (int): The user ID of the user
+        message_id (int): The message ID
+        channel_id (int): The channel ID
+        message(str): The message to send
+
+    Returns:
+        {}:Empty Dictionary
+
+    """
     DATA = getData()
     time = datetime.now()
     new_message_to_send = {
@@ -115,7 +145,22 @@ def new_message(message_id, channel_id, user_id, message):
     return {}
 ##########################################################
 def create_user(u_id, permission_id, handle, token, email, password, name_first, name_last):
+    """ Creates a new user
 
+    Parameters:
+        u_id (int): The u_id of the user
+        permission_id(int): The permission ID
+        handle (str): Handle for the user
+        token(str): Token for the user
+        email(str): email for the user
+        password(str): password for the user
+        name_first(str): User's first name
+        name_last(str): User's last name
+
+    Returns:
+        {}: Empty Dictionary
+
+    """
     DATA = getData()
 
     new_user = {
@@ -134,6 +179,15 @@ def create_user(u_id, permission_id, handle, token, email, password, name_first,
     return {}
 
 def reset_db():
+    """ Resets Database
+
+    Parameters:
+        None
+
+    Returns:
+        None
+
+    """
     DATA = {
         'users' : [],
         'channels' : [],
@@ -156,6 +210,15 @@ def reset_db():
     return {}
 
 def update_database(DATA):
+    """ Update Database
+
+    Parameters:
+        DATA (dictionary): The current state of the database
+
+    Returns:
+        None
+
+    """
     #print(DATA)
     a_file = open("database.json", "w")
     json.dump(DATA, a_file)
@@ -163,6 +226,17 @@ def update_database(DATA):
     return {}
 
 def change_permission(token, u_id, permission_id):
+    """ Change the permission of user with u_id
+
+    Parameters:
+        token (str): The token of the active user
+        u_id(int): The user ID of the user to change
+        permission_id (int): New permission ID
+
+    Returns:
+        channels (list): List of dictionaries, where each dictionary contains types { channel_id, name }
+
+    """
     DATA = getData()
 
     if permission_id != 1 and permission_id != 2:
@@ -186,6 +260,16 @@ def change_permission(token, u_id, permission_id):
     return {}
 
 def remove_users(token, u_id):
+    """ Remove a user with u_id from Slackr
+
+    Parameters:
+        token (str): The token of the active user
+        u_id(int):user ID of the user to remove
+
+    Returns:
+        None
+
+    """
     DATA = getData()
 
     owner_flag = False

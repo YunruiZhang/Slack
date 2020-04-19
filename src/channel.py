@@ -1,5 +1,5 @@
 '''
-This file contains information about anything relating to a single channel.  The 
+This file contains information about anything relating to a single channel.  The
 methods in this file relate to inviting/joining/leaving channels, adding/removing
 owners, getting message details and channel details.  There are some helper
 methods that just check the existence of channels and users.
@@ -11,6 +11,17 @@ from database import *
 from error import InputError, AccessError
 
 def channel_invite(token, channel_id, u_id):
+    """ Invites user with u_id to join channel with channel_id
+
+    Parameters:
+        u_id (int): User ID
+        token (str): The token of the active user
+        channel_id (int): Channel ID
+
+    Returns:
+        {}: Empty dictionary
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -42,6 +53,18 @@ def channel_invite(token, channel_id, u_id):
     return {}
 
 def channel_details(token, channel_id):
+    """ Gets the details of channel with channel_id
+
+    Parameters:
+        channel_id (int): Channel ID
+        token (str): The token of the active user
+
+    Returns:
+        name (string): Name of the channel
+        owner_members (list): List of owner members
+        all_members (list): List of all members
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -63,6 +86,19 @@ def channel_details(token, channel_id):
     return curr_channel['details']
 
 def channel_messages(token, channel_id, start):
+    """ Gets the messages of channel with channel_id
+
+    Parameters:
+        channel_id (int): Channel ID
+        token (str): The token of the active user
+        start(int): Starting index for the messages
+
+    Returns:
+        messages(list): List of all messages
+        start(int): Starting index
+        end(int): Ending index
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -101,6 +137,16 @@ def channel_messages(token, channel_id, start):
     }
 
 def channel_leave(token, channel_id):
+    """ Active user leaves channel with channel_id
+
+    Parameters:
+        channel_id (int): Chennel ID
+        token (str): The token of the active user
+
+    Returns:
+        {}: Empty dictionary
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -129,6 +175,16 @@ def channel_leave(token, channel_id):
     }
 
 def channel_join(token, channel_id):
+    """ Lets active user join channel with channel_id
+
+    Parameters:
+        channel_id (int): Channel ID
+        token (str): The token of the active user
+
+    Returns:
+        {}:Empty dictionary
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -161,6 +217,17 @@ def channel_join(token, channel_id):
     }
 
 def channel_addowner(token, channel_id, u_id):
+    """ Add user with u_id as owner to channel with channel_id
+
+    Parameters:
+        u_id (int): User ID
+        channel_id(int): Channel ID
+        token (str): The token of the active user
+
+    Returns:
+        {}: Empty Dictionary
+
+    """
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -199,6 +266,17 @@ def channel_addowner(token, channel_id, u_id):
     }
 
 def channel_removeowner(token, channel_id, u_id):
+    """ Removes user with u_id as owner of channel with channel_id
+
+    Parameters:
+        u_id (int): User ID
+        channel_id(int): Channel ID
+        token (str): The token of the active user
+
+    Returns:
+        {}: Empty Dictionary
+
+    """
     DATA = getData()
 
     if not channel_id_check(DATA, channel_id):
@@ -230,6 +308,15 @@ def channel_removeowner(token, channel_id, u_id):
     }
 
 def u_id_check(u_id):
+    """ Checks to see if the u_id is valid
+
+    Parameters:
+        u_id(int): User ID
+
+    Returns:
+        bool: True or False whether it's valid
+
+    """
     DATA = getData()
     for users in DATA['users']:
         if int(users['u_id']) == int(u_id):
@@ -238,26 +325,65 @@ def u_id_check(u_id):
 
 
 def channel_id_check(DATA, channel_id):
+    """ Checks to see if the channel_id is valid
+
+    Parameters:
+        channel_id(int): Channel ID
+        DATA (dictionary): Current state of the database
+
+    Returns:
+        bool: True or False whether it's valid
+
+    """
     #DATA = getData()
-    print(DATA)
+    #print(DATA)
     for channels in DATA['channels']:
         if int(channels['channel_id']) == int(channel_id):
             return True
     return False
 
 def user_member_check(channel, u_id):
+    """ Checks to see if the u_id is member
+
+    Parameters:
+        u_id(int): User ID
+        channel(dictionary): Currrent channel
+
+    Returns:
+        bool: True or False whether it's true
+
+    """
     for members in channel['details']['all_members']:
         if int(members['u_id']) == int(u_id):
             return True
     return False
 
 def user_owner_check(channel, u_id):
+    """ Checks to see if the u_id is owner
+
+    Parameters:
+        u_id(int): User ID
+        channel(dictionary): Current channel
+
+    Returns:
+        bool: True or False whether it's true
+
+    """
     for members in channel['details']['owner_members']:
         if int(members['u_id']) == int(u_id):
             return True
     return False
 
 def slackr_owner_check(u_id):
+    """ Checks to see if the u_id is slackr owner
+
+    Parameters:
+        u_id(int): User ID
+
+    Returns:
+        bool: True or False whether it's true
+
+    """
     user_list = getData()['users']
     for users in user_list:
         if users['u_id'] == u_id:
