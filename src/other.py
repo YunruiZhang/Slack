@@ -13,6 +13,17 @@ from auth import *
 from message import *
 
 def users_all(token):
+    '''
+    Returns a list of all the users in the database
+
+    Parameters:
+        token (str): Generated token from user's login session
+
+    Returns:
+        dict {
+            users: list of all the users
+        }
+    '''
     all_user = []
     Data = getData()
 
@@ -34,7 +45,19 @@ def users_all(token):
     return {"users":all_user}
 
 def search(token, query_str):
+    '''
+    Returns a list of all the related messages
+    from the query string
 
+    Parameters:
+        token (str): Generated token from user's login session
+        query_str (str): The message that wants to be looked up
+
+    Returns:
+        dict {
+            messages: list of all the related messages
+        }
+    '''
     if not verify_token(token):
         raise AccessError('Invalid Token')
 
@@ -52,6 +75,16 @@ def search(token, query_str):
     return {'messages' : newlist}
 
 def hangman_start(token, channel_id):
+    '''
+    Starts the game of hangman in a specific channel
+
+    Parameters:
+        token (str): Generated token from user's login session
+        channel_id (str): The id relating to a specific channel
+
+    Returns:
+        (dict): emtpy dictionary
+    '''
     DATA = getData()
 
     bot_id = None
@@ -119,6 +152,17 @@ def hangman_start(token, channel_id):
     return {}
 
 def hangman_guess(token, channel_id, character):
+    '''
+    Enters a guess from the user of the hangman game
+
+    Parameters:
+        token (str): Generated token from user's login session
+        channel_id (str): The id relating to a specific channel
+        character (str): Letter that is guessed by the user
+
+    Returns:
+        (dict): emtpy dictionary
+    '''
     DATA = getData()
     character = character.upper()
     found_flag = False
@@ -210,6 +254,15 @@ def hangman_guess(token, channel_id, character):
     return {}
 
 def hangman_ascii(wrong_guesses):
+    '''
+    This method deals with wrong guesses
+
+    Parameters:
+        wrong_guesses (int): The amount of wrong guesses from user
+
+    Returns:
+        (str): Specified to the amount of wrong guesses
+    '''
     if (wrong_guesses) == 1:
         return "    ========="
     elif (wrong_guesses) == 2:

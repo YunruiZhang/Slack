@@ -16,7 +16,13 @@ from database import *
 
 def valid_email(email):
     '''
-    This method checks that the email given is valid
+    Returns whether the given email is valid
+
+    Parameters:
+        email (str): User's Email
+
+    Returns:
+        (bool): Whether the email is valid
     '''
     regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
@@ -27,11 +33,20 @@ def valid_email(email):
 
 def auth_login(email, password):
     '''
-    This method takes in a user's email and password and checks to see
-    if they are registered.  If so, then the user will be granted a token
-    and be able to login.  Otherwise, errors will be raised.
-    '''
+    Takes an email and password and logs the user into their
+    account if the given information is valid.  Will throw
+    errors with incorrect information
 
+    Parameters:
+        email (str): User's Email
+        password (str): User's Password
+
+    Returns:
+        dict {
+            u_id (str): The user's id corresponding to their account
+            token (str): A token generated for the session
+        }
+    '''
     #Get the Database
     store = getData()
 
@@ -63,8 +78,15 @@ def auth_logout(token):
     This method will look out a user given a valid token.  The output
     is a dictionary that states wether the method call was a sucess or
     not
-    '''
 
+    Parameters:
+        token (str): token generated for the user's session
+
+    Returns:
+        dict {
+            is_success (bool): if the user successfully logged out
+        }
+    '''
     #Must check if the token is in the database to prevent a double
     #logout
 
@@ -89,14 +111,23 @@ def auth_logout(token):
 
 def auth_register(email, password, name_first, name_last):
     '''
-    This method registers a new user based on the parameters given.  The
-    output of this method returns the u_id and token to allow the user
-    to continue with their session, although it is important to save the
-    new information of the user in the database.  Also, we must check to see
-    if the credentials entered fit the specs and a current user is not trying
-    to re-register
-    '''
+    This method registers a new user based on the parameters given and
+    checks if the new information of the user in the database.  Also,
+    it checks if the credentials entered fit the specs and a current
+    user is not trying to re-register
 
+    Parameters:
+        email (str): User's email
+        password (str): User's password
+        name_first (str): User's first name
+        name_last (str): User's last name
+
+    Returns:
+        dict {
+            u_id (str): The user's id corresponding to their account
+            token (str): A token generated for the session
+        }
+    '''
     store = getData()
 
     #Gets the first and last name to make a u_id but if it is longer than
@@ -160,6 +191,16 @@ def auth_register(email, password, name_first, name_last):
     }
 
 def password_request(email):
+    '''
+    Request's the user's email when trying to reset the
+    user's password
+
+    Parameters:
+        email (str): User's email
+
+    Returns:
+        (dict): Empty dictionary
+    '''
     data = getData()
 
     for users in data["users"]:
@@ -183,6 +224,17 @@ def password_request(email):
     return {}
 
 def password_reset(reset_code, new_password):
+    '''
+    Reset's the user's password in the case that they forgot
+    their original one
+
+    Parameters:
+        reset_code (str): Code received from password request method
+        new_password (str): New password that the user wants to reset their password with
+
+    Returns:
+        (dict): Empty dictionary
+    '''
     code = unobscure(reset_code).decode('utf-8')
 
     email, old_password = code[:code.find("|")], code[code.find("|")+1:]

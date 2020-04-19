@@ -10,6 +10,18 @@ from other import *
 from error import InputError, AccessError
 
 def channels_list(token):
+    '''
+    This method returns a list of all the channels of a 
+    specific user
+
+    Parameters:
+        token (str): token generated for the user's session
+
+    Returns:
+        dict {
+            channels (list): list of all the channels
+        }
+    '''
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -33,6 +45,17 @@ def channels_list(token):
     }
 
 def channels_listall(token):
+    '''
+    This method returns a list of all the channels
+
+    Parameters:
+        token (str): token generated for the user's session
+
+    Returns:
+        dict {
+            channels (list): list of all the channels
+        }
+    '''
     DATA = getData()
 
     curr_u_id = verify_token(token)
@@ -53,7 +76,19 @@ def channels_listall(token):
     }
 
 def channels_create(token, name, is_public):
+    '''
+    This method creates a channel
 
+    Parameters:
+        token (str): token generated for the user's session
+        name (str): name of the channel
+        is_public (bool): if the channel is public or not
+
+    Returns:
+        dict {
+            channel_id (str): The id for the channel
+        }
+    '''
     DATA = getData()
 
     if len(name) > 20:
